@@ -1,0 +1,87 @@
+AllCops:
+  TargetRubyVersion: 2.7
+  DisplayCopNames: true
+  NewCops: disable
+  Exclude:
+    - 'test/dummy/db/schema.rb'
+
+Layout/ArrayAlignment:
+  Description: >-
+    Align the elements of an array literal if they span more than
+    one line.
+  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#align-multiline-arrays'
+  Enabled: false
+Layout/HashAlignment:
+  EnforcedHashRocketStyle: table
+  EnforcedColonStyle: table
+  EnforcedLastArgumentHashStyle: ignore_implicit
+
+Layout/EmptyLinesAroundClassBody:
+  EnforcedStyle: empty_lines
+Layout/EmptyLinesAroundModuleBody:
+  EnforcedStyle: empty_lines_except_namespace
+Layout/EmptyLinesAroundBlockBody:
+  Description: "Keeps track of empty lines around block bodies."
+  Enabled: false
+  EnforcedStyle: no_empty_lines
+Layout/ExtraSpacing:
+  Description: 'Do not use unnecessary spacing.'
+  Enabled: false
+  AllowForAlignment: true
+Lint/AmbiguousOperator:
+  Enabled: false
+Metrics/BlockLength:
+  AllowedMethods: ['describe', 'context', 'define', 'factory']
+Security/Eval:
+  Description: 'The use of eval represents a serious security risk.'
+  Enabled: false
+Style/Encoding:
+  Description: 'Use UTF-8 as the source file encoding.'
+  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#utf-8'
+  Enabled: true
+Style/FormatStringToken:
+  EnforcedStyle: template
+Style/FrozenStringLiteralComment:
+  EnforcedStyle: never
+Style/OptionHash:
+  Description: "Don't use option hashes when you can use keyword arguments."
+  Enabled: true
+Style/PerlBackrefs:
+  Description: 'Avoid Perl-style regex back references.'
+  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#no-perl-regexp-last-matchers'
+  Enabled: false
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    '%w': '()'
+Style/Proc:
+  Description: 'Use proc instead of Proc.new.'
+  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#proc'
+  Enabled: false
+Style/Send:
+  Description: 'Prefer `Object#__send__` or `Object#public_send` to `send`, as `send` may overlap with existing methods.'
+  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#prefer-public-send'
+  Enabled: true
+Style/SpecialGlobalVars:
+  Description: 'Avoid Perl-style global variables.'
+  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#no-cryptic-perlisms'
+  Enabled: false
+Style/SymbolArray:
+  Enabled: false
+
+Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: single_quotes
+
+Style/StringLiteralsInInterpolation:
+  Enabled: true
+  EnforcedStyle: double_quotes
+
+Layout/LineLength:
+  Max: 120
+
+RSpec/NotToNot:
+  EnforcedStyle: to_not
+  Enabled: true
+
+require:
+  - rubocop-rspec

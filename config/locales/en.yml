@@ -1,0 +1,35 @@
+# Sample localization file for English. Add more files in this directory for other locales.
+# See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+
+en:
+  emerchantpay:
+    preferences:
+      production: Production
+      sandbox: Sandbox
+      authorize: Authorize
+      authorize3d: Authorize3D
+      sale: Sale
+      sale3d: Sale3D
+    payment:
+      usage: Electronic transaction via Spree eCommerce platform
+    payments_table:
+      gateway_response: Gateway Response
+      title: Payments
+      unique_id: UniqueId
+      reference_id: ReferenceId
+      status: Status
+      transaction_type: TransactionType
+      mode: Mode
+      amount: Amount
+      currency: Currency
+      created_at: Created
+      updated_at: Updated
+      message: Message
+      technical_message: Technical Message
+  spree:
+    token: Token
+    username: Username
+    password: Password
+    transaction_types: Transaction Types
+    return_success_url: Return Success URL
+    return_failure_url: Return Failure URL

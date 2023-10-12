@@ -1,0 +1,51 @@
+<div class="emerchantpay-payment-gateway">
+  <div class="mb-4">
+    <div class="emerchantpay-card-wrapper"></div>
+  </div>
+  <div class="payment-gateway-fields">
+    <div class="mb-1 payment-gateway-field checkout-content-inner-field">
+      <input type="text" name="payment_source[<%= payment_method.id %>][name]" id="emp_name_on_card" value="" class="spree-flat-input" placeholder="Cardholder name">
+    </div>
+
+    <div class="mb-1 payment-gateway-field checkout-content-inner-field">
+      <input type="text" name="payment_source[<%= payment_method.id %>][number]" id="emp_card_number" value="" class="spree-flat-input cardNumber" size="19" maxlength="19" autocomplete="off" placeholder="Card number">
+    </div>
+    <div class="payment-gateway-half-fields d-flex justify-content-between">
+      <div class="payment-gateway-field checkout-content-inner-field">
+        <input type="text" name="payment_source[<%= payment_method.id %>][expiry]" id="emp_card_expiry" value="" class="spree-flat-input cardExpiry" placeholder="MM/YY">
+      </div>
+      <div class="payment-gateway-field checkout-content-inner-field">
+        <input type="text" name="payment_source[<%= payment_method.id %>][verification_value]" id="emp_card_code" value="" class="spree-flat-input cardCode" size="5" placeholder="CVC">
+      </div>
+    </div>
+
+    <input type="hidden" name="payment_source[<%= payment_method.id %>][cc_type]" id="emp_cc_type" value="" class="ccType">
+  </div>
+</div>
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function(){
+        new Card({
+            form: document.getElementById('checkout_form_payment'),
+            container: '.emerchantpay-card-wrapper',
+            formSelectors: {
+                nameInput: '#emp_name_on_card',
+                numberInput: '#emp_card_number',
+                expiryInput: '#emp_card_expiry',
+                cvcInput: '#emp_card_code'
+            },
+            messages: {
+                legalText: '&copy;<%= (DateTime.now).strftime('%Y') %> eMerchantPay'
+            },
+            width: (window.innerWidth > 400) ? 300 : 180,
+            debug: false,
+            // Default values for rendered fields - options*}
+            values: {
+                number: '•••• •••• •••• ••••',
+                name: 'Full Name',
+                expiry: '••/••',
+                cvc: '***'
+            }
+        });
+    });
+</script>
