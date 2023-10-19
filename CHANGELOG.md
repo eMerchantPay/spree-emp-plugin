@@ -1,3 +1,13 @@
+0.1.1
+-----
+
+**Features**:
+
+* Added support for the following reference payment actions via Genesis Gateway:
+  * Capture
+  * Void
+  * Refund
+
 0.1.0
 -----
 

@@ -6,9 +6,8 @@ module SpreeEmerchantpayGenesis
 
     # Constructor
     def initialize(options)
-      @options         = options
-      @configuration   = genesis_provider_configuration
-      @genesis_request = initialize_genesis_client options
+      @options           = options
+      @configuration     = Mappers::Genesis.for_config(@options).context
     end
 
     # Load Order data
@@ -27,116 +26,124 @@ module SpreeEmerchantpayGenesis
     end
 
     # Create a payment
-    def purchase # rubocop:disable Metrics/MethodLength
-      genesis = GenesisRuby::Genesis.new(
-        @configuration,
-        Mappers::Genesis.for(@genesis_request, @order, @source, @options).genesis_request
-      )
+    def purchase
+      safe_execute do
+        genesis_request = TransactionHelper.init_genesis_req @configuration, @options[:transaction_types]
 
-      response = genesis.execute.response
+        genesis = GenesisRuby::Genesis.new(
+          @configuration,
+          Mappers::Genesis.for_payment(genesis_request, @order, @source, @options).context
+        )
 
-      handle_response response
+        response = genesis.execute.response
 
-      response
-    rescue GenesisRuby::Error => e
-      Rails.logger.error e.message
-      e
-    rescue StandardError => e
-      Rails.logger.error e.message
-      GenesisRuby::Error.new(e.message)
+        handle_response genesis_request, response
+
+        response
+      end
     end
 
-    # Type that require Capture
-    def authorization_types
-      [
-        GenesisRuby::Api::Constants::Transactions::AUTHORIZE,
-        GenesisRuby::Api::Constants::Transactions::AUTHORIZE_3D
-      ]
+    # Capture a payment
+    def capture(amount, transaction)
+      configure_token transaction
+
+      safe_execute(is_reference: true) do
+        genesis_request = TransactionHelper.init_reference_req(
+          TransactionHelper::CAPTURE_ACTION, @configuration, transaction.transaction_type
+        )
+        genesis         = GenesisRuby::Genesis.new(
+          @configuration, Mappers::Genesis.for_reference(genesis_request, amount, transaction, @order).context
+        )
+
+        process_reference_response transaction, genesis_request, genesis.execute.response
+      end
+    end
+
+    # Refund a payment
+    def refund(amount, transaction)
+      configure_token transaction
+
+      safe_execute(is_reference: true) do
+        genesis_request = TransactionHelper.init_reference_req(
+          TransactionHelper::REFUND_ACTION, @configuration, transaction.transaction_type
+        )
+        genesis         = GenesisRuby::Genesis.new(
+          @configuration, Mappers::Genesis.for_reference(genesis_request, amount, transaction, @order).context
+        )
+
+        process_reference_response transaction, genesis_request, genesis.execute.response
+      end
+    end
+
+    # Cancel a payment
+    def void(transaction)
+      configure_token transaction
+
+      safe_execute(is_reference: true) do
+        genesis_request = TransactionHelper.init_reference_req(
+          TransactionHelper::VOID_ACTION, @configuration, transaction.transaction_type
+        )
+        genesis         = GenesisRuby::Genesis.new(
+          @configuration, Mappers::Genesis.for_reference(genesis_request, nil, transaction, @order).context
+        )
+
+        process_reference_response transaction, genesis_request, genesis.execute.response
+      end
     end
 
     private
 
-    # Handle Genesis Response
-    def handle_response(response)
-      if can_save_response? response
-        EmerchantpayPaymentsRepository.save_from_response_data @genesis_request, response, @order, @payment
+    # Process Gateway response
+    def process_reference_response(original_transaction, genesis_request, genesis_response)
+      response_object = genesis_response.response_object
+
+      if TransactionHelper.success_result? genesis_response
+        EmerchantpayPaymentsRepository.save_reference_from_transaction(
+          original_transaction,
+          response_object[:unique_id]
+        )
       end
 
-      update_payment response
+      handle_response genesis_request, genesis_response, is_payment: false
+
+      TransactionHelper.generate_spree_response genesis_response
+    end
+
+    # Handle Genesis Response
+    def handle_response(request, response, is_payment: true)
+      if TransactionHelper.can_save_genesis_response? response
+        EmerchantpayPaymentsRepository.save_from_response_data request, response, @order, @payment
+      end
+
+      SpreePaymentsRepository.update_payment @payment, response if is_payment
+      SpreePaymentsRepository.add_payment_metadata @payment, response.response_object
+
+      @payment.save
 
       Rails.logger.info response.response_object.to_yaml
       true
     end
 
-    # Load GenesisRuby configuration object
-    def genesis_provider_configuration
-      method_options = @options
+    # Protect Genesis request execution inside block
+    def safe_execute(is_reference: false, &block)
+      block.call
+    rescue GenesisRuby::Error => e
+      Rails.logger.error e.message
 
-      configuration             = GenesisRuby::Configuration.new
-      configuration.username    = method_options[:username]
-      configuration.password    = method_options[:password]
-      configuration.token       = method_options[:token]
-      configuration.environment = fetch_genesis_environment
-      configuration.endpoint    = GenesisRuby::Api::Constants::Endpoints::EMERCHANTPAY
+      return TransactionHelper.generate_spree_response e if is_reference
 
-      configuration
+      e
+    rescue StandardError => e
+      Rails.logger.error e.message
+
+      return TransactionHelper.generate_spree_response e if is_reference
+
+      GenesisRuby::Error.new(e.message)
     end
 
-    # Fetch genesis_request_type from plugin options
-    def initialize_genesis_client(options)
-      case options[:transaction_types]
-      when 'authorize' then GenesisRuby::Api::Requests::Financial::Cards::Authorize.new @configuration
-      when 'authorize3d' then GenesisRuby::Api::Requests::Financial::Cards::Authorize3d.new @configuration
-      when 'sale' then GenesisRuby::Api::Requests::Financial::Cards::Sale.new @configuration
-      when 'sale3d' then GenesisRuby::Api::Requests::Financial::Cards::Sale3d.new @configuration
-      else
-        raise "Invalid transaction type given for #{self.class}"
-      end
-    end
-
-    # Fetch Genesis Environments
-    def fetch_genesis_environment
-      case @options[:test_mode]
-      when true then GenesisRuby::Api::Constants::Environments::STAGING
-      else
-        GenesisRuby::Api::Constants::Environments::PRODUCTION
-      end
-    end
-
-    # Update Spree payment from response
-    def update_payment(response)
-      response_object = response.response_object
-
-      @payment.cvv_response_code    = response_object[:cvv_result_code]
-      @payment.avs_response         = response_object[:avs_response_code]
-
-      # From Spree Payment Model
-      #     # transaction_id is much easier to understand
-      #     def transaction_id
-      #       response_code
-      #     end
-      @payment.response_code        = response_object[:transaction_id]
-
-      add_payment_metadata response_object
-
-      @payment.save
-    end
-
-    # Add metadata to the Payment model
-    def add_payment_metadata(response_object)
-      redirect_url      = response_object[:redirect_url] ? { redirect_url: response_object[:redirect_url] } : {}
-      message           = response_object[:message] ? { message: response_object[:message] } : {}
-      technical_message = response_object[:technical_message] ? { message: response_object[:technical_message] } : {}
-
-      @payment.private_metadata.merge! redirect_url, message, technical_message
-    end
-
-    # Check if the given Genesis Response can be stored
-    def can_save_response?(response)
-      response_object = response.response_object
-
-      response_object[:transaction_id] && response_object[:currency] && response_object[:amount] &&
-        response_object[:mode]
+    # Configure Genesis provider with the token form the given transaction
+    def configure_token(transaction)
+      @configuration.token = transaction.terminal_token if transaction.terminal_token
     end
 
   end

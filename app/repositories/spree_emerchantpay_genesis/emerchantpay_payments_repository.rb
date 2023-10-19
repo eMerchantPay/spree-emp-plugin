@@ -4,9 +4,19 @@ module SpreeEmerchantpayGenesis
 
     class << self
 
+      # Find by transaction_id
+      def find_by_transaction_id(transaction_id)
+        Db::EmerchantpayPayment.find_by(transaction_id: transaction_id)
+      end
+
+      # Find by unique_id
+      def find_by_unique_id(unique_id)
+        Db::EmerchantpayPayment.find_by(unique_id: unique_id)
+      end
+
       # Find all payments that belong to an order
       def find_all_by_order_and_payment(order_id, payment_id)
-        Db::EmerchantpayPayment.where(order_id: order_id, payment_id: payment_id)
+        Db::EmerchantpayPayment.where(order_id: order_id, payment_id: payment_id).order('id desc')
       end
 
       # Store Genesis Payment to the DB
@@ -15,7 +25,7 @@ module SpreeEmerchantpayGenesis
         genesis_response          = genesis_response.response_object
         formatted_genesis_request = format_genesis_request(genesis_request)
 
-        map_payment spree_payment.payment_method.type, payment, formatted_genesis_request, genesis_response
+        map_payment spree_payment, payment, formatted_genesis_request, genesis_response
 
         payment.order_id   = order.number
         payment.payment_id = spree_payment.number
@@ -23,18 +33,43 @@ module SpreeEmerchantpayGenesis
         payment.save
       end
 
+      # Save the reference id to the original transaction
+      def save_reference_from_transaction(transaction, reference_id)
+        transaction.reference_id = reference_id
+        transaction.save
+      end
+
+      # Find the transaction with the latest payment state
+      def find_final_transaction(transaction_id)
+        transaction = find_by_transaction_id transaction_id
+
+        if transaction&.reference_id
+          reference = find_by_unique_id transaction.reference_id
+
+          # check for second level of reference
+          return find_by_unique_id reference.reference_id if reference&.reference_id
+
+          return reference
+        end
+
+        transaction
+      end
+
       private
 
       # Map the given data to the Emerchantpay Payment
-      def map_payment(payment_method, genesis_payment, genesis_request, genesis_response) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+      def map_payment(spree_payment, genesis_payment, genesis_request, genesis_response) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+        currency = genesis_response[:currency] || spree_payment.currency
+        amount   = genesis_response[:amount] ? format_amount(genesis_response[:amount], genesis_response[:currency]) : 0
+
         genesis_payment.transaction_id    = genesis_response[:transaction_id]
         genesis_payment.unique_id         = genesis_response[:unique_id]
-        genesis_payment.payment_method    = payment_method
+        genesis_payment.payment_method    = spree_payment.payment_method.type
         genesis_payment.terminal_token    = fetch_token genesis_request, genesis_response
         genesis_payment.status            = genesis_response[:status]
         genesis_payment.transaction_type  = genesis_response[:transaction_type]
-        genesis_payment.amount            = format_amount genesis_response[:amount], genesis_response[:currency]
-        genesis_payment.currency          = genesis_response[:currency]
+        genesis_payment.amount            = amount
+        genesis_payment.currency          = currency
         genesis_payment.mode              = genesis_response[:mode]
         genesis_payment.message           = genesis_response[:message]
         genesis_payment.technical_message = genesis_response[:technical_message]

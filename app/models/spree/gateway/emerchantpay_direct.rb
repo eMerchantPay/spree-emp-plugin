@@ -4,7 +4,7 @@ module Spree
 
     preference :token, :string
 
-    delegate :authorization_types, :load_data, :load_source, :load_payment, to: :provider
+    delegate :load_data, :load_source, :load_payment, to: :provider
 
     def method_type
       'emerchantpay_direct'
@@ -45,7 +45,7 @@ module Spree
     end
 
     def auto_capture?
-      !authorization_types.include? options[:transaction_types]
+      !GenesisRuby::Utils::Transactions::References::CapturableTypes.all.include? options[:transaction_types]
     end
 
     private

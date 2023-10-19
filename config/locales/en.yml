@@ -12,6 +12,7 @@ en:
       sale3d: Sale3D
     payment:
       usage: Electronic transaction via Spree eCommerce platform
+      reference: Reference transaction via Spree eCommerce platform
     payments_table:
       gateway_response: Gateway Response
       title: Payments

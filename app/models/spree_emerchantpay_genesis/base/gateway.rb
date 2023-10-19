@@ -9,20 +9,38 @@ module SpreeEmerchantpayGenesis
       preference :return_success_url, :string
       preference :return_failure_url, :string
 
-      def settle(_amount, _checkout, _gateway_options)
-        puts 'SETTLE'
+      # Capture authorized payment
+      def capture(amount, transaction_id, gateway_options)
+        order, payment = order_data_from_options gateway_options
+
+        prepare_provider order.attributes.symbolize_keys.merge(gateway_options), payment.source, payment
+
+        transaction = SpreeEmerchantpayGenesis::EmerchantpayPaymentsRepository.find_by_transaction_id transaction_id
+
+        provider.capture GenesisRuby::Utils::MoneyFormat.exponent_to_amount(amount, order.currency), transaction
       end
 
-      def capture(_amount, _transaction_id, _gateway_options)
-        puts 'CAPTURE'
+      # Undo a payment
+      def void(transaction_id, gateway_options)
+        order, payment = order_data_from_options gateway_options
+
+        prepare_provider order.attributes.symbolize_keys.merge(gateway_options), payment.source, payment
+
+        transaction = SpreeEmerchantpayGenesis::EmerchantpayPaymentsRepository.find_final_transaction transaction_id
+
+        provider.void transaction
       end
 
-      def void(_transaction_id, _data)
-        puts 'VOID'
-      end
+      # Refund a payment
+      def credit(credit_cents, transaction_id, refund_object)
+        payment = refund_object[:originator].payment
+        order   = refund_object[:originator].payment.order
 
-      def credit(_credit_cents, _transaction_id, _options)
-        puts 'CREDIT'
+        prepare_provider order.attributes.symbolize_keys, payment.source, payment
+
+        transaction = SpreeEmerchantpayGenesis::EmerchantpayPaymentsRepository.find_final_transaction transaction_id
+
+        provider.refund GenesisRuby::Utils::MoneyFormat.exponent_to_amount(credit_cents, order.currency), transaction
       end
 
       def payment_profiles_supported?

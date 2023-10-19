@@ -4,6 +4,9 @@ module SpreeEmerchantpayGenesis
 
     require 'spree/core'
     require 'genesis_ruby'
+    require 'genesis_ruby/utils/transactions/references/capturable_types'
+    require 'genesis_ruby/utils/transactions/references/refundable_types'
+    require 'genesis_ruby/utils/transactions/references/voidable_types'
 
     isolate_namespace Spree
     engine_name 'spree_emerchantpay_genesis'

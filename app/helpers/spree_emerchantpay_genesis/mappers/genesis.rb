@@ -5,27 +5,64 @@ module SpreeEmerchantpayGenesis
     # Genesis Gateway Data Mapper
     class Genesis
 
-      TRANSACTION_ID_PREFIX = 'sp-'.freeze
+      attr_reader :context
 
-      attr_reader :genesis_request
+      # Load GenesisRuby configuration object
+      def self.for_config(options)
+        this = new GenesisRuby::Configuration.new
+
+        this.map_config options
+      end
 
       # Provider Data
-      def self.for(genesis, provider, source, options)
+      def self.for_payment(genesis, order, source, options)
         this = new genesis
 
-        this.map provider, source, options
+        this.map order, source, options
       end
 
-      def initialize(genesis_request)
-        @genesis_request = genesis_request
+      # Reference Provider
+      def self.for_reference(genesis, amount, transaction, order)
+        this = new genesis
+
+        this.map_reference amount, transaction, order
       end
 
-      def map(provider, source, options)
-        common_attributes provider
+      def initialize(object)
+        @context = object
+      end
+
+      # Map Financial transaction
+      def map(order, source, options)
+        common_attributes order
         credit_card_attributes source
-        billing_attributes provider
-        shipping_attributes provider
-        asyn_attributes options if asyn?
+        billing_attributes order
+        shipping_attributes order
+        asyn_attributes options if TransactionHelper.asyn? @context
+
+        self
+      end
+
+      # Map Reference transaction
+      def map_reference(amount, transaction, order)
+        @context.transaction_id = TransactionHelper.generate_transaction_id
+        @context.reference_id   = transaction.unique_id
+        @context.amount         = amount unless amount.nil?
+        @context.currency       = transaction.currency unless amount.nil?
+        @context.remote_ip      = order.ip
+        @context.usage          =
+          "#{I18n.t("reference", scope: "emerchantpay.payment")} - #{transaction.transaction_type.capitalize}"
+
+        self
+      end
+
+      # Map Configuration
+      def map_config(options)
+        @context.username    = options[:username]
+        @context.password    = options[:password]
+        @context.token       = options[:token]
+        @context.environment = fetch_genesis_environment options[:test_mode]
+        @context.endpoint    = GenesisRuby::Api::Constants::Endpoints::EMERCHANTPAY
 
         self
       end
@@ -34,63 +71,61 @@ module SpreeEmerchantpayGenesis
 
       # Common Genesis Attributes
       def common_attributes(provider) # rubocop:disable Metrics/AbcSize
-        @genesis_request.transaction_id = generate_transaction_id
-        @genesis_request.amount         = provider.total.to_s
-        @genesis_request.currency       = provider.currency
-        @genesis_request.usage          = I18n.t 'usage', scope: 'emerchantpay.payment'
-        @genesis_request.customer_email = provider.email
-        @genesis_request.customer_phone = provider.billing_address&.phone
-        @genesis_request.remote_ip      = provider.ip
+        @context.transaction_id = TransactionHelper.generate_transaction_id
+        @context.amount         = provider.total.to_s
+        @context.currency       = provider.currency
+        @context.usage          = I18n.t 'usage', scope: 'emerchantpay.payment'
+        @context.customer_email = provider.email
+        @context.customer_phone = provider.billing_address&.phone
+        @context.remote_ip      = provider.ip
       end
 
       # Credit Card Attributes
       def credit_card_attributes(source)
-        @genesis_request.card_holder      = source.name
-        @genesis_request.card_number      = source.number
-        @genesis_request.expiration_month = source.month
-        @genesis_request.expiration_year  = source.year
-        @genesis_request.cvv              = source.verification_value
+        @context.card_holder      = source.name
+        @context.card_number      = source.number
+        @context.expiration_month = source.month
+        @context.expiration_year  = source.year
+        @context.cvv              = source.verification_value
       end
 
       # Billing Attributes
       def billing_attributes(provider) # rubocop:disable Metrics/AbcSize
-        @genesis_request.billing_first_name = provider.billing_address.first_name
-        @genesis_request.billing_last_name  = provider.billing_address.last_name
-        @genesis_request.billing_address1   = provider.billing_address.address1
-        @genesis_request.billing_address2   = provider.billing_address.address2
-        @genesis_request.billing_zip_code   = provider.billing_address.zip
-        @genesis_request.billing_city       = provider.billing_address.city
-        @genesis_request.billing_state      = provider.billing_address.state
-        @genesis_request.billing_country    = provider.billing_address.country
+        @context.billing_first_name = provider.billing_address.first_name
+        @context.billing_last_name  = provider.billing_address.last_name
+        @context.billing_address1   = provider.billing_address.address1
+        @context.billing_address2   = provider.billing_address.address2
+        @context.billing_zip_code   = provider.billing_address.zip
+        @context.billing_city       = provider.billing_address.city
+        @context.billing_state      = provider.billing_address.state
+        @context.billing_country    = provider.billing_address.country
       end
 
       # Shipping Attributes
       def shipping_attributes(provider) # rubocop:disable Metrics/AbcSize
-        @genesis_request.shipping_first_name = provider.shipping_address.first_name
-        @genesis_request.shipping_last_name  = provider.shipping_address.last_name
-        @genesis_request.shipping_address1   = provider.shipping_address.address1
-        @genesis_request.shipping_address2   = provider.shipping_address.address2
-        @genesis_request.shipping_zip_code   = provider.shipping_address.zip
-        @genesis_request.shipping_city       = provider.shipping_address.city
-        @genesis_request.shipping_state      = provider.shipping_address.state
-        @genesis_request.shipping_country    = provider.shipping_address.country
+        @context.shipping_first_name = provider.shipping_address.first_name
+        @context.shipping_last_name  = provider.shipping_address.last_name
+        @context.shipping_address1   = provider.shipping_address.address1
+        @context.shipping_address2   = provider.shipping_address.address2
+        @context.shipping_zip_code   = provider.shipping_address.zip
+        @context.shipping_city       = provider.shipping_address.city
+        @context.shipping_state      = provider.shipping_address.state
+        @context.shipping_country    = provider.shipping_address.country
       end
 
       def asyn_attributes(options)
-        @genesis_request.notification_url   = 'https://example.com' # TODO: add IPN url
-        @genesis_request.return_success_url = options[:return_success_url]
-        @genesis_request.return_failure_url = options[:return_failure_url]
+        @context.notification_url   = 'https://example.com' # TODO: add IPN url
+        @context.return_success_url = options[:return_success_url]
+        @context.return_failure_url = options[:return_failure_url]
       end
 
-      # Generate Transaction Id
-      def generate_transaction_id
-        "#{TRANSACTION_ID_PREFIX}#{SecureRandom.uuid[TRANSACTION_ID_PREFIX.length..]}"[0..32].downcase
-      end
-
-      # Checks if the given request is asynchronous or not
-      def asyn?
-        @genesis_request.instance_of?(GenesisRuby::Api::Requests::Financial::Cards::Authorize3d) ||
-          @genesis_request.instance_of?(GenesisRuby::Api::Requests::Financial::Cards::Sale3d)
+      # Fetch Genesis Environments
+      def fetch_genesis_environment(mode)
+        case mode
+        when true then GenesisRuby::Api::Constants::Environments::STAGING
+        else
+          GenesisRuby::Api::Constants::Environments::PRODUCTION
+        end
       end
 
     end
