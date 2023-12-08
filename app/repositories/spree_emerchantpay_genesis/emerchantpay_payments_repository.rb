@@ -33,6 +33,16 @@ module SpreeEmerchantpayGenesis
         payment.save
       end
 
+      # Update Existing payment
+      def update_from_response_data(emerchantpay_payment, genesis_response, spree_payment)
+        genesis_response = genesis_response.response_object
+        request = { configuration: { token: emerchantpay_payment.terminal_token } }.with_indifferent_access
+
+        map_payment spree_payment, emerchantpay_payment, request, genesis_response
+
+        emerchantpay_payment.save
+      end
+
       # Save the reference id to the original transaction
       def save_reference_from_transaction(transaction, reference_id)
         transaction.reference_id = reference_id
@@ -73,8 +83,9 @@ module SpreeEmerchantpayGenesis
         genesis_payment.mode              = genesis_response[:mode]
         genesis_payment.message           = genesis_response[:message]
         genesis_payment.technical_message = genesis_response[:technical_message]
-        genesis_payment.request           = filter_genesis_parameters genesis_request
-        genesis_payment.response          = genesis_response
+        genesis_payment.request           = filter_request genesis_request if genesis_request.key?('tree_structure')
+        genesis_payment.response          = genesis_payment.response.merge genesis_response
+        genesis_payment.updated_at        = DateTime.now
       end
 
       # Format major amount to minor currency
@@ -95,7 +106,7 @@ module SpreeEmerchantpayGenesis
       end
 
       # Filter CC parameters
-      def filter_genesis_parameters(genesis_request)
+      def filter_request(genesis_request)
         return genesis_request['tree_structure'] unless genesis_request['tree_structure']['payment_transaction']
 
         genesis_request['tree_structure']['payment_transaction'].reject do |key|

@@ -30,5 +30,9 @@ module SpreeEmerchantpayGenesis
       ]
     end
 
+    config.assets.precompile += %w(
+      spree/emerchantpay_threeds.js spree/emerchantpay_threeds.css spree/emerchantpay_logo.png
+    )
+
   end
 end

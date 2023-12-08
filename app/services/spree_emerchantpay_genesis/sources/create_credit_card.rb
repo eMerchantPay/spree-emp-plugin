@@ -17,7 +17,7 @@ module SpreeEmerchantpayGenesis
       private
 
       # Credit Card source attributes
-      def source_attributes(payment_method, params, user) # rubocop:disable Metrics/MethodLength
+      def source_attributes(payment_method, params, user) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
         {
           payment_method_id:           payment_method.id,
           user_id:                     user&.id,
@@ -28,7 +28,17 @@ module SpreeEmerchantpayGenesis
           year:                        params[:year],
           name:                        params[:name],
           number:                      params[:number],
-          verification_value:          params[:verification_value]
+          verification_value:          params[:verification_value],
+          public_metadata:             {
+            accept_header:    params[:accept_header],
+            java_enabled:     params[:java_enabled],
+            language:         params[:language],
+            color_depth:      params[:color_depth],
+            screen_height:    params[:screen_height],
+            screen_width:     params[:screen_width],
+            time_zone_offset: params[:time_zone_offset],
+            user_agent:       params[:user_agent]
+          }
         }
       end
 

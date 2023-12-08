@@ -1,3 +1,18 @@
+0.1.2
+-----
+
+**Features**:
+
+* Updated project license to MIT
+* Added support for the following transaction types:
+  * Authorize 3D
+  * Sale 3D
+* Added 3DSv2 parameters support to the 3D payments
+* Added support for 3DSv2 payment flow
+* Added `emerchantpay_payment` inside Spree API V2 Create Payment response containing payment state and redirect_url
+* Added Gateway Notifications handling used for asynchronous payments
+* Updated Genesis Ruby SDK to version 0.1.3
+
 0.1.1
 -----
 

@@ -52,11 +52,9 @@ module Spree
 
           # Build additional response parameters
           def build_genesis_response_parameters
-            redirect_url = spree_current_order.payments.last.private_metadata[:redirect_url]
+            spree_payment = spree_current_order.payments.last.private_metadata
 
-            return { redirect_url: redirect_url } unless redirect_url.nil?
-
-            {}
+            { emerchantpay_payment: { state: spree_payment[:state], redirect_url: spree_payment[:redirect_url] } }
           end
 
         end

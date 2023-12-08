@@ -1,6 +1,6 @@
 module SpreeEmerchantpayGenesis
   # Helper methods used in the transaction processing
-  class TransactionHelper
+  class TransactionHelper # rubocop:disable Metrics/ClassLength
 
     TRANSACTION_ID_PREFIX = 'sp-'.freeze
     CAPTURE_ACTION        = 'capture'.freeze
@@ -8,6 +8,8 @@ module SpreeEmerchantpayGenesis
     VOID_ACTION           = 'void'.freeze
 
     class << self
+
+      include Spree::Core::Engine.routes.url_helpers
 
       # Generate Transaction Id
       def generate_transaction_id
@@ -28,6 +30,16 @@ module SpreeEmerchantpayGenesis
       # Check given response for asynchronous execution
       def async_result?(response)
         response.pending? || response.pending_async? || response.in_progress? || response.pending_hold?
+      end
+
+      # Check given response for Method Continue parameters
+      def threeds_secure?(response)
+        TransactionHelper.async_result?(response) && response.response_object&.key?(:threeds_method_url)
+      end
+
+      # Check given response for failure
+      def failure_result?(response)
+        response.error? || response.declined?
       end
 
       # Generate Spree Response from Gateway action
@@ -87,6 +99,34 @@ module SpreeEmerchantpayGenesis
         genesis_request
       end
 
+      # Init Notification object
+      def init_notification(configuration, params)
+        GenesisRuby::Api::Notification.new configuration, params
+      end
+
+      # Initialize Method Continue Transaction Request
+      def init_method_continue_req(configuration)
+        GenesisRuby::Api::Requests::Financial::Cards::Threeds::V2::MethodContinue.new configuration
+      end
+
+      # Fetch Redirect Url from Genesis Response
+      def fetch_redirect_url(options, response)
+        url = ''
+        url = options[:return_success_url] if TransactionHelper.success_result? response
+        url = options[:return_failure_url] if TransactionHelper.failure_result? response
+        url = response.response_object[:redirect_url] if response.response_object&.key? :redirect_url
+        url = build_threeds_secure_endpoint options, response if TransactionHelper.threeds_secure? response
+
+        { redirect_url: url }
+      end
+
+      # Generate Checksum from the response object
+      def generate_checksum(response_object)
+        Digest::MD5.hexdigest(
+          "#{response_object[:unique_id]}#{response_object[:amount]}#{response_object[:currency]}"
+        )
+      end
+
       private
 
       # Build Success or Failure Spree Response
@@ -144,6 +184,14 @@ module SpreeEmerchantpayGenesis
           configuration,
           GenesisRuby::Utils::Transactions::References::VoidableTypes.fetch_reference(payment_type)
         )
+      end
+
+      # Build 3DSv2 Method Continue endpoint
+      def build_threeds_secure_endpoint(options, response)
+        response_object = response.response_object
+        checksum        = generate_checksum response_object
+
+        "#{options[:hostname]}#{emerchantpay_threeds_form_path(response_object[:unique_id], checksum)}"
       end
 
     end

@@ -7,7 +7,7 @@ This is a Payment Module for Spree eCommerce that gives you the ability to proce
 * Spree FrontEnd - Optional (Tested up to 4.4.0)
 * Ruby >= 2.7
 * Ruby on Rails >= 6.1.4
-* [GenesisRuby v0.1.1](https://github.com/GenesisGateway/genesis_ruby/releases/tag/0.1.1)
+* [GenesisRuby v0.1.3](https://github.com/GenesisGateway/genesis_ruby/releases/tag/0.1.3)
 * PCI-certified server in order to use emerchantpay Direct
 
 ## Installation
@@ -34,7 +34,21 @@ bundle exec rails g spree_emerchantpay_genesis:install
 
 Restart your server
 
+## Create Payment Method
+* Sign in to Spree Admin BackEnd
+* Navigate to Configurations -> Payment Methods -> New Payment Method
+* For Provider `Choose Spree::Gateway::Emerchantpay*`
+* Fill in Name, Description and Stores
+* Click Create
+
 # Usage
+
+## Configuration
+* Navigate to the `Spree::Gateway::Emerchantpay*` payment method in the Configurations
+* Fill in Username, Password and Token
+* Fill in `hostname` used for the generation of the notification webhook. In most cases, the hostname should be the hostname of the Spree backend.
+* Fill in `return_success_url` and `return_failure_url`. Those endpoints will be returned to the `create_payment` response
+  * If you add `|:ORDER:|` pattern in the URLs. The pattern will be replaced with the Spree Order Number
 
 ## Spree Storefront API V2
 
@@ -162,7 +176,8 @@ curl --request 'PATCH' \
 }'
 ```
 5. Create Payment
-**CAUTION** Create Payment endpoint will Complete the order! Call this endpoint in order to finish the order!
+**CAUTION** Create Payment endpoint will Complete the order! Call this endpoint in order to finish the order!  
+Accept Header, Java Enabled, Language, Color Depth, Screen height, Screen Width, Time Zone Offset, User Agent parameters must be retrieved from the customer browser. More info [here](https://emerchantpay.github.io/gateway-api-docs/?shell#3ds-v2-request-params).
 
 ```bash
 curl --request 'POST' \
@@ -178,13 +193,29 @@ curl --request 'POST' \
     "month": 1,
     "year": 2040,
     "verification_value": "123",
-    "cc_type": "visa"
+    "cc_type": "visa",
+    "accept_header": "*/*",
+    "java_enabled": "true",
+    "language": "en-GB",
+    "color_depth": "32",
+    "screen_height": "400",
+    "screen_width": "400",
+    "time_zone_offset": "+0",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36"
   }
 }'
 ```
 
 Response:
 **CAUTION** If a redirect URL exists in the response object you MUST redirect the customer for payment completion
+
+Create Payment response will contain `emerchantpay_payment` object. It will contain the current status of the payment.
+Redirect URL will give you the next step.
+
+States:
+* error or declined - redirect URL will be the Failure URL filled in plugin settings
+* approved - redirect URL will be the Success URL filled in the plugin settings
+* pending_async - redirect URL will be the 3DSecure Method Continue endpoint for the next step of the payment
 
 ```json
 {
@@ -193,10 +224,19 @@ Response:
     "type": "cart",
     "attributes": {...},
     "relationships": {...},
-    "redirect_url": "<customer-redirect-url>"
+    "emerchantpay_payment": {
+      "state": "pending_async",
+      "redirect_url": "<customer-redirect-url>"
+    }
   }
 }
 ```
+
+## Reference Actions
+**CAUTION** the following transaction actions must be executed via Spree Admin backend:
+* Capture
+* Refund
+* Void
 
 ## Contributing
 Contribution directions go here.

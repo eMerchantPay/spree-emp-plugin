@@ -20,10 +20,20 @@ module Spree
       @provider
     end
 
-    def purchase(_money_in_cents, source, gateway_options)
+    def purchase(_money_in_cents, source, gateway_options) # rubocop:disable Metrics/MethodLength
       order, payment = order_data_from_options gateway_options
+      user           = order.user
 
-      prepare_provider order.attributes.symbolize_keys.merge(gateway_options), source, payment
+      prepare_provider(
+        order.attributes.symbolize_keys.merge(
+          gateway_options,
+          { digital: order.digital? },
+          { line_items: order.line_items.map { |line_item| line_item.attributes.symbolize_keys } },
+          { user: (user ? user.attributes.symbolize_keys : {}) }
+        ),
+        source,
+        payment
+      )
 
       provider.purchase
     end

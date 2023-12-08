@@ -3,12 +3,13 @@ module SpreeEmerchantpayGenesis
     # Spree Order Mapper
     class Order
 
-      NESTED_NODES             = %w(billing_address shipping_address).freeze
+      NESTED_NODES             = %w(billing_address shipping_address line_items user).freeze
       ORDER_ALLOWED_ATTRIBUTES = %w(
-        currency item_total total user_id token item_count email shipment_total
+        id currency item_total total user_id token item_count email shipment_total
         bill_address_id ship_address_id last_ip_address adjustment_total additional_tax_total included_tax_total number
         customer ip order_id shipping tax subtotal discount name address1 address2 city
-        state zip country phone
+        state zip country phone digital
+        created_at updated_at
       ) + NESTED_NODES
 
       # Provider Data
@@ -36,11 +37,22 @@ module SpreeEmerchantpayGenesis
           data.public_send(node_key, attr_value)
 
           if attr_value.is_a?(Hash) && NESTED_NODES.include?(attr_key.to_s)
-            data.public_send node_key, map_order_data(SpreeEmerchantpayGenesis::Data::Address.new, attr_value)
+            map_user data, node_key, attr_value if attr_key.to_s == 'user'
+            map_address data, node_key, attr_value if %w(billing_address shipping_address).include? attr_key.to_s
           end
         end
 
         data
+      end
+
+      # Map User
+      def map_user(data, node_key, attr_value)
+        data.public_send node_key, map_order_data(SpreeEmerchantpayGenesis::Data::User.new, attr_value)
+      end
+
+      # Map Addresses
+      def map_address(data, node_key, attr_value)
+        data.public_send node_key, map_order_data(SpreeEmerchantpayGenesis::Data::Address.new, attr_value)
       end
 
     end

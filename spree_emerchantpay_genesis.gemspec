@@ -15,7 +15,7 @@ Gem::Specification.new do |spec|
   spec.author   = 'emerchantpay ltd.'
   spec.email    = ['client_integrations@emerchantpay.com']
   spec.homepage = 'https://emerchantpay.com'
-  spec.license  = 'GPL-2.0'
+  spec.license  = 'MIT'
 
   spec.require_path = 'lib'
   spec.requirements << 'none'
@@ -27,7 +27,7 @@ Gem::Specification.new do |spec|
 
   spec.files = Dir['{app,config,db,lib}/**/*', 'LICENSE', 'Rakefile', 'README.md', 'CHANGELOG.md']
 
-  spec.add_dependency 'genesis_ruby', '0.1.1'
+  spec.add_dependency 'genesis_ruby', '0.1.3'
   spec.add_dependency 'rails', '~> 6.1.4'
   spec.add_dependency 'securerandom', '~> 0.2.2'
   spec.add_dependency 'spree_backend', '~> 4.4', '>= 4.4.0'

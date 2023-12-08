@@ -4,12 +4,17 @@ module SpreeEmerchantpayGenesis
 
     class << self
 
+      # Find Spree payment by its number
+      def find_by_number(number)
+        Spree::Payment.find_by(number: number)
+      end
+
       # Update Spree payment from response
       def update_payment(payment, response)
         response_object = response.response_object
 
-        payment.cvv_response_code = response_object[:cvv_result_code]
-        payment.avs_response      = response_object[:avs_response_code]
+        payment.cvv_response_code = response_object[:cvv_result_code] if response_object.key?(:cvv_result_code)
+        payment.avs_response      = response_object[:avs_response_code] if response_object.key?(:avs_response_code)
 
         # From Spree Payment Model
         #     # transaction_id is  much easier to understand
@@ -20,12 +25,31 @@ module SpreeEmerchantpayGenesis
       end
 
       # Add metadata to the Payment model
-      def add_payment_metadata(payment, response_object)
-        redirect_url      = response_object[:redirect_url] ? { redirect_url: response_object[:redirect_url] } : {}
-        message           = response_object[:message] ? { message: response_object[:message] } : {}
-        technical_message = response_object[:technical_message] ? { message: response_object[:technical_message] } : {}
+      def add_payment_metadata(payment, options, genesis_response)
+        response_object   = genesis_response.response_object
+        redirect_url      = TransactionHelper.fetch_redirect_url(options, genesis_response)
+        state             = response_object.key?(:status) ? { state: response_object[:status] } : {}
+        message           = response_object.key?(:message) ? { message: response_object[:message] } : {}
+        technical_message =
+          response_object.key?(:technical_message) ? { message: response_object[:technical_message] } : {}
 
-        payment.private_metadata.merge! redirect_url, message, technical_message
+        payment.private_metadata.merge! redirect_url, message, technical_message, state
+      end
+
+      # Update the Spree Payment status from GenesisRuby::Api::Response object
+      def update_payment_status(payment, response)
+        capturable_types = GenesisRuby::Utils::Transactions::References::CapturableTypes
+        transaction_type = response.response_object[:transaction_type]
+
+        if response.approved?
+          action = :complete
+          action = :pend if capturable_types.allowed_reference? transaction_type
+
+          payment.public_send(action)
+        end
+
+        payment.failure if response.error? || response.declined?
+        payment.void if response.voided?
       end
 
     end

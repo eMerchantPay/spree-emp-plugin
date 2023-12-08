@@ -10,6 +10,10 @@ en:
       authorize3d: Authorize3D
       sale: Sale
       sale3d: Sale3D
+      no_preference: No Preference
+      no_challenge_requested: No Challenge Requested
+      preference: Preference
+      mandate: Mandate
     payment:
       usage: Electronic transaction via Spree eCommerce platform
       reference: Reference transaction via Spree eCommerce platform
@@ -34,3 +38,5 @@ en:
     transaction_types: Transaction Types
     return_success_url: Return Success URL
     return_failure_url: Return Failure URL
+    challenge_indicator: Challenge Indicator
+    hostname: Hostname

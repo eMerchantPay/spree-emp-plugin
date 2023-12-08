@@ -1,0 +1,26 @@
+<iframe width="1200" height="800" id="threedsMethodIframe" name="threedsMethodIframe" class="hidden">
+  <html>
+  <body>
+  </body>
+  </html>
+</iframe>
+<div class="center">
+  <div class="content">
+    <div class="screen-logo">
+      <%= image_tag 'spree/emerchantpay_logo.png', alt: 'emerchantpay ltd.' %>
+    </div>
+    <h3>The payment is being processed
+      <span>Please wait</span>
+    </h3>
+  </div>
+</div>
+
+<form id="threedsMethodForm" name="threedsMethodForm" enctype="application/x-www-form-urlencoded;charset=UTF-8"
+      method="POST" action="<%= threeds_method_url %>"
+      data-status-url="<%= api_v2_storefront_emerchantpay_threeds_callback_status_path %>"
+      data-method-secure-url="<%= api_v2_storefront_emerchantpay_threeds_secure_continue_path %>"
+      data-failure-url="<%= failure_url %>"
+      target="threedsMethodIframe">
+  <input type="hidden" name="unique_id" value="<%= params[:unique_id] %>" />
+  <input type="hidden" name="signature" value="<%= signature %>" />
+</form>

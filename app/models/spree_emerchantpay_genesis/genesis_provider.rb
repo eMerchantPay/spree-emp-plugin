@@ -1,6 +1,8 @@
 module SpreeEmerchantpayGenesis
   # Genesis API provider
-  class GenesisProvider
+  class GenesisProvider # rubocop:disable Metrics/ClassLength
+
+    ORDER_REPLACE_PATTERN = '|:ORDER:|'.freeze
 
     attr_reader :provider_data
 
@@ -13,6 +15,10 @@ module SpreeEmerchantpayGenesis
     # Load Order data
     def load_data(data)
       @order = data
+
+      parse_order_patterns
+
+      @order
     end
 
     # Load Payment Source data
@@ -91,6 +97,34 @@ module SpreeEmerchantpayGenesis
       end
     end
 
+    # Handle notification
+    def notification(emerchantpay_payment, params)
+      notification = TransactionHelper.init_notification @configuration, params
+
+      notification.reconcile
+
+      unless notification.transaction_reconciliation?
+        reconciliation = notification.reconciliation
+
+        raise reconciliation.nil? ? 'Notification can not be handled!' : reconciliation.response_object.inspect
+      end
+
+      handle_reconciliation_response emerchantpay_payment, notification.reconciliation
+
+      notification
+    end
+
+    # Execute 3DSv2 Method Continue
+    def method_continue(emerchantpay_payment)
+      method_continue = TransactionHelper.init_method_continue_req @configuration
+
+      genesis = GenesisRuby::Genesis.new(
+        @configuration, Mappers::Genesis.for_method_continue(method_continue, emerchantpay_payment).context
+      )
+
+      genesis.execute.response
+    end
+
     private
 
     # Process Gateway response
@@ -98,10 +132,7 @@ module SpreeEmerchantpayGenesis
       response_object = genesis_response.response_object
 
       if TransactionHelper.success_result? genesis_response
-        EmerchantpayPaymentsRepository.save_reference_from_transaction(
-          original_transaction,
-          response_object[:unique_id]
-        )
+        EmerchantpayPaymentsRepository.save_reference_from_transaction original_transaction, response_object[:unique_id]
       end
 
       handle_response genesis_request, genesis_response, is_payment: false
@@ -116,11 +147,28 @@ module SpreeEmerchantpayGenesis
       end
 
       SpreePaymentsRepository.update_payment @payment, response if is_payment
-      SpreePaymentsRepository.add_payment_metadata @payment, response.response_object
+      SpreePaymentsRepository.add_payment_metadata @payment, @options, response
+
+      # Missing shipping amount fix
+      @payment.amount = response.response_object[:amount] if response.response_object&.key?(:amount) && is_payment
 
       @payment.save
 
       Rails.logger.info response.response_object.to_yaml
+      true
+    end
+
+    # Handle Genesis Notification Response
+    def handle_reconciliation_response(emerchantpay_payment, reconciliation)
+      EmerchantpayPaymentsRepository.update_from_response_data(emerchantpay_payment, reconciliation, @payment)
+
+      SpreePaymentsRepository.update_payment @payment, reconciliation
+      SpreePaymentsRepository.add_payment_metadata @payment, @options, reconciliation
+      SpreePaymentsRepository.update_payment_status @payment, reconciliation
+
+      @payment.save
+
+      Rails.logger.info reconciliation.response_object.to_yaml
       true
     end
 
@@ -144,6 +192,14 @@ module SpreeEmerchantpayGenesis
     # Configure Genesis provider with the token form the given transaction
     def configure_token(transaction)
       @configuration.token = transaction.terminal_token if transaction.terminal_token
+    end
+
+    # Plugin options with dynamic parameters
+    def parse_order_patterns
+      @options[:return_success_url].sub! ORDER_REPLACE_PATTERN, @order[:number]
+      @options[:return_failure_url].sub! ORDER_REPLACE_PATTERN, @order[:number]
+
+      @options
     end
 
   end
