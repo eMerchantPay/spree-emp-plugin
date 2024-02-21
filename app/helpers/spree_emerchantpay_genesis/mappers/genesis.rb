@@ -5,6 +5,8 @@ module SpreeEmerchantpayGenesis
     # Genesis Gateway Data Mapper
     class Genesis # rubocop:disable Metrics/ClassLength
 
+      ORDER_REPLACE_PATTERN = '|:ORDER:|'.freeze
+
       include Spree::Core::Engine.routes.url_helpers
 
       attr_reader :context
@@ -37,6 +39,14 @@ module SpreeEmerchantpayGenesis
         this.map_method_continue emerchantpay_payment
       end
 
+      # Replace URL patterns
+      def self.for_urls!(options, order_number)
+        options[:return_success_url]&.sub! ORDER_REPLACE_PATTERN, order_number
+        options[:return_failure_url]&.sub! ORDER_REPLACE_PATTERN, order_number
+
+        options
+      end
+
       def initialize(object)
         @context = object
       end
@@ -49,7 +59,7 @@ module SpreeEmerchantpayGenesis
         shipping_attributes order
         if TransactionHelper.asyn? @context
           asyn_attributes options
-          threeds_attributes order, source, options if options[:threeds_allowed]
+          threeds_attributes order, source, options if ActiveModel::Type::Boolean.new.cast options[:threeds_allowed]
         end
 
         self
@@ -73,7 +83,7 @@ module SpreeEmerchantpayGenesis
         @context.username    = options[:username]
         @context.password    = options[:password]
         @context.token       = options[:token]
-        @context.environment = fetch_genesis_environment options[:test_mode]
+        @context.environment = fetch_genesis_environment ActiveModel::Type::Boolean.new.cast(options[:test_mode])
         @context.endpoint    = GenesisRuby::Api::Constants::Endpoints::EMERCHANTPAY
 
         self
@@ -112,6 +122,8 @@ module SpreeEmerchantpayGenesis
 
       # Billing Attributes
       def billing_attributes(provider) # rubocop:disable Metrics/AbcSize
+        return unless provider&.billing_address
+
         @context.billing_first_name = provider.billing_address.first_name
         @context.billing_last_name  = provider.billing_address.last_name
         @context.billing_address1   = provider.billing_address.address1

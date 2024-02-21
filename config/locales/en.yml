@@ -40,3 +40,6 @@ en:
     return_failure_url: Return Failure URL
     challenge_indicator: Challenge Indicator
     hostname: Hostname
+    threeds_allowed: Threeds V2 parameters handling
+    enabled: Enabled
+    disabled: Disabled

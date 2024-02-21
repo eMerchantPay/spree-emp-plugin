@@ -47,7 +47,9 @@ module SpreeEmerchantpayGenesis
 
       # Failure URL
       def failure_url
-        genesis_preferences[:return_failure_url].sub(GenesisProvider::ORDER_REPLACE_PATTERN, order_number)
+        Mappers::Genesis.for_urls! genesis_preferences, order_number
+
+        genesis_preferences[:return_failure_url]
       end
 
     end

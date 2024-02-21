@@ -1,0 +1,90 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://staging.gate.emerchantpay.net/process/example_token/
+    body:
+      encoding: UTF-8
+      string: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <payment_transaction>
+          <transaction_type>capture</transaction_type>
+          <transaction_id>sp-2fbed-bb8d-4f3a-b067-0e24b7e3c</transaction_id>
+          <usage>Reference transaction via Spree eCommerce platform - Authorize3d</usage>
+          <remote_ip>127.0.0.1</remote_ip>
+          <reference_id>89606fdc-f30e-4e76-b345-3ae34cfce578</reference_id>
+          <amount>99</amount>
+          <currency>EUR</currency>
+        </payment_transaction>
+    headers:
+      Content-Type:
+      - text/xml
+      Content-Length:
+      - '434'
+      Authorization:
+      - Basic example_credentials
+      User-Agent:
+      - 'Genesis Ruby Client 0.1.3. Network: GenesisRuby::Network::NetHttp'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/xml; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Date:
+      - Tue, 06 Feb 2024 11:37:20 GMT
+      Vary:
+      - Accept
+      Etag:
+      - W/"681d1210d611fa2b1f27187a2660da23"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - ec709342-8021-4d3f-8db3-99e353fa5c40
+      X-Runtime:
+      - '0.214414'
+      Strict-Transport-Security:
+      - max-age=631138519
+      X-Frame-Options:
+      - ALLOWALL
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Content-Security-Policy:
+      - 'default-src https: ''self''; font-src ''self'' data:; img-src https: ''self''
+        data:; script-src https: ''self'' ''unsafe-inline'' js-agent.newrelic.com
+        bam.nr-data.net; style-src https: ''self'' ''unsafe-inline''; report-uri https://emerchantpay.report-uri.io/r/default/csp/enforce'
+      X-Cache:
+      - Miss from cloudfront
+      Via:
+      - 1.1 d7b57c03966322aaa7563ac66201d474.cloudfront.net (CloudFront)
+      X-Amz-Cf-Pop:
+      - DUB56-P2
+      X-Amz-Cf-Id:
+      - d6C5ReRhTrnXKlUSqHcZvd3m0fmZopUbpPfx11yMv3V4FnLY1x8fng==
+    body:
+      encoding: UTF-8
+      string: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <payment_response>
+          <status>error</status>
+          <code>220</code>
+          <message>Transaction failed, please contact support!</message>
+          <technical_message>Invalid Terminal</technical_message>
+        </payment_response>
+  recorded_at: Tue, 06 Feb 2024 11:37:20 GMT
+recorded_with: VCR 6.2.0

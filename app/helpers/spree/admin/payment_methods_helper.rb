@@ -5,48 +5,39 @@ module Spree
 
       def preference_field_for(form, field, options) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength
         case options[:type]
-        when :integer
+        when :integer, :string
           form.text_field(field, preference_field_options(options))
         when :boolean
           form.check_box(field, preference_field_options(options))
-        when :string
-          if field.eql?('preferred_descriptor_name')
-            content_tag(:div,
-                        Spree.t('descriptor_name_information_box_text').html_safe,
-                        class: 'alert alert-warning')
-          end.to_s.html_safe +
-            form.text_field(field, preference_field_options(options))
         when :password
           form.password_field(field, preference_field_options(options))
         when :text
           form.text_area(field, preference_field_options(options))
         when :boolean_select
           label_tag(field, Spree.t(field))
-          form.select(field, {
-                        Spree.t(:enabled)  => true,
-                        Spree.t(:disabled) => false
-                      },
-                      {},
-                      class: 'select2')
+          form.select(field, { Spree.t(:enabled) => true, Spree.t(:disabled) => false }, {}, class: 'select2')
         when :select
           label_tag(field, Spree.t(field))
-          form.select(field, options_for_select(options[:values].map do |key|
-                                                  [I18n.t(key, scope: 'emerchantpay.preferences'), key]
-                                                end, options[:selected]), {}, class: 'select2')
+          form.select(
+            field,
+            options_for_select(
+              options[:values].map { |key| [I18n.t(key, scope: 'emerchantpay.preferences'), key] }, options[:selected]
+            ),
+            {},
+            class: 'select2'
+          )
         else
           form.text_field(field, preference_field_options(options))
         end
       end
 
-      def preference_field_tag(name, value, options) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength
+      def preference_field_tag(name, value, options) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         case options[:type]
-        when :integer
+        when :integer, :string
           text_field_tag(name, value, preference_field_options(options))
         when :boolean
           hidden_field_tag(name, 0, id: "#{name}_hidden") +
             check_box_tag(name, 1, value, preference_field_options(options))
-        when :string
-          text_field_tag(name, value, preference_field_options(options))
         when :password
           password_field_tag(name, value, preference_field_options(options))
         when :text

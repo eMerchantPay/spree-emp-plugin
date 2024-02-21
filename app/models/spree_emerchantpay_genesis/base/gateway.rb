@@ -8,11 +8,12 @@ module SpreeEmerchantpayGenesis
       preference :transaction_types, :select,  default: -> { { values: [:authorize, :authorize3d, :sale, :sale3d] } }
       preference :return_success_url, :string, default: 'http://localhost:4000/orders/|:ORDER:|'
       preference :return_failure_url, :string, default: 'http://localhost:4000/checkout/payment?order_number=|:ORDER:|'
-      preference :threeds_allowed, :boolean, default: true
+      preference :threeds_allowed, :boolean_select, default: true
       preference :challenge_indicator, :select, default: lambda {
         { values: [:no_preference, :no_challenge_requested, :preference, :mandate] }
       }
       preference :hostname, :string, default: 'http://127.0.0.1:4000'
+      preference :test_mode, :boolean_select, default: true
 
       # Capture authorized payment
       def capture(amount, transaction_id, gateway_options)

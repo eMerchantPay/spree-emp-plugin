@@ -1,3 +1,17 @@
+0.1.3
+-----
+**Features**
+
+* Added tests to the library
+* Added Appraisals for Spree 4.4 and Spree main GitHub Branch
+* Added `spree_emerchantpay_genesis` to [RubyGems](https://rubygems.org/gems/spree_emerchantpay_genesis)
+
+**Fixes**:
+
+* Fixed 3DSv2 parameters handling
+* Fixed engine installation without Spree Rails Frontend
+* Fixed minor issues
+
 0.1.2
 -----
 

@@ -46,7 +46,11 @@ module SpreeEmerchantpayGenesis
 
       # 3DSv2 registration date with the 3DSv2 requester
       def filter_first_completed_payment(user_orders)
-        user_orders.filter { |row| row['payment_state'] == COMPLETED_SPREE_PAYMENT_STATE }.first
+        filtered = user_orders.filter { |row| row['payment_state'] == COMPLETED_SPREE_PAYMENT_STATE }.first
+
+        return {} unless filtered
+
+        filtered
       end
 
       # Fetch 3DSv2 Card Holder Shipping Address first used

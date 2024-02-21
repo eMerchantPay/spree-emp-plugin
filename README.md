@@ -251,5 +251,19 @@ Contribution directions go here.
 
 `rake styles`
 
+### Appraisals
+
+#### Spree 4.4
+
+`bundle exec appraisal spree-4.4 rake test`
+
+#### Spree Master
+
+`bundle exec appraisal spree-master rake test`
+
+#### Configure
+
+`bundle exec appraisal install`
+
 ## License
 The gem is available as open source under the terms of the [GPL-2.0 License](https://opensource.org/license/gpl-2-0/).

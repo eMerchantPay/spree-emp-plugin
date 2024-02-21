@@ -11,7 +11,7 @@ module Spree
 
       render 'method_continue', locals: service.build_secure_method_params
     rescue StandardError => e
-      Rails.logger.error = "Emerchantpay Threeds Controller: #{e.message}"
+      Rails.logger.error "Emerchantpay Threeds Controller: #{e.message}"
 
       render plain: 'Error during Emerchantpay 3DSv2 execution. Contact administrator!'
     end

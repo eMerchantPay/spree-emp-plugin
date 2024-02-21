@@ -4,9 +4,10 @@
 /log/*.log
 /pkg/
 /tmp/
-/test/dummy/log/*.log
-/test/dummy/storage/
-/test/dummy/tmp/
 .byebug_history
 .idea
 spree_emerchantpay_genesis*.gem
+coverage
+rspec_report.xml
+rubocop_report.txt
+/spec/dummy

@@ -23,7 +23,7 @@ module SpreeEmerchantpayGenesis
           FROM spree_orders as o \
           INNER JOIN spree_payments as p on (p.order_id = o.id) \
           INNER JOIN spree_payment_methods as m on (m.id = p.payment_method_id) \
-          INNER JOIN spree_line_items as l on (l.order_id = o.id) \
+          LEFT JOIN spree_line_items as l on (l.order_id = o.id) \
           WHERE m.type = '#{type}' AND o.user_id = '#{user_id}' \
           ORDER BY o.id ASC"
         )

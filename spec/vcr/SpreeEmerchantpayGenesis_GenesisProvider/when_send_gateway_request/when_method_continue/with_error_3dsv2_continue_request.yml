@@ -1,0 +1,79 @@
+---
+http_interactions:
+- request:
+    method: put
+    uri: https://staging.gate.emerchantpay.net/threeds/threeds_method/44fa3826a2966c738febda31aecf02d2
+    body:
+      encoding: US-ASCII
+      string: unique_id=44fa3826a2966c738febda31aecf02d2&signature=cec7c84c8031dfa678edbe5676fcb73c483f262e1412cb272287d609b5c0e9dcfd08632f24ec18b8b08b5f1b689c387e53b9af8f478237a51c22cc2b23465dc6
+    headers:
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Content-Length:
+      - '181'
+      Authorization:
+      - Basic example_credentials
+      User-Agent:
+      - 'Genesis Ruby Client 0.1.3. Network: GenesisRuby::Network::NetHttp'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 409
+      message: Conflict
+    headers:
+      Content-Type:
+      - application/xml; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Date:
+      - Tue, 06 Feb 2024 15:47:39 GMT
+      Vary:
+      - Accept
+      Cache-Control:
+      - no-cache
+      X-Request-Id:
+      - 04d1fbdc-df0b-4683-a135-cbdceb48854a
+      X-Runtime:
+      - '0.046205'
+      Strict-Transport-Security:
+      - max-age=631138519
+      X-Frame-Options:
+      - ALLOWALL
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Content-Security-Policy:
+      - 'default-src https: ''self''; font-src ''self'' data:; img-src https: ''self''
+        data:; script-src https: ''self'' ''unsafe-inline'' js-agent.newrelic.com
+        bam.nr-data.net; style-src https: ''self'' ''unsafe-inline''; report-uri https://emerchantpay.report-uri.io/r/default/csp/enforce'
+      X-Cache:
+      - Error from cloudfront
+      Via:
+      - 1.1 70d9ae273c860e606f236c528381f9ca.cloudfront.net (CloudFront)
+      X-Amz-Cf-Pop:
+      - SOF50-C1
+      X-Amz-Cf-Id:
+      - KWgeORpoc00ZOOkQJ52dL6ZXXzXwT2noAP3E3a3bk8psc-jkVjcciA==
+    body:
+      encoding: UTF-8
+      string: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <payment_response>
+          <unique_id>44fa3826a2966c738febda31aecf02d2</unique_id>
+          <transaction_id>sp-28377-994b-414e-b0bc-d75de0860</transaction_id>
+          <transaction_type>authorize3d</transaction_type>
+          <status>error</status>
+          <technical_message>Please, reconcile the transaction in order to check its current status.</technical_message>
+        </payment_response>
+  recorded_at: Tue, 06 Feb 2024 15:47:39 GMT
+recorded_with: VCR 6.2.0

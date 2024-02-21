@@ -3,28 +3,22 @@ module SpreeEmerchantpayGenesis
     # Emerchantpay plugin install script
     class InstallGenerator < Rails::Generators::Base
 
+      JS_FRONTEND_PATH  = 'vendor/assets/javascripts/spree/frontend/all.js'.freeze
+      CSS_FRONTEND_PATH = 'vendor/assets/stylesheets/spree/frontend/all.css'.freeze
+      RAKE_PATH         = 'bundle exec rake'.freeze
+
       class_option :auto_run_migrations, type: :boolean, default: false
 
       def add_javascripts
-        append_file 'vendor/assets/javascripts/spree/frontend/all.js', "//= require spree/frontend/card.min.js\n"
+        append_file JS_FRONTEND_PATH, "//= require spree/frontend/card.min.js\n" if File.exist? JS_FRONTEND_PATH
       end
 
       def add_stylesheets
-        append_file 'vendor/assets/stylesheets/spree/frontend/all.css', "//= require spree/frontend/card.css\n"
-      end
-
-      def add_schedule
-        # TODO: Add Cron If Needed
-        # create_file 'config/schedule.rb' unless File.exist?('config/schedule.rb')
-        # append_file 'config/schedule.rb' do
-        #   "\nevery '0 4,10,16,22 * * * *' do
-        #     rake 'emerchantpay_direct:update_states'
-        #   end"
-        # end
+        append_file CSS_FRONTEND_PATH, "//= require spree/frontend/card.css\n" if File.exist? CSS_FRONTEND_PATH
       end
 
       def add_migrations
-        run 'bundle exec rake railties:install:migrations FROM=spree_emerchantpay_genesis'
+        run "#{RAKE_PATH} railties:install:migrations FROM=spree_emerchantpay_genesis"
       end
 
       def run_migrations
@@ -32,7 +26,7 @@ module SpreeEmerchantpayGenesis
           ask('Would you like to run the migrations now? [Y/n]')
         )
         if run_migrations
-          run 'bundle exec rake db:migrate'
+          run "#{RAKE_PATH} db:migrate"
         else
           puts 'Skipping rake db:migrate, don\'t forget to run it!'
         end

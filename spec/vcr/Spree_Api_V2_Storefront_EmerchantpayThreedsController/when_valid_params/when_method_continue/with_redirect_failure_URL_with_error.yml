@@ -1,0 +1,83 @@
+---
+http_interactions:
+- request:
+    method: put
+    uri: https://staging.gate.emerchantpay.net/threeds/threeds_method/bb0d6f1c-01dc-461e-b391-b2374b25d9ba
+    body:
+      encoding: US-ASCII
+      string: unique_id=bb0d6f1c-01dc-461e-b391-b2374b25d9ba&signature=243fd36f62fece235898094acaf944309baf7e54babeaa0ee5d545df31b9243ec82a2a5bc0de7323240c583481e595910d0b1a6cb7f05a78f93ea01d93250456
+    headers:
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Content-Length:
+      - '185'
+      Authorization:
+      - Basic example_credentials
+      User-Agent:
+      - 'Genesis Ruby Client 0.1.3. Network: GenesisRuby::Network::NetHttp'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Content-Type:
+      - text/html; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Date:
+      - Mon, 12 Feb 2024 13:46:45 GMT
+      Vary:
+      - Accept
+      Cache-Control:
+      - no-cache
+      X-Request-Id:
+      - 333e8124-b0a8-4db3-a976-fd4becb40a5d
+      X-Runtime:
+      - '0.024359'
+      Strict-Transport-Security:
+      - max-age=631138519
+      X-Frame-Options:
+      - ALLOWALL
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Content-Security-Policy:
+      - 'default-src https: ''self''; font-src ''self'' data:; img-src https: ''self''
+        data:; script-src https: ''self'' ''unsafe-inline'' js-agent.newrelic.com
+        bam.nr-data.net; style-src https: ''self'' ''unsafe-inline''; report-uri https://emerchantpay.report-uri.io/r/default/csp/enforce'
+      X-Cache:
+      - Error from cloudfront
+      Via:
+      - 1.1 0d28fd7b073340c78cdcd5a3e2e0fe5a.cloudfront.net (CloudFront)
+      X-Amz-Cf-Pop:
+      - LHR3-C2
+      X-Amz-Cf-Id:
+      - gDma_vFeyxekdSD5TPdVV6KvQgCN1uP4DWFVkC1NbDDFXavz5-t12A==
+    body:
+      encoding: UTF-8
+      string: "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"\n
+        \      \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n\n<html
+        xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n\n<head>\n
+        \ <meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" />\n
+        \ <title>The page you were looking for doesn't exist (404)</title>\n\t<style
+        type=\"text/css\">\n\t\tbody { background-color: #fff; color: #666; text-align:
+        center; font-family: arial, sans-serif; }\n\t\tdiv.dialog {\n\t\t\twidth:
+        25em;\n\t\t\tpadding: 0 4em;\n\t\t\tmargin: 4em auto 0 auto;\n\t\t\tborder:
+        1px solid #ccc;\n\t\t\tborder-right-color: #999;\n\t\t\tborder-bottom-color:
+        #999;\n\t\t}\n\t\th1 { font-size: 100%; color: #f00; line-height: 1.5em; }\n\t</style>\n</head>\n\n<body>\n
+        \ <!-- This file lives in public/404.html -->\n  <div class=\"dialog\">\n
+        \   <h1>The page you were looking for doesn't exist.</h1>\n    <p>You may
+        have mistyped the address or the page may have moved.</p>\n  </div>\n</body>\n</html>"
+  recorded_at: Mon, 12 Feb 2024 13:46:45 GMT
+recorded_with: VCR 6.2.0

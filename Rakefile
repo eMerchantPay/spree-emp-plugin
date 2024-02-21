@@ -1,24 +1,50 @@
-require 'bundler/setup'
+require 'bundler'
+Bundler::GemHelper.install_tasks
 
-APP_RAKEFILE = File.expand_path('test/dummy/Rakefile', __dir__)
-load 'rails/tasks/engine.rake'
+require 'rspec/core/rake_task'
+require 'spree/testing_support/extension_rake'
 
-load 'rails/tasks/statistics.rake'
+desc 'Generates a dummy app for testing'
+task :test_app do
+  ENV['LIB_NAME'] = 'spree_emerchantpay_genesis'
+  Rake::Task['extension:test_app'].invoke
+end
 
-require 'bundler/gem_tasks'
+RSpec::Core::RakeTask.new(:spec)
+RSpec::Core::RakeTask.new(:spec_junit) do |t|
+  t.rspec_opts = ['--format RspecJunitFormatter', '--out rspec_report.xml']
+  t.pattern    = '**/*_spec.rb'
+end
 
-require 'rake/testtask'
+task :rspec, [:format] do |_task, args|
+  if Dir['spec/dummy'].empty?
+    Rake::Task[:test_app].invoke
+    Dir.chdir('../../')
+  end
 
-Rake::TestTask.new(:test) do |t|
-  t.libs << 'test'
-  t.pattern = 'test/**/*_test.rb'
-  t.verbose = false
+  case args.format
+  when 'junit'
+    Rake::Task[:spec_junit].invoke
+  else
+    Rake::Task[:spec].invoke
+  end
 end
 
 require 'rubocop/rake_task'
+RuboCop::RakeTask.new(:rubocop_default)
+RuboCop::RakeTask.new(:rubocop_progress) do |t|
+  t.formatters = %w(progress)
+  t.options    = %w(--out rubocop_report.txt)
+end
 
-RuboCop::RakeTask.new
+task :test do
+  Rake::Task[:rspec].invoke('')
+end
 
-task default: %i[test rubocop]
-task spec: :test
-task styles: :rubocop
+task :test_junit do
+  Rake::Task[:rspec].invoke('junit')
+end
+
+task default: %i[test rubocop_default]
+task styles: :rubocop_default
+task style_progress: :rubocop_progress

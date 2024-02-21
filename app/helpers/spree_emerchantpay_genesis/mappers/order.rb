@@ -12,6 +12,16 @@ module SpreeEmerchantpayGenesis
         created_at updated_at
       ) + NESTED_NODES
 
+      # Prepare Order data used from the Order mapper
+      def self.prepare_data(order, user, gateway_options = {})
+        order.attributes.symbolize_keys.merge(
+          gateway_options,
+          { digital: order.digital? },
+          { line_items: order.line_items.map { |line_item| line_item.attributes.symbolize_keys } },
+          { user: (user ? user.attributes.symbolize_keys : {}) }
+        )
+      end
+
       # Provider Data
       def self.for(raw_data)
         mapped_data = new SpreeEmerchantpayGenesis::Data::Provider.new

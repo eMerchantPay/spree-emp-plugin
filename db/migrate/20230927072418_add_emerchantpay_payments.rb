@@ -1,8 +1,8 @@
 # Add Emerchanptay Payments DB migration
 class AddEmerchantpayPayments < ActiveRecord::Migration[6.1]
 
-  def change # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-    create_table 'emerchantpay_payments' do |t|
+  def up # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    create_table 'emerchantpay_payments', if_not_exists: true do |t|
       t.string 'transaction_id', null: false
       t.string 'unique_id', limit: 512
       t.string 'reference_id', limit: 512
@@ -25,6 +25,10 @@ class AddEmerchantpayPayments < ActiveRecord::Migration[6.1]
       t.index %w(transaction_id transaction_type), name: 'idx_unique_transaction_type', unique: true
       t.index %w(order_id payment_id), name: 'idx_order_payment_id'
     end
+  end
+
+  def down
+    drop_table 'emerchantpay_payments'
   end
 
 end

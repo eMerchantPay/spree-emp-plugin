@@ -28,18 +28,26 @@ Gem::Specification.new do |spec|
   spec.files = Dir['{app,config,db,lib}/**/*', 'LICENSE', 'Rakefile', 'README.md', 'CHANGELOG.md']
 
   spec.add_dependency 'genesis_ruby', '0.1.3'
-  spec.add_dependency 'rails', '~> 6.1.4'
+  spec.add_dependency 'rails', '~> 6.0'
   spec.add_dependency 'securerandom', '~> 0.2.2'
   spec.add_dependency 'spree_backend', '~> 4.4', '>= 4.4.0'
   spec.add_dependency 'spree_core', '~> 4.4', '>= 4.4.0'
   spec.add_dependency 'spree_extension', '0.1.0'
 
+  spec.add_development_dependency 'appraisal', '~> 2.5'
+  spec.add_development_dependency 'database_cleaner', '~> 2.0'
   spec.add_development_dependency 'factory_bot', '~> 4.7'
+  spec.add_development_dependency 'faker', '~> 3.2'
   spec.add_development_dependency 'faraday-retry', '~> 2.0'
+  spec.add_development_dependency 'ffaker', '~> 2.23'
   spec.add_development_dependency 'pronto', '~> 0.11'
   spec.add_development_dependency 'pronto-rubocop', '~> 0.11'
+  spec.add_development_dependency 'pry', '~> 0.14'
   spec.add_development_dependency 'rspec', '~> 3.12'
-  spec.add_development_dependency 'rspec-rails', '~> 6.0'
+  spec.add_development_dependency 'rspec_junit_formatter', '~> 0.6'
+  spec.add_development_dependency 'rspec-rails', '~> 4.0'
   spec.add_development_dependency 'rubocop', '~> 1.21'
   spec.add_development_dependency 'rubocop-rspec', '~> 2.13'
+  spec.add_development_dependency 'simplecov', '~> 0.22'
+  spec.add_development_dependency 'vcr', '~> 6.2'
 end

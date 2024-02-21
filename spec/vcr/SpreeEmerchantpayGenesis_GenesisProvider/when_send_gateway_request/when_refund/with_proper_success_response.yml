@@ -1,0 +1,99 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://staging.gate.emerchantpay.net/process/example_token/
+    body:
+      encoding: UTF-8
+      string: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <payment_transaction>
+          <transaction_type>refund</transaction_type>
+          <transaction_id>sp-ff560-7d56-486b-9b0f-260573cdf</transaction_id>
+          <usage>Reference transaction via Spree eCommerce platform - Capture</usage>
+          <remote_ip>127.0.0.1</remote_ip>
+          <reference_id>ce67aa24ca6ac656684af4a302a6214d</reference_id>
+          <amount>99</amount>
+          <currency>EUR</currency>
+        </payment_transaction>
+    headers:
+      Content-Type:
+      - text/xml
+      Content-Length:
+      - '425'
+      Authorization:
+      - Basic example_credentials
+      User-Agent:
+      - 'Genesis Ruby Client 0.1.3. Network: GenesisRuby::Network::NetHttp'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/xml; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Date:
+      - Tue, 06 Feb 2024 10:01:04 GMT
+      Vary:
+      - Accept
+      Etag:
+      - W/"4420c077fd5bc5dcff808a27e11d6034"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 9b2177fc-c5f6-4d45-bc36-7d3b0020bd8e
+      X-Runtime:
+      - '1.074749'
+      Strict-Transport-Security:
+      - max-age=631138519
+      X-Frame-Options:
+      - ALLOWALL
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Content-Security-Policy:
+      - 'default-src https: ''self''; font-src ''self'' data:; img-src https: ''self''
+        data:; script-src https: ''self'' ''unsafe-inline'' js-agent.newrelic.com
+        bam.nr-data.net; style-src https: ''self'' ''unsafe-inline''; report-uri https://emerchantpay.report-uri.io/r/default/csp/enforce'
+      X-Cache:
+      - Miss from cloudfront
+      Via:
+      - 1.1 eef8e8b0b7fc1b7ec6767325fac5e44c.cloudfront.net (CloudFront)
+      X-Amz-Cf-Pop:
+      - DUB56-P2
+      X-Amz-Cf-Id:
+      - fjyZ2lXyrHhFVbX8rgkK6-MK45SkvY1btDckqvBt7Hphj552AQM2fQ==
+    body:
+      encoding: UTF-8
+      string: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <payment_response>
+          <transaction_type>refund</transaction_type>
+          <status>approved</status>
+          <unique_id>e8ead7e8645a70380c0759e87688881a</unique_id>
+          <transaction_id>sp-ff560-7d56-486b-9b0f-260573cdf</transaction_id>
+          <response_code>00</response_code>
+          <technical_message>TESTMODE: No real money will be transferred!</technical_message>
+          <message>TESTMODE: No real money will be transferred!</message>
+          <mode>test</mode>
+          <timestamp>2024-02-06T10:01:03Z</timestamp>
+          <descriptor>test</descriptor>
+          <amount>99</amount>
+          <currency>EUR</currency>
+          <sent_to_acquirer>true</sent_to_acquirer>
+        </payment_response>
+  recorded_at: Tue, 06 Feb 2024 10:01:04 GMT
+recorded_with: VCR 6.2.0

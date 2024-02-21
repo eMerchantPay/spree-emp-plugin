@@ -2,8 +2,6 @@ module SpreeEmerchantpayGenesis
   # Genesis API provider
   class GenesisProvider # rubocop:disable Metrics/ClassLength
 
-    ORDER_REPLACE_PATTERN = '|:ORDER:|'.freeze
-
     attr_reader :provider_data
 
     # Constructor
@@ -196,8 +194,7 @@ module SpreeEmerchantpayGenesis
 
     # Plugin options with dynamic parameters
     def parse_order_patterns
-      @options[:return_success_url].sub! ORDER_REPLACE_PATTERN, @order[:number]
-      @options[:return_failure_url].sub! ORDER_REPLACE_PATTERN, @order[:number]
+      Mappers::Genesis.for_urls! @options, @order[:number]
 
       @options
     end

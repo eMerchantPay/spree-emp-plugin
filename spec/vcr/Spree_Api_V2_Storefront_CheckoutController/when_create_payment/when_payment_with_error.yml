@@ -1,0 +1,162 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://staging.gate.emerchantpay.net/process/example_token/
+    body:
+      encoding: UTF-8
+      string: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <payment_transaction>
+          <transaction_type>authorize3d</transaction_type>
+          <transaction_id>sp-67028-3e59-4440-b945-b5bf1dda7</transaction_id>
+          <usage>Electronic transaction via Spree eCommerce platform</usage>
+          <remote_ip>127.0.0.1</remote_ip>
+          <amount>2999</amount>
+          <currency>USD</currency>
+          <card_holder>Dimitar Natskin</card_holder>
+          <card_number>4938730000000001</card_number>
+          <expiration_month>1</expiration_month>
+          <expiration_year>2023</expiration_year>
+          <cvv>123</cvv>
+          <notification_url>http://127.0.0.1:4000/api/v2/storefront/emerchantpay_notification</notification_url>
+          <return_success_url>http://localhost:4000/orders/R891000540</return_success_url>
+          <return_failure_url>http://localhost:4000/checkout/payment?order_number=R891000540</return_failure_url>
+          <customer_email>spree@example.com</customer_email>
+          <customer_phone>555-555-0199</customer_phone>
+          <billing_address>
+            <first_name>John</first_name>
+            <last_name>Doe</last_name>
+            <address1>1 Lovely Street</address1>
+            <address2>Northwest</address2>
+            <zip_code>35005</zip_code>
+            <city>Herndon</city>
+            <state>STATE_ABBR_2</state>
+            <country>I1</country>
+          </billing_address>
+          <shipping_address>
+            <first_name>John</first_name>
+            <last_name>Doe</last_name>
+            <address1>2 Lovely Street</address1>
+            <address2>Northwest</address2>
+            <zip_code>35005</zip_code>
+            <city>Herndon</city>
+            <state>STATE_ABBR_3</state>
+            <country>I1</country>
+          </shipping_address>
+          <threeds_v2_params>
+            <threeds_method>
+              <callback_url>http://127.0.0.1:4000/api/v2/storefront/emerchantpay_threeds/status</callback_url>
+            </threeds_method>
+            <control>
+              <device_type>browser</device_type>
+              <challenge_window_size>full_screen</challenge_window_size>
+              <challenge_indicator>mandate</challenge_indicator>
+            </control>
+            <purchase>
+              <category>goods</category>
+            </purchase>
+            <merchant_risk>
+              <shipping_indicator>other</shipping_indicator>
+              <delivery_timeframe>another_day</delivery_timeframe>
+              <reorder_items_indicator>first_time</reorder_items_indicator>
+            </merchant_risk>
+            <card_holder_account>
+              <registration_indicator>guest_checkout</registration_indicator>
+            </card_holder_account>
+            <browser>
+              <accept_header>*/*</accept_header>
+              <java_enabled>true</java_enabled>
+              <language>en-GB</language>
+              <color_depth>32</color_depth>
+              <screen_height>400</screen_height>
+              <screen_width>400</screen_width>
+              <time_zone_offset>+0</time_zone_offset>
+              <user_agent>Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36</user_agent>
+            </browser>
+          </threeds_v2_params>
+        </payment_transaction>
+    headers:
+      Content-Type:
+      - text/xml
+      Content-Length:
+      - '2784'
+      Authorization:
+      - Basic example_credentials
+      User-Agent:
+      - 'Genesis Ruby Client 0.1.3. Network: GenesisRuby::Network::NetHttp'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/xml; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Date:
+      - Tue, 13 Feb 2024 07:18:51 GMT
+      Vary:
+      - Accept
+      Etag:
+      - W/"f6a7d0132081c5ee000443aae25ba015"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 38c65ad1-a4da-4a5a-9fff-29f081066e7a
+      X-Runtime:
+      - '1.657669'
+      Strict-Transport-Security:
+      - max-age=631138519
+      X-Frame-Options:
+      - ALLOWALL
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Content-Security-Policy:
+      - 'default-src https: ''self''; font-src ''self'' data:; img-src https: ''self''
+        data:; script-src https: ''self'' ''unsafe-inline'' js-agent.newrelic.com
+        bam.nr-data.net; style-src https: ''self'' ''unsafe-inline''; report-uri https://emerchantpay.report-uri.io/r/default/csp/enforce'
+      X-Cache:
+      - Miss from cloudfront
+      Via:
+      - 1.1 1d3122f28c181bea75d22821ce3a4c00.cloudfront.net (CloudFront)
+      X-Amz-Cf-Pop:
+      - DUB56-P2
+      X-Amz-Cf-Id:
+      - 4c4rcJksPXKDDJzs0bIRypVBgWU7_01ZNiTd3FPM1AxEieDO_Utz_g==
+    body:
+      encoding: UTF-8
+      string: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <payment_response>
+          <transaction_type>authorize3d</transaction_type>
+          <status>error</status>
+          <unique_id>2e2fc9e3d8b0595457f4fa478cbc6665</unique_id>
+          <transaction_id>sp-67028-3e59-4440-b945-b5bf1dda7</transaction_id>
+          <code>340</code>
+          <technical_message>'currency' not supported by this Terminal</technical_message>
+          <message>Please check input data for errors!</message>
+          <mode>test</mode>
+          <timestamp>2024-02-13T07:18:50Z</timestamp>
+          <descriptor>test</descriptor>
+          <amount>2999</amount>
+          <currency>USD</currency>
+          <threeds>
+            <eci>07</eci>
+          </threeds>
+          <sent_to_acquirer>false</sent_to_acquirer>
+        </payment_response>
+  recorded_at: Tue, 13 Feb 2024 07:18:51 GMT
+recorded_with: VCR 6.2.0
