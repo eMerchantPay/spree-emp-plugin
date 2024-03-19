@@ -85,7 +85,7 @@ RSpec.describe SpreeEmerchantpayGenesis::Generators::InstallGenerator do
 
     Dir.chdir('spec/dummy') { generator.add_migrations }
 
-    expect(Dir.glob(File.join('spec/dummy', 'db/**/*spree_emerchantpay_genesis.rb')).count).to eq 2
+    expect(Dir.glob(File.join('spec/dummy', 'db/**/*spree_emerchantpay_genesis.rb')).count).to eq 3
   end
 
   it 'when run_migrations' do # rubocop:disable RSpec/ExampleLength

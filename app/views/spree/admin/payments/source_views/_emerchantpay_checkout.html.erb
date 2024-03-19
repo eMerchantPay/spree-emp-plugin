@@ -1,0 +1,23 @@
+<fieldset data-hook="emerchantpay_checkout">
+  <legend><%= I18n.t('emerchantpay.payments_table.checkout_source') %></legend>
+  <div class="table-responsive border rounded bg-white mb-3">
+    <table class="table table-condensed">
+      <tr>
+        <th><%= I18n.t('emerchantpay.payments_table.source_name') %>:</th>
+        <td><%= payment.source.name %></td>
+      </tr>
+      <tr>
+        <th><%= I18n.t('emerchantpay.payments_table.source_consumer_id') %>:</th>
+        <td><%= payment.source.consumer_id %></td>
+      </tr>
+      <tr>
+        <th><%= I18n.t('emerchantpay.payments_table.source_consumer_email') %>:</th>
+        <td><%= payment.source.consumer_email %></td>
+      </tr>
+    </table>
+  </div>
+</fieldset>
+
+<%= render :partial => 'partials/gateway_messages', locals: { payment: payment } %>
+
+<%= render :partial => 'partials/transaction_table', locals: { payment: payment} %>

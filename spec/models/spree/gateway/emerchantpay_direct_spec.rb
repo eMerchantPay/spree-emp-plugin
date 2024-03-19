@@ -2,7 +2,7 @@
 RSpec.describe Spree::Gateway::EmerchantpayDirect, :vcr do
   let(:gateway) { create :emerchantpay_direct_gateway }
   let(:source) { create :credit_card_params }
-  let(:payment) { create :emerchantpay_direct_payment, payment_method: gateway, source: source }
+  let(:payment) { create :spree_payment, payment_method: gateway, source: source }
   let(:order) { OrderWalkthrough.up_to(:payment) }
   let(:gateway_options) do
     add_payment_to_order!
@@ -130,7 +130,7 @@ RSpec.describe Spree::Gateway::EmerchantpayDirect, :vcr do
 
     describe 'when refund' do
       let(:emerchantpay_payment) do
-        create :emerchantpay_direct_payment,
+        create :spree_payment,
                payment_method: gateway,
                source: source,
                state: 'completed',

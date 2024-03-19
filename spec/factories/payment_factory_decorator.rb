@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :emerchantpay_direct_payment, class: 'Spree::Payment' do
+  factory :spree_payment, class: 'Spree::Payment' do
     amount { 0.99 }
     association(:order, factory: :order, currency: 'EUR')
     state { 'checkout' }

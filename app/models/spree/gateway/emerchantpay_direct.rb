@@ -3,21 +3,14 @@ module Spree
   class Gateway::EmerchantpayDirect < SpreeEmerchantpayGenesis::Base::Gateway # rubocop:disable Style/ClassAndModuleChildren
 
     preference :token, :string
+    preference :transaction_types, :select,  default: lambda {
+      { values: [:authorize, :authorize3d, :sale, :sale3d] }
+    }
 
     delegate :load_data, :load_source, :load_payment, to: :provider
 
     def method_type
-      'emerchantpay_direct'
-    end
-
-    def provider_class
-      SpreeEmerchantpayGenesis::GenesisProvider
-    end
-
-    def provider
-      @provider = provider_class.new options if @provider.nil?
-
-      @provider
+      SpreeEmerchantpayGenesis::PaymentMethodHelper::DIRECT_PAYMENT
     end
 
     def purchase(_money_in_cents, source, gateway_options)
@@ -31,14 +24,6 @@ module Spree
       )
 
       provider.purchase
-    end
-
-    def authorize(money_in_cents, source, gateway_options)
-      purchase money_in_cents, source, gateway_options
-    end
-
-    def supports?(_source)
-      true
     end
 
     def source_required?

@@ -5,12 +5,31 @@ module Spree
         # Decorate Create Payment action
         module CheckoutControllerDecorator
 
+          def complete
+            spree_authorize! :update, spree_current_order, order_token
+
+            result = complete_service.call(order: spree_current_order)
+
+            return emerchantpay_checkout_handler if result.success? && emerchantpay_checkout_method?
+
+            render_order(result)
+          end
+
+          def next
+            spree_authorize! :update, spree_current_order, order_token
+
+            result = next_service.call(order: spree_current_order)
+
+            return emerchantpay_checkout_handler if result.success? && emerchantpay_checkout_method?
+
+            render_order(result)
+          end
+
           def create_payment
             result = create_payment_service.call(order: spree_current_order, params: params)
 
             if result.success?
-              return emerchantpay_direct_payment_handler if
-                result.value.payment_method.type == Spree::Gateway::EmerchantpayDirect.name
+              return emerchantpay_direct_payment_handler if emerchantpay_direct_method?
 
               render_serialized_payload(201) { serialize_resource(spree_current_order.reload) }
             else
@@ -22,32 +41,42 @@ module Spree
 
           # Handle EmerchantpayDirect Payment Method Create Payment API Call
           def emerchantpay_direct_payment_handler
-            return render_error_payload('You must authenticate in order to create Emerchanptpay payment') if
-              order_token.empty?
-
             spree_authorize! :update, spree_current_order, order_token
 
             # Complete the order. This will call the purchase method with source containing credit card number
             loop { break unless spree_current_order.next }
 
+            return handle_order_state 201 if spree_current_order.completed?
+
+            render_error_payload(spree_current_order.errors[:base].join('|'))
+          end
+
+          # Handle Emerchantpay Checkout Payment Method Next and Complete API Calls
+          def emerchantpay_checkout_handler
             handle_order_state
           end
 
+          # Check if the payment is made via emerchantpay direct method
+          def emerchantpay_direct_method?
+            spree_current_order&.payments &&
+              spree_current_order.payments.last.payment_method.type == Spree::Gateway::EmerchantpayDirect.name
+          end
+
+          # Check if the payment is made via emerchantpay checkout method
+          def emerchantpay_checkout_method?
+            spree_current_order&.completed? && spree_current_order&.payments &&
+              spree_current_order.payments.last.payment_method.type == Spree::Gateway::EmerchantpayCheckout.name
+          end
+
           # Generate Spree Response
-          def handle_order_state
-            #  spree_current_order.payments.last.source
+          def handle_order_state(status = 200)
+            render_serialized_payload(status) do
+              response = serialize_resource(spree_current_order.reload)
 
-            if spree_current_order.completed?
-              return render_serialized_payload(201) do
-                response = serialize_resource(spree_current_order.reload)
+              response[:data].merge!(build_genesis_response_parameters)
 
-                response[:data].merge!(build_genesis_response_parameters)
-
-                response
-              end
+              response
             end
-
-            render_error_payload(spree_current_order.errors[:base].join('|'))
           end
 
           # Build additional response parameters

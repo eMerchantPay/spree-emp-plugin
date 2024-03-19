@@ -14,7 +14,7 @@ http_interactions:
           <remote_ip>127.0.0.1</remote_ip>
           <amount>2999</amount>
           <currency>USD</currency>
-          <card_holder>Dimitar Natskin</card_holder>
+          <card_holder>Travis Pastrana</card_holder>
           <card_number>4938730000000001</card_number>
           <expiration_month>1</expiration_month>
           <expiration_year>2023</expiration_year>

@@ -22,12 +22,12 @@ Gem::Specification.new do |spec|
 
   spec.metadata['homepage_uri'] = spec.homepage
   spec.metadata['source_code_uri'] = 'https://github.com/emerchantpay/spree-emp-plugin'
-  spec.metadata['changelog_uri'] = 'https://github.com/emerchantpay/spree-emp-plugin/blob/main/CHANGELOG.md'
-  spec.metadata['documentation_uri'] = 'https://github.com/emerchantpay/spree-emp-plugin/blob/main/README.md'
+  spec.metadata['changelog_uri'] = 'https://github.com/emerchantpay/spree-emp-plugin/blob/master/CHANGELOG.md'
+  spec.metadata['documentation_uri'] = 'https://github.com/emerchantpay/spree-emp-plugin/blob/master/README.md'
 
   spec.files = Dir['{app,config,db,lib}/**/*', 'LICENSE', 'Rakefile', 'README.md', 'CHANGELOG.md']
 
-  spec.add_dependency 'genesis_ruby', '0.1.3'
+  spec.add_dependency 'genesis_ruby', '0.1.5'
   spec.add_dependency 'rails', '~> 6.0'
   spec.add_dependency 'securerandom', '~> 0.2.2'
   spec.add_dependency 'spree_backend', '~> 4.4', '>= 4.4.0'

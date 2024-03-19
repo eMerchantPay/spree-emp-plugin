@@ -1,8 +1,8 @@
 PATH
   remote: ..
   specs:
-    spree_emerchantpay_genesis (0.1.2)
-      genesis_ruby (= 0.1.3)
+    spree_emerchantpay_genesis (0.1.4)
+      genesis_ruby (= 0.1.5)
       rails (~> 6.0)
       securerandom (~> 0.2.2)
       spree_backend (~> 4.4, >= 4.4.0)
@@ -157,7 +157,7 @@ GEM
     friendly_id-mobility (1.0.4)
       friendly_id (>= 5.0.0, < 5.5)
       mobility (>= 1.0.1, < 2.0)
-    genesis_ruby (0.1.3)
+    genesis_ruby (0.1.5)
       net-http (~> 0.3.2)
       nokogiri (~> 1.14)
     gitlab (4.19.0)

@@ -15,7 +15,7 @@ RSpec.describe Spree::EmerchantpayThreedsController, :vcr, type: :controller do
 
   describe 'with valid params' do
     let(:payment) do
-      create :emerchantpay_direct_payment,
+      create :spree_payment,
              payment_method: create(:emerchantpay_direct_gateway),
              source: create(:credit_card_params)
     end
@@ -27,11 +27,10 @@ RSpec.describe Spree::EmerchantpayThreedsController, :vcr, type: :controller do
       order
     end
     let(:emerchantpay_payment) do
-      create :emerchantpay_payment,
+      create :emerchantpay_direct_payment,
              status:         'pending_async',
              amount:         99,
              currency:       'EUR',
-             payment_method: 'emerchantpay_direct',
              order_id:       order.number,
              payment_id:     payment.number
     end

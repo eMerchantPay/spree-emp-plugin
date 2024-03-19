@@ -64,13 +64,12 @@ RSpec.describe Spree::Api::V2::Storefront::EmerchantpayThreedsController, :vcr, 
 
   describe 'when valid params' do
     let(:payment) do
-      create :emerchantpay_direct_payment,
+      create :spree_payment,
              payment_method: create(:emerchantpay_direct_gateway),
              source: create(:credit_card_params)
     end
     let(:emerchantpay_payment) do
-      create :emerchantpay_payment,
-             payment_method: 'emerchantpay_direct',
+      create :emerchantpay_direct_payment,
              amount:         99,
              currency:       'EUR',
              order_id:       payment.order.number,
@@ -134,9 +133,8 @@ RSpec.describe Spree::Api::V2::Storefront::EmerchantpayThreedsController, :vcr, 
 
     describe 'when method_continue' do
       let(:emerchantpay_pending_payment) do
-        create :emerchantpay_payment,
+        create :emerchantpay_direct_payment,
                transaction_id:   'sp-8f095-212d-41f3-8c2c-5da0b1365',
-               payment_method:   payment.payment_method.name,
                unique_id:        '162d90bf750a62392b12a88010426ccd',
                reference_id:     nil,
                terminal_token:   payment.payment_method.preferences[:token],

@@ -22,7 +22,6 @@ module SpreeEmerchantpayGenesis
       # Store Genesis Payment to the DB
       def save_from_response_data(genesis_request, genesis_response, order, spree_payment)
         payment                   = Db::EmerchantpayPayment.new
-        genesis_response          = genesis_response.response_object
         formatted_genesis_request = format_genesis_request(genesis_request)
 
         map_payment spree_payment, payment, formatted_genesis_request, genesis_response
@@ -34,11 +33,13 @@ module SpreeEmerchantpayGenesis
       end
 
       # Update Existing payment
-      def update_from_response_data(emerchantpay_payment, genesis_response, spree_payment)
-        genesis_response = genesis_response.response_object
-        request = { configuration: { token: emerchantpay_payment.terminal_token } }.with_indifferent_access
+      def update_from_response_data(emerchantpay_payment, response_object, spree_payment)
+        request = { configuration: {
+          token: emerchantpay_payment.terminal_token || response_object[:terminal_token]
+        } }.with_indifferent_access
+        response_object[:mode] = emerchantpay_payment.mode unless response_object.key? :mode
 
-        map_payment spree_payment, emerchantpay_payment, request, genesis_response
+        map_payment spree_payment, emerchantpay_payment, request, response_object
 
         emerchantpay_payment.save
       end

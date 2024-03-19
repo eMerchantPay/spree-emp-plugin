@@ -10,9 +10,7 @@ module SpreeEmerchantpayGenesis
       end
 
       # Update Spree payment from response
-      def update_payment(payment, response)
-        response_object = response.response_object
-
+      def update_payment(payment, response_object)
         payment.cvv_response_code = response_object[:cvv_result_code] if response_object.key?(:cvv_result_code)
         payment.avs_response      = response_object[:avs_response_code] if response_object.key?(:avs_response_code)
 
@@ -25,8 +23,7 @@ module SpreeEmerchantpayGenesis
       end
 
       # Add metadata to the Payment model
-      def add_payment_metadata(payment, options, genesis_response)
-        response_object   = genesis_response.response_object
+      def add_payment_metadata(payment, options, genesis_response, response_object)
         redirect_url      = TransactionHelper.fetch_redirect_url(options, genesis_response)
         state             = response_object.key?(:status) ? { state: response_object[:status] } : {}
         message           = response_object.key?(:message) ? { message: response_object[:message] } : {}
@@ -37,9 +34,8 @@ module SpreeEmerchantpayGenesis
       end
 
       # Update the Spree Payment status from GenesisRuby::Api::Response object
-      def update_payment_status(payment, response)
+      def update_payment_status(payment, response, transaction_type)
         capturable_types = GenesisRuby::Utils::Transactions::References::CapturableTypes
-        transaction_type = response.response_object[:transaction_type]
 
         if response.approved?
           action = :complete
@@ -48,7 +44,7 @@ module SpreeEmerchantpayGenesis
           payment.public_send(action)
         end
 
-        payment.failure if response.error? || response.declined?
+        payment.failure if TransactionHelper.failure_result? response
         payment.void if response.voided?
       end
 

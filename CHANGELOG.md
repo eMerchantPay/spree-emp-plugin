@@ -1,3 +1,15 @@
+0.1.4
+-----
+**Features**:
+
+* Added `EmerchantpayCheckout` payment method
+* Updated Genesis Ruby SDK to version 0.1.5
+* Update Card JS to the latest version
+
+**Fixes**:
+
+* Fixed project's URLs listed on RubyGems
+
 0.1.3
 -----
 **Features**

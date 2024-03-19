@@ -24,11 +24,11 @@ module Spree
 
           # Validate params
           def validate_params
-            params.require [:unique_id, :signature]
+            params.require [:signature]
           end
 
           # Permit params
-          def process_params
+          def process_params # rubocop:disable Metrics/MethodLength
             @permitted_params = params.permit(
               :transaction_id, :terminal_token, :unique_id, :transaction_type, :status, :signature, :amount,
               :eci, :cvv_result_code, :retrieval_reference_number, :authorization_code, :scheme_transaction_identifier,
@@ -36,7 +36,9 @@ module Spree
               :threeds_concrete_protocol_version, :threeds_method_status, :scheme_response_code, :avs_response_code,
               :avs_response_text, :reference_transaction_unique_id, :threeds_authentication_status_reason_code,
               :card_brand, :card_number, :card_type, :card_subtype, :card_issuing_bank, :card_holder, :expiration_year,
-              :expiration_month
+              :expiration_month, :wpf_unique_id, :payment_transaction_terminal_token, :payment_transaction_unique_id,
+              :payment_transaction_transaction_type, :payment_transaction_amount, :wpf_status, :wpf_transaction_id,
+              :notification_type
             )
           end
 

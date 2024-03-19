@@ -18,7 +18,7 @@ module SpreeEmerchantpayGenesis
 
       # Fetch emerchantpay payment
       def fetch_emerchantapy_payment
-        result = SpreeEmerchantpayGenesis::EmerchantpayPaymentsRepository.find_by_unique_id(params[:unique_id])
+        result = wpf_params? ? load_wpf_payment : load_processing_payment
 
         raise 'Invalid parameters given. Payment not found.' unless result
 
@@ -37,7 +37,10 @@ module SpreeEmerchantpayGenesis
 
       # Initialize the payment provider
       def initialize_genesis_provider
-        provider = SpreeEmerchantpayGenesis::GenesisProvider.new genesis_preferences
+        provider = GenesisProvider.new(
+          PaymentMethodHelper.fetch_method_type(@emerchantpay_payment.payment_method),
+          genesis_preferences
+        )
         provider.load_source spree_payment.source
         provider.load_data SpreeEmerchantpayGenesis::Mappers::Order.for order.attributes.symbolize_keys
         provider.load_payment spree_payment
@@ -76,6 +79,29 @@ module SpreeEmerchantpayGenesis
       # Prepare Genesis Preferences
       def genesis_preferences
         @spree_payment.payment_method.preferences.merge token: @emerchantpay_payment[:terminal_token]
+      end
+
+      # Load Processing payment via params[:unique_id]
+      def load_processing_payment
+        EmerchantpayPaymentsRepository.find_by_unique_id params[:unique_id]
+      end
+
+      # Load WPF initial or reference payment
+      def load_wpf_payment
+        # WPF Initial transaction case
+        result = EmerchantpayPaymentsRepository.find_by_unique_id params[:wpf_unique_id]
+
+        return result if result
+
+        return nil unless params.key? :payment_transaction_unique_id
+
+        # WPF Reference transaction notifications
+        EmerchantpayPaymentsRepository.find_by_unique_id params[:payment_transaction_unique_id]
+      end
+
+      # Fetch the parameters type
+      def wpf_params?
+        params.key? :wpf_unique_id
       end
 
     end

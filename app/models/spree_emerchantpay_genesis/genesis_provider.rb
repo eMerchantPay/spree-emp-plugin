@@ -5,9 +5,10 @@ module SpreeEmerchantpayGenesis
     attr_reader :provider_data
 
     # Constructor
-    def initialize(options)
-      @options           = options
-      @configuration     = Mappers::Genesis.for_config(@options).context
+    def initialize(method_type, options)
+      @options       = options
+      @configuration = Mappers::Genesis.for_config(@options).context
+      @method_type   = method_type
     end
 
     # Load Order data
@@ -32,16 +33,11 @@ module SpreeEmerchantpayGenesis
     # Create a payment
     def purchase
       safe_execute do
-        genesis_request = TransactionHelper.init_genesis_req @configuration, @options[:transaction_types]
-
-        genesis = GenesisRuby::Genesis.new(
-          @configuration,
-          Mappers::Genesis.for_payment(genesis_request, @order, @source, @options).context
-        )
+        genesis = init_gateway_req
 
         response = genesis.execute.response
 
-        handle_response genesis_request, response
+        handle_response genesis.request, response
 
         response
       end
@@ -140,12 +136,14 @@ module SpreeEmerchantpayGenesis
 
     # Handle Genesis Response
     def handle_response(request, response, is_payment: true)
-      if TransactionHelper.can_save_genesis_response? response
-        EmerchantpayPaymentsRepository.save_from_response_data request, response, @order, @payment
+      response_object = fetch_response_object response
+
+      if TransactionHelper.can_save_genesis_response? response_object
+        EmerchantpayPaymentsRepository.save_from_response_data request, response_object, @order, @payment
       end
 
-      SpreePaymentsRepository.update_payment @payment, response if is_payment
-      SpreePaymentsRepository.add_payment_metadata @payment, @options, response
+      SpreePaymentsRepository.update_payment @payment, response_object if is_payment
+      SpreePaymentsRepository.add_payment_metadata @payment, @options, response, response_object
 
       # Missing shipping amount fix
       @payment.amount = response.response_object[:amount] if response.response_object&.key?(:amount) && is_payment
@@ -158,11 +156,13 @@ module SpreeEmerchantpayGenesis
 
     # Handle Genesis Notification Response
     def handle_reconciliation_response(emerchantpay_payment, reconciliation)
-      EmerchantpayPaymentsRepository.update_from_response_data(emerchantpay_payment, reconciliation, @payment)
+      response_object = fetch_reconciliation_object reconciliation, emerchantpay_payment.unique_id
 
-      SpreePaymentsRepository.update_payment @payment, reconciliation
-      SpreePaymentsRepository.add_payment_metadata @payment, @options, reconciliation
-      SpreePaymentsRepository.update_payment_status @payment, reconciliation
+      EmerchantpayPaymentsRepository.update_from_response_data emerchantpay_payment, response_object, @payment
+
+      SpreePaymentsRepository.update_payment @payment, response_object
+      SpreePaymentsRepository.add_payment_metadata @payment, @options, reconciliation, response_object
+      SpreePaymentsRepository.update_payment_status @payment, reconciliation, response_object[:transaction_type]
 
       @payment.save
 
@@ -197,6 +197,62 @@ module SpreeEmerchantpayGenesis
       Mappers::Genesis.for_urls! @options, @order[:number]
 
       @options
+    end
+
+    # Initialize Gateway API Request
+    def init_gateway_req
+      case @method_type
+      when PaymentMethodHelper::CHECKOUT_PAYMENT
+        init_wpf_api
+      when PaymentMethodHelper::DIRECT_PAYMENT
+        init_processing_api
+      else
+        raise GenesisRuby::Error, 'Invalid Payment Method Type given!'
+      end
+    end
+
+    # Init Processing API Request
+    def init_processing_api
+      genesis_request = TransactionHelper.init_genesis_req @configuration, @options[:transaction_types]
+
+      GenesisRuby::Genesis.new(
+        @configuration,
+        Mappers::Genesis.for_payment(genesis_request, @order, @source, @options).context
+      )
+    end
+
+    # Init WPF API Request
+    def init_wpf_api
+      genesis_request = TransactionHelper.init_wpf_req @configuration
+
+      GenesisRuby::Genesis.new(
+        @configuration,
+        Mappers::Genesis.for_wpf(genesis_request, @order, @source, @options).context
+      )
+    end
+
+    # Prepare the response object
+    def fetch_response_object(genesis_response)
+      response_object = genesis_response.response_object
+      test_mode       = ActiveModel::Type::Boolean.new.cast(@options[:test_mode]) ? 'test' : 'live'
+
+      if @method_type == PaymentMethodHelper::CHECKOUT_PAYMENT && genesis_response.new?
+        response_object.merge!(
+          { transaction_type: TransactionHelper::WPF_TRANSACTION_TYPE, mode: test_mode, terminal_token: '' }
+        )
+      end
+
+      response_object
+    end
+
+    # Fetch the payment_transaction object from the given reconciliation response
+    def fetch_reconciliation_object(reconciliation, unique_id)
+      response_object = reconciliation.response_object
+
+      return response_object unless response_object.key? :payment_transaction
+      return response_object[:payment_transaction] if response_object[:payment_transaction].is_a? Hash
+
+      response_object[:payment_transaction].select { |payment| payment[:unique_id] == unique_id }.first
     end
 
   end

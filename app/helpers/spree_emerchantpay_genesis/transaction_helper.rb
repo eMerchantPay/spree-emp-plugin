@@ -6,6 +6,7 @@ module SpreeEmerchantpayGenesis
     CAPTURE_ACTION        = 'capture'.freeze
     REFUND_ACTION         = 'refund'.freeze
     VOID_ACTION           = 'void'.freeze
+    WPF_TRANSACTION_TYPE  = 'checkout'.freeze
 
     class << self
 
@@ -29,7 +30,7 @@ module SpreeEmerchantpayGenesis
 
       # Check given response for asynchronous execution
       def async_result?(response)
-        response.pending? || response.pending_async? || response.in_progress? || response.pending_hold?
+        response.pending? || response.pending_async? || response.in_progress? || response.pending_hold? || response.new?
       end
 
       # Check given response for Method Continue parameters
@@ -39,7 +40,7 @@ module SpreeEmerchantpayGenesis
 
       # Check given response for failure
       def failure_result?(response)
-        response.error? || response.declined?
+        response.error? || response.declined? || response.timeout?
       end
 
       # Generate Spree Response from Gateway action
@@ -71,9 +72,7 @@ module SpreeEmerchantpayGenesis
       end
 
       # Check if the given Genesis Response can be stored
-      def can_save_genesis_response?(response)
-        response_object = response.response_object
-
+      def can_save_genesis_response?(response_object)
         !(
           response_object[:transaction_id].nil? ||
             response_object[:transaction_type].nil? ||
@@ -107,6 +106,11 @@ module SpreeEmerchantpayGenesis
       # Initialize Method Continue Transaction Request
       def init_method_continue_req(configuration)
         GenesisRuby::Api::Requests::Financial::Cards::Threeds::V2::MethodContinue.new configuration
+      end
+
+      # Initialize WPF API Request
+      def init_wpf_req(configuration)
+        GenesisRuby::Api::Requests::Wpf::Create.new configuration
       end
 
       # Fetch Redirect Url from Genesis Response

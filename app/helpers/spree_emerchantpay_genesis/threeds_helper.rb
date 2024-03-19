@@ -8,6 +8,7 @@ module SpreeEmerchantpayGenesis
     CURRENT_TRANSACTION_INDICATOR  = 'current_transaction'.freeze
     DATE_ISO_FORMAT                = GenesisRuby::Api::Constants::DateTimeFormats::YYYY_MM_DD_ISO_8601
     COMPLETED_SPREE_PAYMENT_STATE  = 'completed'.freeze
+    CONSTANT_PATH                  = 'GenesisRuby::Api::Constants::Transactions::Parameters::Threeds::Version2::'.freeze
 
     class << self
 
@@ -70,7 +71,7 @@ module SpreeEmerchantpayGenesis
 
       # Fetch the given 3DSv2 parameter indicator
       def fetch_class_indicator(indicator_class, updated_at) # rubocop:disable Metrics/MethodLength
-        constant_path = 'GenesisRuby::Api::Constants::Transactions::Parameters::Threeds::Version2::CardHolderAccount::'
+        constant_path = "#{CONSTANT_PATH}CardHolderAccount::"
 
         case fetch_indicator updated_at
         when LESS_THAN_30_DAYS_INDICATOR

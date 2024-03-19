@@ -1,0 +1,90 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://staging.wpf.emerchantpay.net/wpf/reconcile
+    body:
+      encoding: UTF-8
+      string: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <wpf_reconcile>
+          <unique_id>9aed8de9319c4c3806a9d1614797f853</unique_id>
+        </wpf_reconcile>
+    headers:
+      Content-Type:
+      - text/xml
+      Content-Length:
+      - '130'
+      Authorization:
+      - Basic example_credentials
+      User-Agent:
+      - 'Genesis Ruby Client 0.1.3. Network: GenesisRuby::Network::NetHttp'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/xml; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Date:
+      - Fri, 15 Mar 2024 12:31:46 GMT
+      Vary:
+      - Accept
+      Etag:
+      - W/"07b942f04f6a645fccc918fa0c534ec3"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - fc997182-dfef-49b7-80fe-885f26e5f572
+      X-Runtime:
+      - '0.126048'
+      Strict-Transport-Security:
+      - max-age=631138519
+      X-Frame-Options:
+      - DENY
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Content-Security-Policy:
+      - 'default-src https: ''self''; font-src ''self'' data:  https://fonts.gstatic.com;
+        frame-src https: ''self''  staging.gate.emerchantpay.net:443; img-src ''self''
+        data:  dadu5f16bpxo.cloudfront.net https://www.gstatic.com https://hatscripts.github.io;
+        script-src https: ''self'' ''unsafe-inline''  js-agent.newrelic.com bam.nr-data.net
+        pay.google.com; style-src https: ''self'' ''unsafe-inline''  dadu5f16bpxo.cloudfront.net;
+        report-uri https://emerchantpay.report-uri.io/r/default/csp/enforce'
+      X-Cache:
+      - Miss from cloudfront
+      Via:
+      - 1.1 01ff8231ac3eb0824a64f71dd911997c.cloudfront.net (CloudFront)
+      X-Amz-Cf-Pop:
+      - DUB56-P2
+      X-Amz-Cf-Id:
+      - sqXJXArXvmR0_3QbO7-jIWdJhtZJVt4-jZKMhKyalAxRIuuXL7Kj0g==
+    body:
+      encoding: UTF-8
+      string: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <wpf_payment>
+          <status>timeout</status>
+          <unique_id>9aed8de9319c4c3806a9d1614797f853</unique_id>
+          <transaction_id>sp-fce38-b3fc-4320-9700-8e33799f4</transaction_id>
+          <consumer_id>164344</consumer_id>
+          <timestamp>2024-03-14T10:17:31Z</timestamp>
+          <amount>11000</amount>
+          <currency>EUR</currency>
+        </wpf_payment>
+  recorded_at: Fri, 15 Mar 2024 12:31:46 GMT
+recorded_with: VCR 6.2.0

@@ -1,6 +1,6 @@
 RSpec.describe SpreeEmerchantpayGenesis::SpreePaymentsRepository do
   it 'when find by number' do
-    payment = create :emerchantpay_direct_payment,
+    payment = create :spree_payment,
                      payment_method: create(:emerchantpay_direct_gateway),
                      source: create(:credit_card_params)
 

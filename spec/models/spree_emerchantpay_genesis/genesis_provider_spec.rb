@@ -2,27 +2,91 @@
 RSpec.describe SpreeEmerchantpayGenesis::GenesisProvider, :vcr do
   let(:source) { create(:spree_credit_card) }
   let(:spree_payment) do
-    create :emerchantpay_direct_payment,
+    create :spree_payment,
            order: create(:order_with_line_items, currency: 'EUR'),
            payment_method: source.payment_method,
            source: source
   end
   let(:options) { spree_payment.payment_method.preferences }
 
+  describe 'when error handling' do
+    let(:genesis_provider) do
+      described_class.new SpreeEmerchantpayGenesis::PaymentMethodHelper::DIRECT_PAYMENT, options
+    end
+
+    describe 'when GenesisRuby Error' do
+      before do
+        allow(SpreeEmerchantpayGenesis::TransactionHelper)
+          .to receive(:init_genesis_req).and_raise GenesisRuby::Error
+      end
+
+      it 'with purchase' do
+        expect(genesis_provider.purchase).to be_kind_of GenesisRuby::Error
+      end
+    end
+
+    describe 'when Standard Error' do
+      before do
+        allow(SpreeEmerchantpayGenesis::TransactionHelper).to receive(:init_genesis_req).and_raise StandardError
+      end
+
+      it 'with purchase' do
+        expect(genesis_provider.purchase).to be_kind_of GenesisRuby::Error
+      end
+
+      it 'with reference' do # rubocop:disable RSpec/ExampleLength
+        transaction = create :emerchantpay_payment,
+                             transaction_id: 'sp-c6910-b099-48be-ae5e-87f8cac3f',
+                             unique_id:      '7e82b1d4eae5ab35c51fbaa68b23bcbd',
+                             payment_method: spree_payment.payment_method.type,
+                             payment_id:     spree_payment.number,
+                             order_id:       spree_payment.order.number,
+                             amount:         GenesisRuby::Utils::MoneyFormat.amount_to_exponent(
+                               spree_payment.amount.to_s, spree_payment.currency
+                             ),
+                             currency:       spree_payment.order.currency
+
+        expect(genesis_provider.capture(1, transaction)).to be_kind_of ActiveMerchant::Billing::Response
+      end
+    end
+  end
+
   describe 'when initialization' do
     it 'with options' do
-      expect { described_class.new options }.to_not raise_error
+      expect do
+        described_class.new SpreeEmerchantpayGenesis::PaymentMethodHelper::DIRECT_PAYMENT, options
+      end.to_not raise_error
     end
 
     it 'with configuration' do
-      genesis_provider = described_class.new spree_payment.payment_method.preferences
+      genesis_provider = described_class.new(
+        SpreeEmerchantpayGenesis::PaymentMethodHelper::DIRECT_PAYMENT,
+        spree_payment.payment_method.preferences
+      )
 
       expect(genesis_provider.instance_variable_get(:@configuration)).to be_kind_of GenesisRuby::Configuration
+    end
+
+    it 'with checkout method type' do
+      genesis_provider = described_class.new(
+        SpreeEmerchantpayGenesis::PaymentMethodHelper::CHECKOUT_PAYMENT,
+        spree_payment.payment_method.preferences
+      )
+
+      expect(genesis_provider.instance_variable_get(:@method_type)).to eq 'emerchantpay_checkout'
+    end
+
+    it 'with invalid method type' do
+      genesis_provider = described_class.new('invalid', spree_payment.payment_method.preferences)
+
+      expect { genesis_provider.__send__(:init_gateway_req) }.to raise_error GenesisRuby::Error
     end
   end
 
   describe 'when initialized' do
-    let(:genesis_provider) { described_class.new options }
+    let(:genesis_provider) do
+      described_class.new SpreeEmerchantpayGenesis::PaymentMethodHelper::DIRECT_PAYMENT, options
+    end
     let(:order_data) do
       SpreeEmerchantpayGenesis::Mappers::Order.prepare_data(
         spree_payment.order,
@@ -50,7 +114,7 @@ RSpec.describe SpreeEmerchantpayGenesis::GenesisProvider, :vcr do
     end
   end
 
-  describe 'when send gateway request' do
+  describe 'emerchantpay direct processing' do
     let(:order_data) do
       SpreeEmerchantpayGenesis::Mappers::Order.for(
         SpreeEmerchantpayGenesis::Mappers::Order.prepare_data(
@@ -67,7 +131,7 @@ RSpec.describe SpreeEmerchantpayGenesis::GenesisProvider, :vcr do
       )
     end
     let(:genesis_provider) do
-      provider = described_class.new options
+      provider = described_class.new SpreeEmerchantpayGenesis::PaymentMethodHelper::DIRECT_PAYMENT, options
       provider.load_data order_data
       provider.load_source(
         build(
@@ -241,7 +305,7 @@ RSpec.describe SpreeEmerchantpayGenesis::GenesisProvider, :vcr do
                  message:                     'TESTMODE: No real money will be transferred!',
                  threeds_method_url:          'https://staging.gate.emerchantpay.net/threeds/threeds_method',
                  threeds_method_continue_url: 'https://staging.gate.emerchantpay.net/threeds/threeds_method/' \
-                   '162d90bf750a62392b12a88010426ccd',
+                 '162d90bf750a62392b12a88010426ccd',
                  mode:                        'test',
                  timestamp:                   '2024-02-06T16:10:19+00:00',
                  descriptor:                  'test',
@@ -307,41 +371,142 @@ RSpec.describe SpreeEmerchantpayGenesis::GenesisProvider, :vcr do
         expect(response.reconciliation.response_object[:unique_id]).to eq params[:unique_id]
       end
     end
+  end
 
-    describe 'when error handling' do
-      describe 'when GenesisRuby Error' do # rubocop:disable RSpec/NestedGroups
-        before do
-          allow(SpreeEmerchantpayGenesis::TransactionHelper).to receive(:init_genesis_req).and_raise GenesisRuby::Error
-        end
+  describe 'emerchantpay checkout web payment form' do
+    let(:source) { create(:emerchantpay_checkout_source) }
+    let(:spree_payment) do
+      create :spree_payment,
+             order: create(:order_with_line_items, currency: 'EUR'),
+             payment_method: source.payment_method,
+             source: source
+    end
+    let(:options) { spree_payment.payment_method.preferences }
 
-        it 'with purchase' do
-          expect(genesis_provider.purchase).to be_kind_of GenesisRuby::Error
-        end
+    let(:order_data) do
+      SpreeEmerchantpayGenesis::Mappers::Order.for(
+        SpreeEmerchantpayGenesis::Mappers::Order.prepare_data(
+          spree_payment.order,
+          spree_payment.order.user,
+          build(
+            :gateway_options_with_address,
+            email: spree_payment.order.email,
+            currency: spree_payment.order.currency,
+            order_number: spree_payment.order.number,
+            payment_number: spree_payment.number
+          )
+        )
+      )
+    end
+    let(:genesis_provider) do
+      provider = described_class.new SpreeEmerchantpayGenesis::PaymentMethodHelper::CHECKOUT_PAYMENT, options
+      provider.load_data order_data
+      provider.load_source(
+        build(
+          :emerchantpay_checkout_source,
+          payment_method: spree_payment.payment_method,
+          user: spree_payment.order.user
+        )
+      )
+      provider.load_payment spree_payment
+
+      provider
+    end
+
+    describe 'when purchase' do
+      it 'with proper success response type' do
+        response = genesis_provider.purchase
+
+        expect(response).to be_kind_of GenesisRuby::Api::Response
       end
 
-      describe 'when Standard Error' do # rubocop:disable RSpec/NestedGroups
-        before do
-          allow(SpreeEmerchantpayGenesis::TransactionHelper).to receive(:init_genesis_req).and_raise StandardError
+      it 'with approved response state' do
+        response = genesis_provider.purchase
+
+        expect(response.new?).to be true
+      end
+
+      it 'with stored emerchantpay payment' do
+        response = genesis_provider.purchase
+        payment  = SpreeEmerchantpayGenesis::EmerchantpayPaymentsRepository.find_by_transaction_id(
+          response.response_object[:transaction_id]
+        )
+
+        expect(payment.response[:unique_id]).to eq response.response_object[:unique_id]
+      end
+
+      it 'with proper error response type' do
+        expect(genesis_provider.purchase).to be_kind_of GenesisRuby::Api::Response
+      end
+
+      it 'with error response state' do
+        response = genesis_provider.purchase
+
+        expect(response.error?).to eq true
+      end
+    end
+
+    describe 'when notification' do
+      let(:params) do
+        {
+          wpf_unique_id:                 'ae1d51e6dcaae88635bb54b2aaa3257a',
+          signature:                     'd80593dfdb3959842fd028f74ccd356a5b124c65',
+          payment_transaction_unique_id: '09dc2c787080b29b2552daf3fb639712'
+        }
+      end
+      let(:transaction) do
+        create :emerchantpay_payment,
+               transaction_id: 'sp-1ac50-75f8-48f9-a0e8-fc294ee02',
+               unique_id:      'eafae2b35722a68ed9e4522ace7d720b',
+               payment_method: spree_payment.payment_method.name,
+               payment_id:     spree_payment.number,
+               order_id:       spree_payment.order.number,
+               amount:         GenesisRuby::Utils::MoneyFormat.amount_to_exponent(
+                 spree_payment.amount.to_s, spree_payment.currency
+               ),
+               currency:       spree_payment.order.currency
+      end
+
+      it 'with successful notification' do
+        if Rails.application.secrets.password
+          skip 'Skipped: Secrets file is used. Notification signature is generated with default password.'
         end
 
-        it 'with purchase' do
-          expect(genesis_provider.purchase).to be_kind_of GenesisRuby::Error
+        expect(genesis_provider.notification(transaction, params)).to be_kind_of GenesisRuby::Api::Notification
+      end
+
+      it 'with reconcile response' do
+        if Rails.application.secrets.password
+          skip 'Skipped: Secrets file is used. Notification signature is generated with default password.'
         end
 
-        it 'with reference' do # rubocop:disable RSpec/ExampleLength
-          transaction = create :emerchantpay_payment,
-                               transaction_id: 'sp-c6910-b099-48be-ae5e-87f8cac3f',
-                               unique_id:      '7e82b1d4eae5ab35c51fbaa68b23bcbd',
-                               payment_method: spree_payment.payment_method.name,
-                               payment_id:     spree_payment.number,
-                               order_id:       spree_payment.order.number,
-                               amount:         GenesisRuby::Utils::MoneyFormat.amount_to_exponent(
-                                 spree_payment.amount.to_s, spree_payment.currency
-                               ),
-                               currency:       spree_payment.order.currency
+        response = genesis_provider.notification transaction, params
 
-          expect(genesis_provider.capture(1, transaction)).to be_kind_of ActiveMerchant::Billing::Response
+        expect(response.reconciliation.response_object[:unique_id]).to eq params[:wpf_unique_id]
+      end
+
+      it 'with reference reconcile response' do # rubocop:disable RSpec/ExampleLength
+        if Rails.application.secrets.password
+          skip 'Skipped: Secrets file is used. Notification signature is generated with default password.'
         end
+
+        transaction = create :emerchantpay_payment,
+                             transaction_id: 'sp-1ac50-75f8-48f9-a0e8-fc294ee02',
+                             unique_id:      '09dc2c787080b29b2552daf3fb639712',
+                             payment_method: spree_payment.payment_method.name,
+                             payment_id:     spree_payment.number,
+                             order_id:       spree_payment.order.number,
+                             amount:         GenesisRuby::Utils::MoneyFormat.amount_to_exponent(
+                               spree_payment.amount.to_s, spree_payment.currency
+                             ),
+                             currency:       spree_payment.order.currency
+
+        response        = genesis_provider.notification transaction, params
+        response_object = genesis_provider.__send__(
+          :fetch_reconciliation_object, response.reconciliation, transaction.unique_id
+        )
+
+        expect(response_object[:status]).to eq 'refunded'
       end
     end
   end

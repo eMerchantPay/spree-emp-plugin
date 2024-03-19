@@ -14,6 +14,67 @@ en:
       no_challenge_requested: No Challenge Requested
       preference: Preference
       mandate: Mandate
+      account_verification: Account Verification
+      argencard: Argencard
+      apple_pay: Apple Pay
+      aura: Aura
+      baloto: Baloto
+      bancomer: Bancomer
+      bcmc: Bcmc
+      banco_de_occidente: Banco de Occidente
+      banco_do_brasil: Banco do Brasil
+      bitpay_payout: Bitpay Payout
+      bitpay_sale: Bitpay Sale
+      boleto: Boleto
+      bradesco: Bradesco
+      cabal: Cabal
+      cashu: Cashu
+      cencosud: Cencosud
+      davivienda: Davivienda
+      efecty: Efecty
+      elo: Elo
+      eps: Eps
+      ezeewallet: eZeeWallet
+      fashioncheque: Fashioncheque
+      giropay: Giropay
+      google_pay: Google Pay
+      ideal: Ideal
+      idebit_payin: Idebit Payin
+      insta_debit_payin: Insta Debit Payin
+      intersolve: Intersolve
+      itau: Itau
+      multibanco: Multibanco
+      my_bank: My Bank
+      naranja: Naranja
+      nativa: Nativa
+      neosurf: Neosurf
+      neteller: Neteller
+      online_banking: Online Banking
+      oxxo: Oxxo
+      p24: P24
+      pago_facil: Pago Facil
+      pay_pal: Pay Pal
+      paysafecard: Paysafecard
+      payu: PayU
+      pix: Pix
+      poli: Poli
+      post_finance: Post Finance
+      ppro: PPRO
+      pse: PSE
+      rapi_pago: Rapi Pago
+      redpagos: RedPagos
+      russian_mobile_sale: Russian Mobile Sale
+      safetypay: Safetypay
+      santander: Santander
+      sdd_init_recurring_sale: SDD Init Recurring Sale
+      sdd_sale: SDD Sale
+      tarjeta_shopping: Tarjeta Shopping
+      container_store: Container Store
+      trustly_sale: Trustly Sale
+      upi: Upi
+      webmoney: Webmoney
+      webpay: Webpay
+      wechat: Wechat
     payment:
       usage: Electronic transaction via Spree eCommerce platform
       reference: Reference transaction via Spree eCommerce platform
@@ -31,6 +92,10 @@ en:
       updated_at: Updated
       message: Message
       technical_message: Technical Message
+      checkout_source: Checkout source
+      source_name: Name
+      source_consumer_id: Consumer ID
+      source_consumer_email: Consumer Email
   spree:
     token: Token
     username: Username
@@ -38,6 +103,8 @@ en:
     transaction_types: Transaction Types
     return_success_url: Return Success URL
     return_failure_url: Return Failure URL
+    return_cancel_url: Return Cancel URL
+    return_pending_url: Return Pending URL
     challenge_indicator: Challenge Indicator
     hostname: Hostname
     threeds_allowed: Threeds V2 parameters handling

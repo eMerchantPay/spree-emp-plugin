@@ -5,7 +5,6 @@ module SpreeEmerchantpayGenesis
 
       preference :username, :string
       preference :password, :string
-      preference :transaction_types, :select,  default: -> { { values: [:authorize, :authorize3d, :sale, :sale3d] } }
       preference :return_success_url, :string, default: 'http://localhost:4000/orders/|:ORDER:|'
       preference :return_failure_url, :string, default: 'http://localhost:4000/checkout/payment?order_number=|:ORDER:|'
       preference :threeds_allowed, :boolean_select, default: true
@@ -14,6 +13,20 @@ module SpreeEmerchantpayGenesis
       }
       preference :hostname, :string, default: 'http://127.0.0.1:4000'
       preference :test_mode, :boolean_select, default: true
+
+      def provider_class
+        SpreeEmerchantpayGenesis::GenesisProvider
+      end
+
+      def provider
+        @provider = provider_class.new method_type, options if @provider.nil?
+
+        @provider
+      end
+
+      def authorize(money_in_cents, source, gateway_options)
+        purchase money_in_cents, source, gateway_options
+      end
 
       # Capture authorized payment
       def capture(amount, transaction_id, gateway_options)
@@ -51,6 +64,10 @@ module SpreeEmerchantpayGenesis
 
       def payment_profiles_supported?
         false
+      end
+
+      def supports?(_source)
+        true
       end
 
       def order_data_from_options(options)

@@ -2,7 +2,7 @@
 RSpec.describe SpreeEmerchantpayGenesis::Mappers::Genesis do
   let(:source) { create(:spree_credit_card) }
   let(:spree_payment) do
-    create :emerchantpay_direct_payment,
+    create :spree_payment,
            payment_method: source.payment_method,
            source: source
   end
@@ -306,14 +306,14 @@ RSpec.describe SpreeEmerchantpayGenesis::Mappers::Genesis do
              user_id:    order.user_id
     end
     let(:create_completed_order) do
-      create :emerchantpay_direct_payment,
+      create :spree_payment,
              payment_method: source.payment_method,
              source: source,
              state: 'completed',
              order: spree_payment.order
     end
     let(:spree_payment) do
-      create :emerchantpay_direct_payment,
+      create :spree_payment,
              payment_method: source.payment_method,
              source: source,
              order: order,
@@ -356,7 +356,7 @@ RSpec.describe SpreeEmerchantpayGenesis::Mappers::Genesis do
     end
 
     it 'with reorder threeds_v2_merchant_risk_reorder_items_indicator' do # rubocop:disable RSpec/ExampleLength
-      create :emerchantpay_direct_payment,
+      create :spree_payment,
              payment_method: source.payment_method,
              source: source,
              order: order2,
@@ -366,7 +366,7 @@ RSpec.describe SpreeEmerchantpayGenesis::Mappers::Genesis do
     end
 
     it 'with threeds_v2_card_holder_account_transactions_activity_previous_year' do # rubocop:disable RSpec/ExampleLength
-      create :emerchantpay_direct_payment,
+      create :spree_payment,
              payment_method: source.payment_method,
              source: source,
              order: order,

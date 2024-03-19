@@ -9,4 +9,16 @@ FactoryBot.define do
     mode { 'test' }
     response { { timestamp: DateTime.now } }
   end
+
+  factory :emerchantpay_direct_payment,
+          parent: :emerchantpay_payment,
+          class: 'SpreeEmerchantpayGenesis::Db::EmerchantpayPayment' do
+    payment_method { Spree::Gateway::EmerchantpayDirect }
+  end
+
+  factory :emerchantpay_checkout_payment,
+          parent: :emerchantpay_payment,
+          class: 'SpreeEmerchantpayGenesis::Db::EmerchantpayPayment' do
+    payment_method { Spree::Gateway::EmerchantpayCheckout }
+  end
 end

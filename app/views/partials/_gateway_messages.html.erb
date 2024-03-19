@@ -1,0 +1,21 @@
+<fieldset data-hook="emerchantpay_gateway_response">
+  <% if payment.private_metadata[:message] || payment.private_metadata[:technical_message] %>
+    <legend><%= "#{payment.payment_method.name} #{I18n.t('emerchantpay.payments_table.gateway_response')}" %></legend>
+    <div class="table-responsive border rounded bg-white mb-3">
+      <table class="table table-condensed">
+        <% if payment.private_metadata[:message] %>
+          <tr>
+            <th><%= I18n.t('emerchantpay.payments_table.message') %></th>
+            <td><%= payment.private_metadata[:message] %></td>
+          </tr>
+        <% end %>
+        <% if payment.private_metadata[:technical_message] %>
+          <tr>
+            <th><%= I18n.t('emerchantpay.payments_table.technical_message') %></th>
+            <td><%= payment.private_metadata[:technical_message] %></td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  <% end %>
+</fieldset>

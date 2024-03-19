@@ -74,6 +74,15 @@ RSpec.describe Spree::Admin::PaymentMethodsHelper do
         .to include '<option selected="selected" value="authorize">Authorize</option>'
     end
 
+    it 'with multi select type' do
+      options[:type]     = :multi_select
+      options[:selected] = ['authorize3d']
+      options[:values]   = GenesisRuby::Utils::Transactions::WpfTypes.all
+
+      expect(helper.preference_field_for(form, 'preferred_transaction_types', options))
+        .to include '<select class="select2" multiple="multiple"'
+    end
+
     it 'with default type' do
       options[:type] = :some_type
 

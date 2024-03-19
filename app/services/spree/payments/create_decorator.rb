@@ -31,8 +31,11 @@ module Spree
 
       # Create payment source
       def create_payment_source(payment_method, params, order)
-        if payment_method.type == Spree::Gateway::EmerchantpayDirect.name
+        case payment_method.type
+        when Spree::Gateway::EmerchantpayDirect.name
           emerchantpay_direct_payment_source payment_method, params, order
+        when Spree::Gateway::EmerchantpayCheckout.name
+          emerchantpay_checkout_payment_source payment_method, params, order
         else
           default_payment_source payment_method, params, order
         end
@@ -53,6 +56,15 @@ module Spree
           payment_method: payment_method,
           params: params.delete(:source_attributes),
           user: order.user
+        )
+      end
+
+      # Emerchantpay Checkout payment source creation
+      def emerchantpay_checkout_payment_source(payment_method, params, order)
+        SpreeEmerchantpayGenesis::Sources::CreateCheckout.call(
+          payment_method: payment_method,
+          params: params.delete(:source_attributes),
+          order: order
         )
       end
 

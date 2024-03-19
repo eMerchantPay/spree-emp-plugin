@@ -22,59 +22,6 @@
   </div>
 </fieldset>
 
-<fieldset data-hook="emerchantpay_gateway_response">
-<% if payment.private_metadata[:message] || payment.private_metadata[:technical_message] %>
-  <legend><%= "#{payment.payment_method.name} #{I18n.t('emerchantpay.payments_table.gateway_response')}" %></legend>
-  <div class="table-responsive border rounded bg-white mb-3">
-    <table class="table table-condensed">
-      <% if payment.private_metadata[:message] %>
-        <tr>
-          <th><%= I18n.t('emerchantpay.payments_table.message') %></th>
-          <td><%= payment.private_metadata[:message] %></td>
-        </tr>
-      <% end %>
-      <% if payment.private_metadata[:technical_message] %>
-        <tr>
-          <th><%= I18n.t('emerchantpay.payments_table.technical_message') %></th>
-          <td><%= payment.private_metadata[:technical_message] %></td>
-        </tr>
-      <% end %>
-    </table>
-  </div>
-<% end %>
-</fieldset>
+<%= render :partial => 'partials/gateway_messages', locals: { payment: payment } %>
 
-<fieldset data-hook="emerchantpay_gateway_payments">
-  <% if payment.emerchantpay_payments.count > 0 %>
-    <legend><%= "#{payment.payment_method.name} #{I18n.t('emerchantpay.payments_table.title')}" %></legend>
-    <div class="table-responsive border rouded bg-white mb-3">
-      <table class="table table-condensed">
-        <tr>
-          <th><%= I18n.t('emerchantpay.payments_table.unique_id') %></th>
-          <th><%= I18n.t('emerchantpay.payments_table.reference_id') %></th>
-          <th><%= I18n.t('emerchantpay.payments_table.status') %></th>
-          <th><%= I18n.t('emerchantpay.payments_table.transaction_type') %></th>
-          <th><%= I18n.t('emerchantpay.payments_table.mode') %></th>
-          <th><%= I18n.t('emerchantpay.payments_table.amount') %></th>
-          <th><%= I18n.t('emerchantpay.payments_table.currency') %></th>
-          <th><%= I18n.t('emerchantpay.payments_table.created_at') %></th>
-          <th><%= I18n.t('emerchantpay.payments_table.updated_at') %></th>
-        </tr>
-
-        <% payment.emerchantpay_payments.each do |emerchantpay_payment| %>
-          <tr>
-            <td><%= emerchantpay_payment.unique_id %></td>
-            <td><%= emerchantpay_payment.reference_id %></td>
-            <td><%= emerchantpay_payment.status %></td>
-            <td><%= emerchantpay_payment.transaction_type %></td>
-            <td><%= emerchantpay_payment.mode %></td>
-            <td><%= emerchantpay_payment.major_amount %></td>
-            <td><%= emerchantpay_payment.currency %></td>
-            <td><%= emerchantpay_payment.formatted_created_at %></td>
-            <td><%= emerchantpay_payment.formatted_updated_at %></td>
-          </tr>
-        <% end %>
-      </table>
-    </div>
-  <% end %>
-</fieldset>
+<%= render :partial => 'partials/transaction_table', locals: { payment: payment } %>

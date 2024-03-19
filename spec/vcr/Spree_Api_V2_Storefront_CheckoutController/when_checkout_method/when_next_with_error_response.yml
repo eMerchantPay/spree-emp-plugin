@@ -1,0 +1,141 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://staging.wpf.emerchantpay.net/wpf
+    body:
+      encoding: UTF-8
+      string: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <wpf_payment>
+          <transaction_id>sp-e5c1d-7a5a-4c5e-8adc-c00febb34</transaction_id>
+          <amount>2999</amount>
+          <currency>USD</currency>
+          <usage>Electronic transaction via Spree eCommerce platform</usage>
+          <customer_email>spree@example.com</customer_email>
+          <customer_phone>555-555-0199</customer_phone>
+          <notification_url>http://127.0.0.1:4000/api/v2/storefront/emerchantpay_notification</notification_url>
+          <return_success_url>http://localhost:4000/orders/R522986687</return_success_url>
+          <return_failure_url>http://localhost:4000/checkout/payment?order_number=R522986687</return_failure_url>
+          <return_cancel_url>http://localhost:4000/checkout/payment</return_cancel_url>
+          <return_pending_url>http://localhost:4000/orders/R522986687</return_pending_url>
+          <billing_address>
+            <first_name>John</first_name>
+            <last_name>Doe</last_name>
+            <address1>25 Lovely Street</address1>
+            <address2>Northwest</address2>
+            <zip_code>35005</zip_code>
+            <city>Herndon</city>
+            <state>STATE_ABBR_34</state>
+            <country>I9</country>
+          </billing_address>
+          <shipping_address>
+            <first_name>John</first_name>
+            <last_name>Doe</last_name>
+            <address1>26 Lovely Street</address1>
+            <address2>Northwest</address2>
+            <zip_code>35005</zip_code>
+            <city>Herndon</city>
+            <state>STATE_ABBR_35</state>
+            <country>I9</country>
+          </shipping_address>
+          <transaction_types>
+            <transaction_type name="authorize3d"/>
+            <transaction_type name="sale3d"/>
+            <transaction_type name="wechat"/>
+            <transaction_type name="post_finance"/>
+            <transaction_type name="trustly_sale"/>
+          </transaction_types>
+          <threeds_v2_params>
+            <control>
+              <challenge_window_size>full_screen</challenge_window_size>
+              <challenge_indicator>preference</challenge_indicator>
+            </control>
+            <purchase>
+              <category>goods</category>
+            </purchase>
+            <merchant_risk>
+              <shipping_indicator>other</shipping_indicator>
+              <delivery_timeframe>another_day</delivery_timeframe>
+              <reorder_items_indicator>first_time</reorder_items_indicator>
+            </merchant_risk>
+            <card_holder_account>
+              <registration_indicator>guest_checkout</registration_indicator>
+            </card_holder_account>
+          </threeds_v2_params>
+        </wpf_payment>
+    headers:
+      Content-Type:
+      - text/xml
+      Content-Length:
+      - '2272'
+      Authorization:
+      - Basic example_credentials
+      User-Agent:
+      - 'Genesis Ruby Client 0.1.3. Network: GenesisRuby::Network::NetHttp'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/xml; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Date:
+      - Thu, 14 Mar 2024 15:22:20 GMT
+      Vary:
+      - Accept
+      Etag:
+      - W/"b8287c0a97f57a40b3a631bc2102efe5"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - '0108240b-b8cc-441f-acd4-b66b2a36ebc3'
+      X-Runtime:
+      - '0.049425'
+      Strict-Transport-Security:
+      - max-age=631138519
+      X-Frame-Options:
+      - DENY
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Content-Security-Policy:
+      - 'default-src https: ''self''; font-src ''self'' data:  https://fonts.gstatic.com;
+        frame-src https: ''self''  staging.gate.emerchantpay.net:443; img-src ''self''
+        data:  dadu5f16bpxo.cloudfront.net https://www.gstatic.com https://hatscripts.github.io;
+        script-src https: ''self'' ''unsafe-inline''  js-agent.newrelic.com bam.nr-data.net
+        pay.google.com; style-src https: ''self'' ''unsafe-inline''  dadu5f16bpxo.cloudfront.net;
+        report-uri https://emerchantpay.report-uri.io/r/default/csp/enforce'
+      X-Cache:
+      - Miss from cloudfront
+      Via:
+      - 1.1 7d1d59e1d7c17682b3d50dee49f3f96c.cloudfront.net (CloudFront)
+      X-Amz-Cf-Pop:
+      - SOF50-P1
+      X-Amz-Cf-Id:
+      - iLBscXeW4DuC2ApIvybLdp1-YQjjBuFB5cgPaU68HrI5MT1F5ZWDkQ==
+    body:
+      encoding: UTF-8
+      string: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <wpf_payment>
+          <status>error</status>
+          <code>110</code>
+          <technical_message>Invalid Authentication</technical_message>
+          <message>401 Unauthorized: Invalid Authentication!</message>
+        </wpf_payment>
+  recorded_at: Thu, 14 Mar 2024 15:22:20 GMT
+recorded_with: VCR 6.2.0
