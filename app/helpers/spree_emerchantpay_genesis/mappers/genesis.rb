@@ -75,16 +75,15 @@ module SpreeEmerchantpayGenesis
       end
 
       # Map WPF request
-      def map_wpf(order, _source, options)
+      def map_wpf(order, source, options)
         common_attributes order, support_ip: false
+        description_attribute order
         billing_attributes order
         shipping_attributes order
-        asyn_attributes options
-        transaction_types_attributes options
+        asyn_attributes options, is_wpf: true
+        transaction_types_attributes options, source
         threeds_wpf_attributes order, options if ActiveModel::Type::Boolean.new.cast options[:threeds_allowed]
-
-        @context.return_cancel_url  = options[:return_cancel_url]
-        @context.return_pending_url = options[:return_pending_url]
+        wpf_locale_attributes options
 
         self
       end
@@ -181,10 +180,15 @@ module SpreeEmerchantpayGenesis
       end
 
       # Asynchronous attributes
-      def asyn_attributes(options)
+      def asyn_attributes(options, is_wpf: false)
         @context.notification_url   = "#{options[:hostname]}#{api_v2_storefront_emerchantpay_notification_path}"
         @context.return_success_url = options[:return_success_url]
         @context.return_failure_url = options[:return_failure_url]
+
+        if is_wpf
+          @context.return_cancel_url  = options[:return_cancel_url]
+          @context.return_pending_url = options[:return_pending_url]
+        end
 
         nil
       end
@@ -209,10 +213,39 @@ module SpreeEmerchantpayGenesis
       end
 
       # Map WPF Transaction Types
-      def transaction_types_attributes(options)
-        options[:transaction_types].each do |type|
-          @context.add_transaction_type type unless type.empty?
+      def transaction_types_attributes(options, source)
+        custom_attributes = source.public_metadata
+        transaction_types = PaymentMethodHelper.select_options_value options, :transaction_types
+
+        transaction_types.each do |type|
+          next if type.empty?
+
+          if custom_attributes.key?(type.to_s) && custom_attributes[type.to_s].is_a?(Hash)
+            @context.add_transaction_type type, custom_attributes[type.to_s].deep_symbolize_keys
+
+            next
+          end
+
+          @context.add_transaction_type type
         end
+      end
+
+      # Map WPF Description field
+      def description_attribute(order)
+        items_description = order.line_items.map { |item| ["#{item[:product_name]} x #{item[:quantity]}"] }
+
+        @context.description = items_description.join("\n")
+
+        nil
+      end
+
+      # Map WPF language attributes
+      def wpf_locale_attributes(options)
+        locale = PaymentMethodHelper.select_options_value options, :language
+
+        return unless locale.is_a? String
+
+        @context.locale = locale.delete_prefix('\'').delete_suffix('\'')
       end
 
     end

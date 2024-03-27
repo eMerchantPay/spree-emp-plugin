@@ -75,6 +75,32 @@ en:
       webmoney: Webmoney
       webpay: Webpay
       wechat: Wechat
+      ar: Arabic
+      bg: Bulgarian
+      de: German
+      en: English
+      es: Spanish
+      fr: French
+      hi: Hindu
+      ja: Japanese
+      is: Icelandic
+      it: Italian
+      nl: Dutch
+      pt: Portuguese
+      pl: Polish
+      ru: Russian
+      tr: Turkish
+      zh: Mandarin Chinese
+      id: Indonesian
+      ms: Malay
+      th: Thai
+      cs: Czech
+      hr: Croatian
+      sl: Slovenian
+      fi: Finnish
+      "no": Norwegian
+      da: Danish
+      sv: Swedish
     payment:
       usage: Electronic transaction via Spree eCommerce platform
       reference: Reference transaction via Spree eCommerce platform
@@ -96,6 +122,7 @@ en:
       source_name: Name
       source_consumer_id: Consumer ID
       source_consumer_email: Consumer Email
+      source_custom_attributes: Custom Attributes
   spree:
     token: Token
     username: Username

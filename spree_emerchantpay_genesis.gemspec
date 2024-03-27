@@ -27,12 +27,11 @@ Gem::Specification.new do |spec|
 
   spec.files = Dir['{app,config,db,lib}/**/*', 'LICENSE', 'Rakefile', 'README.md', 'CHANGELOG.md']
 
-  spec.add_dependency 'genesis_ruby', '0.1.5'
-  spec.add_dependency 'rails', '~> 6.0'
-  spec.add_dependency 'securerandom', '~> 0.2.2'
-  spec.add_dependency 'spree_backend', '~> 4.4', '>= 4.4.0'
-  spec.add_dependency 'spree_core', '~> 4.4', '>= 4.4.0'
-  spec.add_dependency 'spree_extension', '0.1.0'
+  spec.add_dependency 'genesis_ruby', '0.1.6'
+  spec.add_dependency 'securerandom'
+  spec.add_dependency 'spree_backend', '>= 4.4.0'
+  spec.add_dependency 'spree_core', '>= 4.4.0'
+  spec.add_dependency 'spree_extension'
 
   spec.add_development_dependency 'appraisal', '~> 2.5'
   spec.add_development_dependency 'database_cleaner', '~> 2.0'
@@ -45,7 +44,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'pry', '~> 0.14'
   spec.add_development_dependency 'rspec', '~> 3.12'
   spec.add_development_dependency 'rspec_junit_formatter', '~> 0.6'
-  spec.add_development_dependency 'rspec-rails', '~> 4.0'
+  spec.add_development_dependency 'rspec-rails'
   spec.add_development_dependency 'rubocop', '~> 1.21'
   spec.add_development_dependency 'rubocop-rspec', '~> 2.13'
   spec.add_development_dependency 'simplecov', '~> 0.22'

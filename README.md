@@ -7,7 +7,7 @@ This is a Payment Module for Spree eCommerce that gives you the ability to proce
 * Spree FrontEnd - Optional (Tested up to 4.4.0)
 * Ruby >= 2.7
 * Ruby on Rails >= 6.1.4
-* [GenesisRuby v0.1.5](https://github.com/GenesisGateway/genesis_ruby/releases/tag/0.1.5)
+* [GenesisRuby v0.1.6](https://github.com/GenesisGateway/genesis_ruby/releases/tag/0.1.6)
 * PCI-certified server in order to use emerchantpay Direct
 
 ## Installation
@@ -216,7 +216,30 @@ curl --request 'POST' \
 
 #### Create Checkout Payment
 
-The Checkout Gateway doesn't require `source_attributes` (see [p.4 Update Order](#payment-point-4)). Upon Order Update or Payment Create the only required parameter is `payment_method_id`.
+The Checkout Gateway doesn't require `source_attributes` by default (see [p.4 Update Order](#payment-point-4)). Upon Order Update or Payment Create the only required parameter is `payment_method_id`.
+
+In some cases, the Gateway Web Payment Form may require Custom Attributes. Those attributes can be passed to the gateway via `api/v2/storefront/checkout/create_payment`.
+public_metadata contains a list with custom attributes where the key is the transaction type chosen on the payment method configuration inside the administration backend.
+
+```bash
+curl --request 'POST' \
+  --header 'Accept: application/vnd.api+json' \
+  --header 'X-Spree-Order-Token: EsDjq1oXEgKI6kuujgfvFw1694531383712' \
+  --header 'Content-Type: application/vnd.api+json' \
+  --url 'http://localhost:4000/api/v2/storefront/checkout/create_payment' \
+  --data '{
+  "payment_method_id": "8",
+  "source_attributes": {
+    "consumer_id":"123456",
+    "consumer_email": "travis@example.com",
+    "public_metadata": {
+      "sale3d": { "bin": "401200", "tail": "0085"},
+      "trustly_sale": {"return_success_url_target": "top"}
+    }
+  }
+}'
+```
+Full list with the available Custom Attributes for every Transaction Type can be found [here](https://emerchantpay.github.io/gateway-api-docs/#wpf-transaction-types).
 
 The payment can be finished and a request to the Gateway will be sent with one of the Order Next or Complete endpoints.  
 

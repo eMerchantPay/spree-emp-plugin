@@ -7,6 +7,8 @@ appraise 'spree-4.4' do
     gem 'redis', '~> 4.0'
     gem 'spree_auth_devise'
     gem 'webmock', '>= 2.3.1'
+    gem 'rails'
+    gem 'rspec-rails'
   end
 end
 
@@ -19,5 +21,7 @@ appraise 'spree-master' do
     gem 'redis', '~> 4.0'
     gem 'spree_auth_devise'
     gem 'webmock', '>= 2.3.1'
+    gem 'rails'
+    gem 'rspec-rails'
   end
 end

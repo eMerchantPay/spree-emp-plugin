@@ -28,6 +28,13 @@ module SpreeEmerchantpayGenesis
         default_attr
       end
 
+      # Get default values for select options
+      def select_options_value(options, key)
+        return options[key][:selected] if options[key].is_a? Hash
+
+        options[key]
+      end
+
     end
 
   end

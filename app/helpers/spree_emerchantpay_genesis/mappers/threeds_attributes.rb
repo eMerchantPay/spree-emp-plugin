@@ -71,7 +71,8 @@ module SpreeEmerchantpayGenesis
 
         @context.threeds_v2_control_challenge_window_size =
           fetch_threeds_constant('Control::ChallengeWindowSizes::FULLSCREEN')
-        @context.threeds_v2_control_challenge_indicator   = options[:challenge_indicator]
+        @context.threeds_v2_control_challenge_indicator   =
+          PaymentMethodHelper.select_options_value options, :challenge_indicator
 
         nil
       end

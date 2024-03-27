@@ -38,4 +38,11 @@ FactoryBot.define do
 
     initialize_with { new config }
   end
+
+  factory :genesis_wpf,
+          parent: :genesis,
+          class: 'GenesisRuby::Api::Requests::Wpf::Create' do
+
+    initialize_with { new config }
+  end
 end

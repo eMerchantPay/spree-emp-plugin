@@ -5,11 +5,10 @@ module SpreeEmerchantpayGenesis
 
       NESTED_NODES             = %w(billing_address shipping_address line_items user).freeze
       ORDER_ALLOWED_ATTRIBUTES = %w(
-        id currency item_total total user_id token item_count email shipment_total
-        bill_address_id ship_address_id last_ip_address adjustment_total additional_tax_total included_tax_total number
-        customer ip order_id shipping tax subtotal discount name address1 address2 city
-        state zip country phone digital
-        created_at updated_at
+        id currency item_total total user_id token item_count email shipment_total bill_address_id ship_address_id
+        last_ip_address adjustment_total additional_tax_total included_tax_total number customer ip order_id shipping
+        tax subtotal discount name address1 address2 city state zip country phone digital created_at updated_at
+        product_name
       ) + NESTED_NODES
 
       # Prepare Order data used from the Order mapper
@@ -17,7 +16,11 @@ module SpreeEmerchantpayGenesis
         order.attributes.symbolize_keys.merge(
           gateway_options,
           { digital: order.digital? },
-          { line_items: order.line_items.map { |line_item| line_item.attributes.symbolize_keys } },
+          {
+            line_items: order.line_items.map do |line_item|
+              line_item.attributes.symbolize_keys.merge({ product_name: line_item.product.name })
+            end
+          },
           { user: (user ? user.attributes.symbolize_keys : {}) }
         )
       end

@@ -7,16 +7,16 @@ FactoryBot.define do
     # be recorded on VCR, so they can be safely replaced with
     # placeholder afterwards
     transient do
-      username { Rails.application.secrets.username || 'example_username' }
-      password { Rails.application.secrets.password || 'example_password' }
-      token { Rails.application.secrets.token || 'example_token' }
+      genesis_credentials = Rails.application.credentials[:genesis]
+
+      username { genesis_credentials ? genesis_credentials[:username] : 'example_username' }
+      password { genesis_credentials ? genesis_credentials[:password] : 'example_password' }
+      token { genesis_credentials ? genesis_credentials[:token] : 'example_token' }
       transaction_types { 'authorize3d' }
-      challenge_indicator { 'mandate' }
-      test_mode { 'true' }
     end
 
     before(:create) do |gateway, evaluator|
-      %w(username password token transaction_types challenge_indicator test_mode).each do |preference|
+      %w(username password token transaction_types).each do |preference|
         gateway.__send__ "preferred_#{preference}=", evaluator.__send__(preference)
       end
 

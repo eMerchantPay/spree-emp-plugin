@@ -354,7 +354,7 @@ RSpec.describe SpreeEmerchantpayGenesis::GenesisProvider, :vcr do
       end
 
       it 'with successful notification' do
-        if Rails.application.secrets.password
+        if Rails.application.credentials[:genesis]
           skip 'Skipped: Secrets file is used. Notification signature is generated with default password.'
         end
 
@@ -362,7 +362,7 @@ RSpec.describe SpreeEmerchantpayGenesis::GenesisProvider, :vcr do
       end
 
       it 'with reconcile response' do
-        if Rails.application.secrets.password
+        if Rails.application.credentials[:genesis]
           skip 'Skipped: Secrets file is used. Notification signature is generated with default password.'
         end
 
@@ -468,7 +468,7 @@ RSpec.describe SpreeEmerchantpayGenesis::GenesisProvider, :vcr do
       end
 
       it 'with successful notification' do
-        if Rails.application.secrets.password
+        if Rails.application.credentials[:genesis]
           skip 'Skipped: Secrets file is used. Notification signature is generated with default password.'
         end
 
@@ -476,7 +476,7 @@ RSpec.describe SpreeEmerchantpayGenesis::GenesisProvider, :vcr do
       end
 
       it 'with reconcile response' do
-        if Rails.application.secrets.password
+        if Rails.application.credentials[:genesis]
           skip 'Skipped: Secrets file is used. Notification signature is generated with default password.'
         end
 
@@ -486,7 +486,7 @@ RSpec.describe SpreeEmerchantpayGenesis::GenesisProvider, :vcr do
       end
 
       it 'with reference reconcile response' do # rubocop:disable RSpec/ExampleLength
-        if Rails.application.secrets.password
+        if Rails.application.credentials[:genesis]
           skip 'Skipped: Secrets file is used. Notification signature is generated with default password.'
         end
 

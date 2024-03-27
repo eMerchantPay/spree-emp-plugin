@@ -14,6 +14,31 @@
         <th><%= I18n.t('emerchantpay.payments_table.source_consumer_email') %>:</th>
         <td><%= payment.source.consumer_email %></td>
       </tr>
+      <% unless payment.source.public_metadata.empty? %>
+        <tr>
+          <td colspan="2" class="text-center">
+            <h3><%= I18n.t('emerchantpay.payments_table.source_custom_attributes') %></h3>
+            <table class="table border-top-0">
+              <% payment.source.public_metadata.each do |transaction_type, custom_attributes| %>
+                <% next unless custom_attributes.is_a? Hash %>
+                  <tr>
+                    <th class="col-2"><%= transaction_type %></th>
+                    <td class="text-left col-10">
+                      <table class="table">
+                        <% custom_attributes  .each do |attribute, value| %>
+                          <tr>
+                            <td class="col-5"><%= attribute %></td>
+                            <td class="col-7"><%= value %></td>
+                          </tr>
+                        <% end %>
+                      </table>
+                    </td>
+                  </tr>
+              <% end %>
+            </table>
+          </td>
+        </tr>
+      <% end %>
     </table>
   </div>
 </fieldset>

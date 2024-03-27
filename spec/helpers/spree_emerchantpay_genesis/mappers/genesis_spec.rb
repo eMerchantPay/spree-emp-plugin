@@ -62,7 +62,9 @@ RSpec.describe SpreeEmerchantpayGenesis::Mappers::Genesis do
 
     describe 'when production' do
       let(:config) do
-        described_class.for_config(create(:emerchantpay_direct_gateway, test_mode: 'false').preferences).context
+        described_class.for_config(
+          create(:emerchantpay_direct_gateway, preferred_test_mode: 'false').preferences
+        ).context
       end
 
       it 'with proper environment' do
@@ -199,7 +201,7 @@ RSpec.describe SpreeEmerchantpayGenesis::Mappers::Genesis do
       end
 
       it 'with threeds_v2_control_challenge_indicator' do
-        expect(payment.threeds_v2_control_challenge_indicator).to eq 'mandate'
+        expect(payment.threeds_v2_control_challenge_indicator).to eq 'no_preference'
       end
 
       it 'with threeds_v2_merchant_risk_shipping_indicator' do
@@ -506,6 +508,88 @@ RSpec.describe SpreeEmerchantpayGenesis::Mappers::Genesis do
 
       expect(params[:return_failure_url]).to include spree_payment.order.number
     end
+  end
+
+  describe 'when wpf' do
+    let(:source) do
+      create :emerchantpay_checkout_source,
+             public_metadata: {
+               sale3d: { bin: '420000', tail: '0000' }, trustly_sale: { return_success_url_target: 'top' }
+             }
+    end
+    let(:payment_method) { source.payment_method }
+    let(:spree_payment) do
+      create :spree_payment,
+             payment_method: payment_method,
+             source: source,
+             order: create(:order_with_line_items)
+    end
+    let(:options) { described_class.for_urls! spree_payment.payment_method.preferences, spree_payment.order.number }
+    let(:mapped_order_with_line_items) do
+      SpreeEmerchantpayGenesis::Mappers::Order.for(
+        SpreeEmerchantpayGenesis::Mappers::Order.prepare_data(
+          spree_payment.order,
+          spree_payment.order.user,
+          build(
+            :gateway_options_with_address,
+            email: spree_payment.order.email,
+            currency: spree_payment.order.currency,
+            order_number: spree_payment.order.number,
+            payment_number: spree_payment.number
+          )
+        )
+      )
+    end
+    let(:gate_request) { build :genesis_wpf }
+
+    before do
+      described_class.for_wpf(gate_request, mapped_order_with_line_items, source, options).context
+    end
+
+    it 'with description' do
+      expect(gate_request.description).to include 'Product', 'x 1'
+    end
+
+    it 'with transaction types' do
+      expect(gate_request.__send__(:transaction_types))
+        .to include({ transaction_type: { '@attributes': { name: 'authorize3d' } } })
+    end
+
+    it 'with default transaction types' do # rubocop:disable RSpec/ExampleLength
+      options = described_class.for_urls!(
+        Spree::Gateway::EmerchantpayCheckout.new.preferences, spree_payment.order.number
+      )
+
+      gate_request = build :genesis_wpf
+
+      described_class.for_wpf(gate_request, mapped_order_with_line_items, source, options).context
+
+      expect(gate_request.__send__(:transaction_types))
+        .to include({ transaction_type: { '@attributes': { name: 'sale3d' }, bin: '420000', tail: '0000' } })
+    end
+
+    it 'when sale3d with custom attributes' do
+      expect(gate_request.__send__(:transaction_types))
+        .to include({ transaction_type: { '@attributes': { name: 'sale3d' }, bin: '420000', tail: '0000' } })
+    end
+
+    it 'when trustly_sale with custom attributes' do
+      expect(gate_request.__send__(:transaction_types))
+        .to include({ transaction_type: { '@attributes': { name: 'trustly_sale' }, return_success_url_target: 'top' } })
+    end
+
+    it 'with default locale' do # rubocop:disable RSpec/ExampleLength
+      options = described_class.for_urls!(
+        Spree::Gateway::EmerchantpayCheckout.new.preferences, spree_payment.order.number
+      )
+
+      gate_request = build :genesis_wpf
+
+      described_class.for_wpf(gate_request, mapped_order_with_line_items, source, options).context
+
+      expect(gate_request.api_config[:url]).to include '/en/wpf'
+    end
+
   end
 end
 # rubocop:enable RSpec/MultipleMemoizedHelpers

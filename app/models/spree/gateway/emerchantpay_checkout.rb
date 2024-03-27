@@ -3,10 +3,19 @@ module Spree
   class Gateway::EmerchantpayCheckout < SpreeEmerchantpayGenesis::Base::Gateway # rubocop:disable Style/ClassAndModuleChildren
 
     preference :transaction_types, :multi_select,  default: lambda {
-      { values: GenesisRuby::Utils::Transactions::WpfTypes.all }
+      {
+        values:   GenesisRuby::Utils::Transactions::WpfTypes.all,
+        selected: [GenesisRuby::Api::Constants::Transactions::SALE_3D]
+      }
     }
     preference :return_cancel_url, :string, default: 'http://localhost:4000/checkout/payment'
     preference :return_pending_url, :string, default: 'http://localhost:4000/orders/|:ORDER:|'
+    preference :language, :select, default: lambda {
+      {
+        values:   GenesisRuby::Api::Constants::I18n.all,
+        selected: GenesisRuby::Api::Constants::I18n::EN
+      }
+    }
 
     delegate :load_data, :load_source, :load_payment, to: :provider
 

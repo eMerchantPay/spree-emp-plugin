@@ -1,5 +1,3 @@
-require 'spree/gateway/emerchantpay_direct'
-
 module SpreeEmerchantpayGenesis
   module Notifications
     # Notification Handler Service

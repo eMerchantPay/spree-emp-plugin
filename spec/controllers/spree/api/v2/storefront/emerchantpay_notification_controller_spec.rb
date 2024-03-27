@@ -62,7 +62,7 @@ RSpec.describe Spree::Api::V2::Storefront::EmerchantpayNotificationController, :
       end
 
       it 'with proper response body' do # rubocop:disable RSpec/ExampleLength
-        if Rails.application.secrets.password
+        if Rails.application.credentials[:genesis]
           skip 'Skipped: Secrets file is used. Callback signature is generated with default password.'
         end
 
@@ -74,7 +74,7 @@ RSpec.describe Spree::Api::V2::Storefront::EmerchantpayNotificationController, :
       end
 
       it 'with proper response code' do # rubocop:disable RSpec/ExampleLength
-        if Rails.application.secrets.password
+        if Rails.application.credentials[:genesis]
           skip 'Skipped: Secrets file is used. Callback signature is generated with default password.'
         end
 
@@ -85,7 +85,7 @@ RSpec.describe Spree::Api::V2::Storefront::EmerchantpayNotificationController, :
       end
 
       it 'with error exception' do # rubocop:disable RSpec/ExampleLength
-        if Rails.application.secrets.password
+        if Rails.application.credentials[:genesis]
           skip 'Skipped: Secrets file is used. Callback signature is generated with default password.'
         end
 
@@ -127,7 +127,7 @@ RSpec.describe Spree::Api::V2::Storefront::EmerchantpayNotificationController, :
       end
 
       it 'with proper response body' do # rubocop:disable RSpec/ExampleLength
-        if Rails.application.secrets.password
+        if Rails.application.credentials[:genesis]
           skip 'Skipped: Secrets file is used. Callback signature is generated with default password.'
         end
 

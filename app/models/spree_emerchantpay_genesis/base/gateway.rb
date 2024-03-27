@@ -9,7 +9,12 @@ module SpreeEmerchantpayGenesis
       preference :return_failure_url, :string, default: 'http://localhost:4000/checkout/payment?order_number=|:ORDER:|'
       preference :threeds_allowed, :boolean_select, default: true
       preference :challenge_indicator, :select, default: lambda {
-        { values: [:no_preference, :no_challenge_requested, :preference, :mandate] }
+        {
+          values:   GenesisRuby::Api::Constants::Transactions::Parameters::Threeds::Version2::Control::
+              ChallengeIndicators.all,
+          selected: GenesisRuby::Api::Constants::Transactions::Parameters::Threeds::Version2::Control::
+              ChallengeIndicators::NO_PREFERENCE
+        }
       }
       preference :hostname, :string, default: 'http://127.0.0.1:4000'
       preference :test_mode, :boolean_select, default: true

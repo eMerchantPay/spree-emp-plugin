@@ -1,3 +1,13 @@
+0.1.5
+-----
+**Features**:
+
+* Added `emerchantpay Checkout` Description field handling
+* Updated Genesis Ruby SDK to version 0.1.6
+* Updated project dependencies
+* Added `emerchantpay Checkout` Custom Attributes handling
+* Added `emerchantpay Checkout` Language support
+
 0.1.4
 -----
 **Features**:

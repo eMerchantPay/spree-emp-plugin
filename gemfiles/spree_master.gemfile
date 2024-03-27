@@ -10,6 +10,8 @@ group :development, :test do
   gem "webmock", ">= 2.3.1"
   gem "spree", branch: "main", git: "https://github.com/spree/spree.git"
   gem "spree_backend", branch: "main", git: "https://github.com/spree/spree_backend.git"
+  gem "rails"
+  gem "rspec-rails"
 end
 
 gemspec path: "../"
