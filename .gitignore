@@ -11,3 +11,4 @@ coverage
 rspec_report.xml
 rubocop_report.txt
 /spec/dummy
+.env

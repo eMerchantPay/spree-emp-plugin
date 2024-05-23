@@ -9,6 +9,7 @@ appraise 'spree-4.4' do
     gem 'webmock', '>= 2.3.1'
     gem 'rails'
     gem 'rspec-rails'
+    gem 'spree_frontend'
   end
 end
 
@@ -23,5 +24,6 @@ appraise 'spree-master' do
     gem 'webmock', '>= 2.3.1'
     gem 'rails'
     gem 'rspec-rails'
+    gem 'spree_frontend'
   end
 end

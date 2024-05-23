@@ -1,0 +1,167 @@
+---
+http_interactions:
+  - request:
+      method: post
+      uri: https://staging.gate.emerchantpay.net/process/example_token/
+      body:
+        encoding: UTF-8
+        string: |
+          <?xml version="1.0" encoding="UTF-8"?>
+          <payment_transaction>
+            <transaction_type>authorize3d</transaction_type>
+            <transaction_id>sp-44abd-d7e4-4f5b-92a4-91fa6c5c8</transaction_id>
+            <usage>Electronic transaction via Spree eCommerce platform</usage>
+            <remote_ip>127.0.0.1</remote_ip>
+            <amount>2999</amount>
+            <currency>USD</currency>
+            <card_holder>Spree Commerce</card_holder>
+            <card_number>4938730000000001</card_number>
+            <expiration_month>12</expiration_month>
+            <expiration_year>2025</expiration_year>
+            <cvv>123</cvv>
+            <notification_url>http://127.0.0.1:4000/api/v2/storefront/emerchantpay_notification</notification_url>
+            <return_success_url>http://localhost:4000/orders/R327483944</return_success_url>
+            <return_failure_url>http://localhost:4000/checkout/payment?order_number=R327483944</return_failure_url>
+            <customer_email>taylor_kihn@metzschultz.co.uk</customer_email>
+            <customer_phone>88888888888</customer_phone>
+            <billing_address>
+              <first_name>John</first_name>
+              <last_name>Smith</last_name>
+              <address1>30148 Christiansen Path</address1>
+              <zip_code>85021</zip_code>
+              <city>City</city>
+              <state>Alabama</state>
+              <country>IN</country>
+            </billing_address>
+            <shipping_address>
+              <first_name>John</first_name>
+              <last_name>Smith</last_name>
+              <address1>471 Blick Path</address1>
+              <zip_code>75149</zip_code>
+              <city>City</city>
+              <state>Wyoming</state>
+              <country>CV</country>
+            </shipping_address>
+            <threeds_v2_params>
+              <threeds_method>
+                <callback_url>http://127.0.0.1:4000/api/v2/storefront/emerchantpay_threeds/status</callback_url>
+              </threeds_method>
+              <control>
+                <device_type>browser</device_type>
+                <challenge_window_size>full_screen</challenge_window_size>
+                <challenge_indicator>mandate</challenge_indicator>
+              </control>
+              <purchase>
+                <category>goods</category>
+              </purchase>
+              <merchant_risk>
+                <shipping_indicator>stored_address</shipping_indicator>
+                <delivery_timeframe>another_day</delivery_timeframe>
+                <reorder_items_indicator>first_time</reorder_items_indicator>
+              </merchant_risk>
+              <card_holder_account>
+                <creation_date>07-02-2024</creation_date>
+                <update_indicator>current_transaction</update_indicator>
+                <last_change_date>07-02-2024</last_change_date>
+                <password_change_indicator>during_transaction</password_change_indicator>
+                <password_change_date>07-02-2024</password_change_date>
+                <shipping_address_usage_indicator>current_transaction</shipping_address_usage_indicator>
+                <shipping_address_date_first_used>07-02-2024</shipping_address_date_first_used>
+                <transactions_activity_last_24_hours>1</transactions_activity_last_24_hours>
+              </card_holder_account>
+              <browser>
+                <accept_header>*/*</accept_header>
+                <java_enabled>true</java_enabled>
+                <language>en-GB</language>
+                <color_depth>32</color_depth>
+                <screen_height>400</screen_height>
+                <screen_width>400</screen_width>
+                <time_zone_offset>+0</time_zone_offset>
+                <user_agent>Mozilla/5.0 (Windows NT x.y; Win64; x64; rv:10.0) Gecko/20100101 Firefox/10.0</user_agent>
+              </browser>
+            </threeds_v2_params>
+          </payment_transaction>
+      headers:
+        Content-Type:
+          - text/xml
+        Content-Length:
+          - '3191'
+        Authorization:
+          - Basic example_credentials
+        User-Agent:
+          - 'Genesis Ruby Client 0.1.3. Network: GenesisRuby::Network::NetHttp'
+        Accept-Encoding:
+          - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+        Accept:
+          - "*/*"
+    response:
+      status:
+        code: 200
+        message: OK
+      headers:
+        Content-Type:
+          - application/xml; charset=utf-8
+        Transfer-Encoding:
+          - chunked
+        Connection:
+          - keep-alive
+        Date:
+          - Wed, 07 Feb 2024 13:18:42 GMT
+        Vary:
+          - Accept
+        Etag:
+          - W/"b443119062a5721d1d82267d540ad495"
+        Cache-Control:
+          - max-age=0, private, must-revalidate
+        X-Request-Id:
+          - d313b29e-5d7c-4b56-9b10-e19ccd2114bd
+        X-Runtime:
+          - '4.042548'
+        Strict-Transport-Security:
+          - max-age=631138519
+        X-Frame-Options:
+          - ALLOWALL
+        X-Content-Type-Options:
+          - nosniff
+        X-Xss-Protection:
+          - 1; mode=block
+        X-Download-Options:
+          - noopen
+        X-Permitted-Cross-Domain-Policies:
+          - none
+        Content-Security-Policy:
+          - 'default-src https: ''self''; font-src ''self'' data:; img-src https: ''self''
+        data:; script-src https: ''self'' ''unsafe-inline'' js-agent.newrelic.com
+        bam.nr-data.net; style-src https: ''self'' ''unsafe-inline''; report-uri https://emerchantpay.report-uri.io/r/default/csp/enforce'
+        X-Cache:
+          - Miss from cloudfront
+        Via:
+          - 1.1 c2eeef4f658b2933c525a8c9b2d5c896.cloudfront.net (CloudFront)
+        X-Amz-Cf-Pop:
+          - LHR3-C2
+        X-Amz-Cf-Id:
+          - BiW85dBO6XvJQaqSWb2QDTLCGxwsAILwEhqeQpeepU2-zgvcPQxR-g==
+      body:
+        encoding: UTF-8
+        string: |
+          <?xml version="1.0" encoding="UTF-8"?>
+          <payment_response>
+            <transaction_type>authorize3d</transaction_type>
+            <status>pending_async</status>
+            <unique_id>e6f86c7ca3b665e29f6d6c6eeb927788</unique_id>
+            <transaction_id>sp-44abd-d7e4-4f5b-92a4-91fa6c5c8</transaction_id>
+            <consumer_id>156898</consumer_id>
+            <technical_message>TESTMODE: No real money will be transferred!</technical_message>
+            <message>TESTMODE: No real money will be transferred!</message>
+            <threeds_method_url>https://staging.gate.emerchantpay.net/threeds/threeds_method</threeds_method_url>
+            <threeds_method_continue_url>https://staging.gate.emerchantpay.net/threeds/threeds_method/e6f86c7ca3b665e29f6d6c6eeb927788</threeds_method_continue_url>
+            <mode>test</mode>
+            <timestamp>2024-02-07T13:18:39Z</timestamp>
+            <descriptor>test</descriptor>
+            <amount>2999</amount>
+            <currency>USD</currency>
+            <threeds/>
+            <sent_to_acquirer>false</sent_to_acquirer>
+          </payment_response>
+    recorded_at: Wed, 07 Feb 2024 13:18:42 GMT
+recorded_with: VCR 6.2.0

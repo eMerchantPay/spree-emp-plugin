@@ -1,0 +1,56 @@
+name: prod-spree-emerchantpay-plugin
+services:
+  spree-postgres:
+    container_name: emp-${RAILS_ENV}-spree-postgres
+    image: "postgres:14-alpine"
+    restart: always
+    user: postgres
+    expose:
+      - 5432
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    healthcheck:
+      test: [ "CMD", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - spree-network
+    volumes:
+      - spree-psql-data:/var/lib/postgresql/data
+  spree-app:
+    container_name: emp-${RAILS_ENV}-spree-commerce
+    build:
+      context: .
+      target: production
+      args:
+        - port:${PORT}
+        - rails_env:${RAILS_ENV}
+    env_file:
+      - .env
+    depends_on:
+      spree-postgres:
+        condition: service_healthy
+    ports:
+      - ${PORT}:${PORT}
+    restart: always
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:${PORT}" ]
+      interval: 1m
+      timeout: 20s
+      retries: 5
+    networks:
+      - spree-network
+    volumes:
+      - spree-app:/mnt/spree
+networks:
+  spree-network:
+    driver: bridge
+    name: emp-${RAILS_ENV}-spree-network
+volumes:
+  spree-psql-data:
+    name: emp-${RAILS_ENV}-spree-psql-data
+  spree-app:
+    name: emp-${RAILS_ENV}-spree-app

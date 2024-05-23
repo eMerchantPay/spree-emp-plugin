@@ -1,0 +1,157 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://staging.gate.emerchantpay.net/process/example_token/
+    body:
+      encoding: UTF-8
+      string: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <payment_transaction>
+          <transaction_type>authorize3d</transaction_type>
+          <transaction_id>sp-d85a1-a9fe-4a1a-bbf0-7834d86ea</transaction_id>
+          <usage>Electronic transaction via Spree eCommerce platform</usage>
+          <remote_ip>127.0.0.1</remote_ip>
+          <amount>2999</amount>
+          <currency>USD</currency>
+          <card_holder>John Smith</card_holder>
+          <card_number>4938730000000001</card_number>
+          <expiration_month>12</expiration_month>
+          <expiration_year>2025</expiration_year>
+          <cvv>123</cvv>
+          <notification_url>http://127.0.0.1:4000/api/v2/storefront/emerchantpay_notification</notification_url>
+          <return_success_url>http://localhost:4000/orders/R800765522</return_success_url>
+          <return_failure_url>http://localhost:4000/checkout/payment?order_number=R800765522</return_failure_url>
+          <customer_email>kia_baumbach@blanda.com</customer_email>
+          <customer_phone>555-555-0199</customer_phone>
+          <billing_address>
+            <first_name>John</first_name>
+            <last_name>Doe</last_name>
+            <address1>5 Lovely Street</address1>
+            <address2>Northwest</address2>
+            <zip_code>35005</zip_code>
+            <city>Herndon</city>
+            <state>STATE_ABBR_8</state>
+            <country>I3</country>
+          </billing_address>
+          <shipping_address>
+            <first_name>John</first_name>
+            <last_name>Doe</last_name>
+            <address1>6 Lovely Street</address1>
+            <address2>Northwest</address2>
+            <zip_code>35005</zip_code>
+            <city>Herndon</city>
+            <state>STATE_ABBR_9</state>
+            <country>I3</country>
+          </shipping_address>
+          <threeds_v2_params>
+            <threeds_method>
+              <callback_url>http://127.0.0.1:4000/api/v2/storefront/emerchantpay_threeds/status</callback_url>
+            </threeds_method>
+            <control>
+              <device_type>browser</device_type>
+              <challenge_window_size>full_screen</challenge_window_size>
+              <challenge_indicator>no_preference</challenge_indicator>
+            </control>
+            <purchase>
+              <category>goods</category>
+            </purchase>
+            <merchant_risk>
+              <shipping_indicator>stored_address</shipping_indicator>
+              <delivery_timeframe>another_day</delivery_timeframe>
+              <reorder_items_indicator>first_time</reorder_items_indicator>
+            </merchant_risk>
+            <card_holder_account>
+              <creation_date>21-05-2024</creation_date>
+              <update_indicator>current_transaction</update_indicator>
+              <last_change_date>21-05-2024</last_change_date>
+              <password_change_indicator>during_transaction</password_change_indicator>
+              <password_change_date>21-05-2024</password_change_date>
+              <shipping_address_usage_indicator>current_transaction</shipping_address_usage_indicator>
+              <shipping_address_date_first_used>21-05-2024</shipping_address_date_first_used>
+              <transactions_activity_last_24_hours>1</transactions_activity_last_24_hours>
+            </card_holder_account>
+            <browser>
+              <accept_header>*/*</accept_header>
+              <java_enabled>false</java_enabled>
+              <language>en-GB</language>
+              <color_depth>24</color_depth>
+              <screen_height>1080</screen_height>
+              <screen_width>1920</screen_width>
+              <time_zone_offset>-180</time_zone_offset>
+              <user_agent>Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko)Chrome/124.0.0.0 Safari/537.36</user_agent>
+            </browser>
+          </threeds_v2_params>
+        </payment_transaction>
+    headers:
+      Content-Type:
+      - text/xml
+      Content-Length:
+      - '3306'
+      Authorization:
+      - Basic example_credentials
+      User-Agent:
+      - 'Genesis Ruby Client 0.1.6. Network: GenesisRuby::Network::NetHttp'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 401
+      message: Unauthorized
+    headers:
+      Content-Type:
+      - application/xml; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Date:
+      - Tue, 21 May 2024 16:09:28 GMT
+      Www-Authenticate:
+      - Basic realm="Web Password"
+      Vary:
+      - Accept
+      Cache-Control:
+      - no-cache
+      X-Request-Id:
+      - 0db978e2-18c5-401b-9af2-97c469ac53f6
+      X-Runtime:
+      - '0.149716'
+      Strict-Transport-Security:
+      - max-age=631138519
+      X-Frame-Options:
+      - ALLOWALL
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Content-Security-Policy:
+      - 'default-src https: ''self''; font-src ''self'' data:; img-src https: ''self''
+        data:; script-src https: ''self'' ''unsafe-inline'' js-agent.newrelic.com
+        bam.nr-data.net; style-src https: ''self'' ''unsafe-inline''; report-uri https://emerchantpay.report-uri.io/r/default/csp/enforce'
+      X-Cache:
+      - Error from cloudfront
+      Via:
+      - 1.1 ce730d33091c8015848f9f46f438eab2.cloudfront.net (CloudFront)
+      X-Amz-Cf-Pop:
+      - LHR3-C2
+      X-Amz-Cf-Id:
+      - okkr7ikrsNGa6Y1hMCOxvB2RzmYfT9iDpm7eT85W78KFqrR_18cYFQ==
+    body:
+      encoding: UTF-8
+      string: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <payment_response>
+          <status>error</status>
+          <code>110</code>
+          <message>401 Unauthorized: Invalid Authentication!</message>
+          <technical_message>Invalid Authentication</technical_message>
+        </payment_response>
+  recorded_at: Tue, 21 May 2024 16:09:27 GMT
+recorded_with: VCR 6.2.0

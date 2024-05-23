@@ -20,11 +20,57 @@
     </div>
 
     <input type="hidden" name="payment_source[<%= payment_method.id %>][cc_type]" id="emp_cc_type" value="" class="ccType">
+    <input name="payment_source[<%= payment_method.id %>][accept_header]"
+           type="hidden"
+           id="emp_cc_3dsv2_accept_header"
+           value="*/*"
+    >
+    <input name="payment_source[<%= payment_method.id %>][java_enabled]"
+           type="hidden"
+           id="emp_cc_3dsv2_java_enabled"
+           value=""
+    >
+    <input name="payment_source[<%= payment_method.id %>][language]"
+           type="hidden"
+           id="emp_cc_3dsv2_language"
+           value=""
+    >
+    <input name="payment_source[<%= payment_method.id %>][color_depth]"
+           type="hidden"
+           id="emp_cc_3dsv2_color_depth"
+           value=""
+    >
+    <input name="payment_source[<%= payment_method.id %>][screen_height]"
+           type="hidden"
+           id="emp_cc_3dsv2_screen_height"
+           value=""
+    >
+    <input name="payment_source[<%= payment_method.id %>][screen_width]"
+           type="hidden"
+           id="emp_cc_3dsv2_screen_width"
+           value=""
+    >
+    <input name="payment_source[<%= payment_method.id %>][time_zone_offset]"
+           type="hidden"
+           id="emp_cc_3dsv2_time_zone_offset"
+           value=""
+    >
+    <input name="payment_source[<%= payment_method.id %>][user_agent]"
+           type="hidden"
+           id="emp_cc_3dsv2_user_agent"
+           value=""
+    >
+
   </div>
 </div>
 
 <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", function(){
+        initBrowserParams()
+        initCreditCard()
+    });
+
+    function initCreditCard() {
         new Card({
             form: document.getElementById('checkout_form_payment'),
             container: '.emerchantpay-card-wrapper',
@@ -47,5 +93,23 @@
                 cvc: '***'
             }
         });
-    });
+    }
+
+    function initBrowserParams() {
+        document.getElementById('emp_cc_3dsv2_java_enabled').value         = fetchJavaEnabled()
+        document.getElementById('emp_cc_3dsv2_color_depth').value          = screen.colorDepth.toString()
+        document.getElementById('emp_cc_3dsv2_language').value             = navigator.language
+        document.getElementById('emp_cc_3dsv2_screen_height').value        = screen.height.toString()
+        document.getElementById('emp_cc_3dsv2_screen_width').value         = screen.width.toString()
+        document.getElementById('emp_cc_3dsv2_time_zone_offset').value     = (new Date()).getTimezoneOffset().toString()
+        document.getElementById('emp_cc_3dsv2_user_agent').value           = navigator.userAgent
+    }
+
+    function fetchJavaEnabled() {
+        try {
+            return navigator.javaEnabled();
+        } catch (e) {
+            return false;
+        }
+    }
 </script>

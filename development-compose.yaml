@@ -1,0 +1,11 @@
+name: dev-spree-emerchantpay-plugin
+services:
+  spree-app:
+    tty: true
+    stdin_open: true
+    build:
+      target: development
+    environment:
+      - RAILS_ENV=development
+    volumes:
+      - ${PLUGIN_SOURCE}:/mnt/spree-emerchantpay-plugin

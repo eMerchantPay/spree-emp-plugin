@@ -1,4 +1,10 @@
-# emerchantpay Genesis Gateway for Spree
+emerchantpay Genesis Gateway for Spree
+===========
+[![Gem Version](https://badge.fury.io/rb/spree_emerchantpay_genesis.svg)](https://badge.fury.io/rb/spree_emerchantpay_genesis)
+[![Software License](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](LICENSE)
+
+Overview
+--------
 This is a Payment Module for Spree eCommerce that gives you the ability to process payments through emerchantpay's Payment Gateway - Genesis.
 
 # Requirements
@@ -384,6 +390,32 @@ _Note_: If you have trouble with your credentials or terminal configuration, get
 #### Configure
 
 `bundle exec appraisal install`
+
+### Build Demo store
+Requires [Docker Engine](https://docs.docker.com/engine/install/)
+
+1. Clone the project
+2. Create .env file in the project rood based on the .env.example
+   * Set `RAILS_ENV=production`
+3. Execute inside project root:
+   ```shell
+   docker compose up
+   ```
+4. Setup Web Server with reverse proxy configuration
+
+### Setup plugin for development
+1. Clone the project
+2. Create .env file based on the .env.example
+   * Set `RAILS_ENV=development`
+   * Set `PLUGIN_SOURCE=/<local path to the plugin source>`
+3. Execute inside project root:
+   ```shell
+   docker compose -f compose.yaml -f development-compose.yaml up -d
+   ```
+   * Optional you can set project name with the -p flag
+   * You can attach to the container and debug with `pry` (`docker attach <container>`). 
+     Requires `config.web_console.whitelisted_ips = '<host_ip>'` inside the container (/mnt/spree/config/environments/development.rb)
+   * If you expose the localhost (ex. ngrok) requires `config.hosts.clear` inside the container (/mnt/spree/config/environments/development.rb)
 
 ## License
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/license/mit).

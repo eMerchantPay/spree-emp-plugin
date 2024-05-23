@@ -1,3 +1,11 @@
+0.1.6
+-----
+**Features**:
+
+* Added Docker project
+* Added Spree Rails FrontEnd Redirect URL handling (asynchronous payments)
+* Updated README
+
 0.1.5
 -----
 **Features**:

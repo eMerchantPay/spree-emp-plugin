@@ -9,6 +9,7 @@ group :development, :test do
   gem 'rails-controller-testing'
   gem 'redis', '~> 4.0'
   gem 'spree_auth_devise'
+  gem 'spree_frontend'
   gem 'webmock', '>= 2.3.1'
 end
 

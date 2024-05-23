@@ -26,6 +26,7 @@ module SpreeEmerchantpayGenesis
           last_digits:                 params[:last_digits],
           month:                       params[:month],
           year:                        params[:year],
+          expiry:                      params[:expiry],
           name:                        params[:name],
           number:                      params[:number],
           verification_value:          params[:verification_value],
