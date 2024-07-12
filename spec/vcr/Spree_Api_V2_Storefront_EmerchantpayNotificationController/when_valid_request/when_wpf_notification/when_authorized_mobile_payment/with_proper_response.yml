@@ -1,0 +1,145 @@
+---
+http_interactions:
+  - request:
+      method: post
+      uri: https://staging.wpf.emerchantpay.net/wpf/reconcile
+      body:
+        encoding: UTF-8
+        string: |
+          <?xml version="1.0" encoding="UTF-8"?>
+          <wpf_reconcile>
+            <unique_id>ae1d51e6dcaae88635bb54b2aaa3257a</unique_id>
+          </wpf_reconcile>
+      headers:
+        Content-Type:
+          - text/xml
+        Content-Length:
+          - '130'
+        Authorization:
+          - Basic example_credentials
+        User-Agent:
+          - 'Genesis Ruby Client 0.1.3. Network: GenesisRuby::Network::NetHttp'
+        Accept-Encoding:
+          - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+        Accept:
+          - "*/*"
+    response:
+      status:
+        code: 200
+        message: OK
+      headers:
+        Content-Type:
+          - application/xml; charset=utf-8
+        Transfer-Encoding:
+          - chunked
+        Connection:
+          - keep-alive
+        Date:
+          - Thu, 14 Mar 2024 11:45:11 GMT
+        Vary:
+          - Accept
+        Etag:
+          - W/"3dd9c3851cd639a0f867ad53f81b10be"
+        Cache-Control:
+          - max-age=0, private, must-revalidate
+        X-Request-Id:
+          - 6270435e-1ed5-4453-b9f9-6ae41b6dff81
+        X-Runtime:
+          - '0.551234'
+        Strict-Transport-Security:
+          - max-age=631138519
+        X-Frame-Options:
+          - DENY
+        X-Content-Type-Options:
+          - nosniff
+        X-Xss-Protection:
+          - 1; mode=block
+        X-Download-Options:
+          - noopen
+        X-Permitted-Cross-Domain-Policies:
+          - none
+        Content-Security-Policy:
+          - 'default-src https: ''self''; font-src ''self'' data:  https://fonts.gstatic.com;
+        frame-src https: ''self''  staging.gate.emerchantpay.net:443; img-src ''self''
+        data:  dadu5f16bpxo.cloudfront.net https://www.gstatic.com https://hatscripts.github.io;
+        script-src https: ''self'' ''unsafe-inline''  js-agent.newrelic.com bam.nr-data.net
+        pay.google.com; style-src https: ''self'' ''unsafe-inline''  dadu5f16bpxo.cloudfront.net;
+        report-uri https://emerchantpay.report-uri.io/r/default/csp/enforce'
+        X-Cache:
+          - Miss from cloudfront
+        Via:
+          - 1.1 9666ae8886e757e257c5c6ae7493f5c6.cloudfront.net (CloudFront)
+        X-Amz-Cf-Pop:
+          - DUB56-P2
+        X-Amz-Cf-Id:
+          - kMEIDW-CT8IQ33e7lwLTucz-5a0jIfgw5Oc-abBzo-_3yvr6MWlSVQ==
+      body:
+        encoding: UTF-8
+        string: |
+          <?xml version="1.0" encoding="UTF-8"?>
+          <wpf_payment>
+            <status>approved</status>
+            <unique_id>ae1d51e6dcaae88635bb54b2aaa3257a</unique_id>
+            <transaction_id>sp-1ac50-75f8-48f9-a0e8-fc294ee02</transaction_id>
+            <timestamp>2024-03-13T13:51:35Z</timestamp>
+            <amount>2499</amount>
+            <currency>EUR</currency>
+            <usage>Electronic transaction via Spree eCommerce platform</usage>
+            <card_brand>master</card_brand>
+            <card_number>520000...1005</card_number>
+            <card_type>CREDIT</card_type>
+            <card_subtype>STANDARD</card_subtype>
+            <card_issuing_bank>PUBLIC BANK BERHAD</card_issuing_bank>
+            <card_issuing_country>malaysia</card_issuing_country>
+            <card_holder>Travis Pastrana</card_holder>
+            <expiration_year>2025</expiration_year>
+            <expiration_month>12</expiration_month>
+            <payment_transaction>
+              <status>refunded</status>
+              <response_code>00</response_code>
+              <authorization_code>968214</authorization_code>
+              <transaction_type>google_pay</transaction_type>
+              <unique_id>09dc2c787080b29b2552daf3fb639712</unique_id>
+              <transaction_id>sp-1ac50-75f8-48f9-a0e8-fc294ee02</transaction_id>
+              <terminal_token>3c5c752969b447f09de25dea4b9f82bdff29b558</terminal_token>
+              <mode>test</mode>
+              <timestamp>2024-03-13T13:53:11Z</timestamp>
+              <descriptor>CL TEST</descriptor>
+              <amount>2499</amount>
+              <currency>EUR</currency>
+              <customer_email>travis@example.com</customer_email>
+              <customer_phone>088888888</customer_phone>
+              <scheme_transaction_identifier>NPDRMNVVQ</scheme_transaction_identifier>
+              <scheme_settlement_date>0313</scheme_settlement_date>
+              <technical_message>TESTMODE: No real money will be transferred!</technical_message>
+              <message>TESTMODE: No real money will be transferred!</message>
+              <threeds>
+                <eci>00</eci>
+                <protocol>
+                  <target_version>2</target_version>
+                </protocol>
+              </threeds>
+              <billing_address>
+                <first_name>Travis</first_name>
+                <last_name>Pastrana</last_name>
+                <address1>GORA Building</address1>
+                <address2/>
+                <zip_code>1000</zip_code>
+                <city>Sofia</city>
+                <state/>
+                <country>BG</country>
+              </billing_address>
+              <shipping_address>
+                <first_name/>
+                <last_name/>
+                <address1/>
+                <address2/>
+                <zip_code/>
+                <city/>
+                <state/>
+                <country/>
+              </shipping_address>
+            </payment_transaction>
+          </wpf_payment>
+    recorded_at: Thu, 14 Mar 2024 11:45:11 GMT
+recorded_with: VCR 6.2.0

@@ -1,3 +1,12 @@
+0.1.7
+-----
+**Features**:
+
+* Added the following Mobile transaction types support through the emerchantpay Checkout payment method:
+  * Apple Pay
+  * Google Pay
+  * Pay Pal
+
 0.1.6
 -----
 **Features**:

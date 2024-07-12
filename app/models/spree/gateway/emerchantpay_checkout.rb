@@ -4,7 +4,7 @@ module Spree
 
     preference :transaction_types, :multi_select,  default: lambda {
       {
-        values:   GenesisRuby::Utils::Transactions::WpfTypes.all,
+        values:   SpreeEmerchantpayGenesis::PaymentMethodHelper.fetch_wpf_transaction_types,
         selected: [GenesisRuby::Api::Constants::Transactions::SALE_3D]
       }
     }

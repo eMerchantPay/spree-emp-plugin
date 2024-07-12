@@ -29,8 +29,8 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'genesis_ruby', '0.1.6'
   spec.add_dependency 'securerandom'
-  spec.add_dependency 'spree_backend', '>= 4.4.0'
-  spec.add_dependency 'spree_core', '>= 4.4.0'
+  spec.add_dependency 'spree_backend', '>= 4.4.0', '< 4.8.0'
+  spec.add_dependency 'spree_core', '>= 4.4.0', '< 4.8.0'
   spec.add_dependency 'spree_extension'
 
   spec.add_development_dependency 'appraisal', '~> 2.5'

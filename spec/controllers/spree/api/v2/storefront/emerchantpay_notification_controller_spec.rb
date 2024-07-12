@@ -140,7 +140,7 @@ RSpec.describe Spree::Api::V2::Storefront::EmerchantpayNotificationController, :
       end
 
       it 'with reference reconciliation' do # rubocop:disable RSpec/ExampleLength
-        # Checkout Method with with the processing unique_id
+        # Checkout Method with the processing unique_id
         create :emerchantpay_checkout_payment,
                unique_id:  'eafae2b35722a68ed9e4522ace7d720b',
                status:     'approved',
@@ -156,6 +156,84 @@ RSpec.describe Spree::Api::V2::Storefront::EmerchantpayNotificationController, :
         expect(response.body).to eq "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<notification_echo>\n" \
                                     "  <wpf_unique_id>ae1d51e6dcaae88635bb54b2aaa3257a</wpf_unique_id>\n"\
                                     "</notification_echo>\n"
+      end
+
+      describe 'when authorized mobile payment' do # rubocop:disable RSpec/NestedGroups
+        let(:payment) do
+          create :spree_payment,
+                 payment_method: create(:emerchantpay_checkout_gateway, transaction_types: %w(google_pay_authorize)),
+                 source: create(:emerchantpay_checkout_source)
+        end
+
+        it 'with proper response' do
+          create_payment
+
+          post :index, params: params
+
+          expect(response.body).to eq "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<notification_echo>\n" \
+                                      "  <wpf_unique_id>9aed8de9319c4c3806a9d1614797f853</wpf_unique_id>\n"\
+                                      "</notification_echo>\n"
+        end
+
+        it 'with proper payment status' do
+          create_payment
+
+          post :index, params: params
+
+          expect(payment.reload.state).to eq 'pending'
+        end
+      end
+
+      describe 'when sale mobile payment' do # rubocop:disable RSpec/NestedGroups
+        let(:payment) do
+          create :spree_payment,
+                 payment_method: create(:emerchantpay_checkout_gateway, transaction_types: %w(apple_pay_sale)),
+                 source: create(:emerchantpay_checkout_source)
+        end
+
+        it 'with proper response' do
+          create_payment
+
+          post :index, params: params
+
+          expect(response.body).to eq "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<notification_echo>\n" \
+                                      "  <wpf_unique_id>9aed8de9319c4c3806a9d1614797f853</wpf_unique_id>\n"\
+                                      "</notification_echo>\n"
+        end
+
+        it 'with proper payment status' do
+          create_payment
+
+          post :index, params: params
+
+          expect(payment.reload.state).to eq 'completed'
+        end
+      end
+
+      describe 'when express mobile payment' do # rubocop:disable RSpec/NestedGroups
+        let(:payment) do
+          create :spree_payment,
+                 payment_method: create(:emerchantpay_checkout_gateway, transaction_types: %w(pay_pal_express)),
+                 source: create(:emerchantpay_checkout_source)
+        end
+
+        it 'with proper response' do
+          create_payment
+
+          post :index, params: params
+
+          expect(response.body).to eq "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<notification_echo>\n" \
+                                      "  <wpf_unique_id>9aed8de9319c4c3806a9d1614797f853</wpf_unique_id>\n"\
+                                      "</notification_echo>\n"
+        end
+
+        it 'with proper payment status' do
+          create_payment
+
+          post :index, params: params
+
+          expect(payment.reload.state).to eq 'completed'
+        end
       end
     end
   end

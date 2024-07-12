@@ -35,17 +35,43 @@ module SpreeEmerchantpayGenesis
 
       # Update the Spree Payment status from GenesisRuby::Api::Response object
       def update_payment_status(payment, response, transaction_type)
-        capturable_types = GenesisRuby::Utils::Transactions::References::CapturableTypes
-
         if response.approved?
           action = :complete
-          action = :pend if capturable_types.allowed_reference? transaction_type
+          action = :pend if capturable_type? payment, transaction_type
 
           payment.public_send(action)
         end
 
         payment.failure if TransactionHelper.failure_result? response
         payment.void if response.voided?
+      end
+
+      # Determine if the given transaction type need capture reference action
+      def capturable_type?(payment, transaction_type)
+        capturable_types = GenesisRuby::Utils::Transactions::References::CapturableTypes
+
+        if SpreeEmerchantpayGenesis::Mappers::Transaction::MOBILE_TYPES.include? transaction_type
+          return mobile_authorize_type? payment, transaction_type
+        end
+
+        capturable_types.allowed_reference? transaction_type
+      end
+
+      # Determine if the given mobile type is authorize or not
+      def mobile_authorize_type?(payment, transaction_type)
+        transaction_helper    = SpreeEmerchantpayGenesis::Mappers::Transaction
+        selected_mobile_types = SpreeEmerchantpayGenesis::PaymentMethodHelper.fetch_wpf_mobile_types(
+          payment.payment_method.preferred_transaction_types
+        )
+
+        if selected_mobile_types.is_a?(Hash) && selected_mobile_types.key?(transaction_type)
+          custom_attribute     = selected_mobile_types[transaction_type.to_s]
+          custom_attribute_key = transaction_helper.mobile_subtype_key transaction_type
+
+          return custom_attribute[custom_attribute_key.to_s] == transaction_helper::MOBILE_PAYMENT_SUB_TYPE_AUTHORIZE
+        end
+
+        false
       end
 
     end

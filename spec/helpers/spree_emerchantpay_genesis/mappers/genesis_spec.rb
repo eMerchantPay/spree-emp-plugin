@@ -590,6 +590,32 @@ RSpec.describe SpreeEmerchantpayGenesis::Mappers::Genesis do
       expect(gate_request.api_config[:url]).to include '/en/wpf'
     end
 
+    describe 'when mobile types' do
+      let(:payment_method) do
+        payment_method = source.payment_method
+
+        payment_method.preferred_transaction_types.push 'google_pay_authorize', 'apple_pay_sale', 'pay_pal_express'
+
+        payment_method
+      end
+
+      it 'with google pay authorize' do
+        expect(gate_request.__send__(:transaction_types))
+          .to include({ transaction_type: { '@attributes': { name: 'google_pay' }, payment_subtype: 'authorize' } })
+      end
+
+      it 'with apple pay sale' do
+        expect(gate_request.__send__(:transaction_types))
+          .to include({ transaction_type: { '@attributes': { name: 'apple_pay' }, payment_subtype: 'sale' } })
+      end
+
+      it 'with pay pal express' do
+        expect(gate_request.__send__(:transaction_types))
+          .to include({ transaction_type: { '@attributes': { name: 'pay_pal' }, payment_type: 'express' } })
+      end
+
+    end
+
   end
 end
 # rubocop:enable RSpec/MultipleMemoizedHelpers

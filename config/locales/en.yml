@@ -75,6 +75,13 @@ en:
       webmoney: Webmoney
       webpay: Webpay
       wechat: Wechat
+      google_pay_authorize: Google Pay (Authorize)
+      google_pay_sale: Google Pay (Sale)
+      apple_pay_authorize: Apple Pay (Authorize)
+      apple_pay_sale: Apple Pay (Sale)
+      pay_pal_authorize: Pay Pal (Authorize)
+      pay_pal_sale: Pay Pal (Sale)
+      pay_pal_express: Pay Pal (Express)
       ar: Arabic
       bg: Bulgarian
       de: German

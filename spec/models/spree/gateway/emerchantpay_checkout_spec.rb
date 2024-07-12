@@ -51,6 +51,14 @@ RSpec.describe Spree::Gateway::EmerchantpayCheckout, :vcr do
       expect(gateway.preferred_transaction_types)
         .to eq %w(authorize3d sale3d wechat post_finance trustly_sale)
     end
+
+    it 'with mobile transaction_type' do
+      gate = described_class.new
+
+      expect(gate.preferred_transaction_types[:values])
+        .to include('google_pay_sale', 'google_pay_authorize', 'apple_pay_sale', 'apple_pay_authorize', 'pay_pal_sale',
+                    'pay_pal_authorize', 'pay_pal_express')
+    end
   end
 
   describe 'when authorize' do
