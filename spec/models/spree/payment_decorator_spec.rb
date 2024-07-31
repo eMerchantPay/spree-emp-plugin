@@ -26,7 +26,7 @@ RSpec.describe Spree::Payment do
     it 'when emerchantpay_payments with proper response' do
       create_emerchantpay_payment
 
-      expect(spree_payment.emerchantpay_payments).to be_kind_of ActiveRecord::Relation
+      expect(spree_payment.emerchantpay_payments).to be_a ActiveRecord::Relation
     end
 
     it 'when emerchantpay_payments with proper data' do
@@ -50,7 +50,7 @@ RSpec.describe Spree::Payment do
     it 'with credit card source' do
       payment = described_class.new source_attributes
 
-      expect(payment.source).to be_kind_of Spree::CreditCard
+      expect(payment.source).to be_a Spree::CreditCard
     end
   end
 end

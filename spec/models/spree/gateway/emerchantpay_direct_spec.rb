@@ -30,11 +30,11 @@ RSpec.describe Spree::Gateway::EmerchantpayDirect, :vcr do
     end
 
     it 'with provider' do
-      expect(gateway.provider).to be_kind_of SpreeEmerchantpayGenesis::GenesisProvider
+      expect(gateway.provider).to be_a SpreeEmerchantpayGenesis::GenesisProvider
     end
 
     it 'with proper source class' do
-      expect(gateway.payment_source_class).to be_kind_of Spree::CreditCard.class
+      expect(gateway.payment_source_class).to be_a Spree::CreditCard.class
     end
 
     it 'with source required' do
@@ -125,7 +125,7 @@ RSpec.describe Spree::Gateway::EmerchantpayDirect, :vcr do
              amount:         amount_in_cents,
              currency:       payment.order.currency
 
-      expect(gateway.capture(amount_in_cents, transaction_id, gateway_options).success?).to eq true
+      expect(gateway.capture(amount_in_cents, transaction_id, gateway_options).success?).to be true
     end
 
     describe 'when refund' do
@@ -152,7 +152,7 @@ RSpec.describe Spree::Gateway::EmerchantpayDirect, :vcr do
           originator: create(:refund, amount: emerchantpay_payment.amount, payment_id: emerchantpay_payment.id)
         }
 
-        expect(gateway.credit(amount_in_cents, transaction.transaction_id, refund).success?).to eq true
+        expect(gateway.credit(amount_in_cents, transaction.transaction_id, refund).success?).to be true
       end
 
       it 'with second level final transaction' do # rubocop:disable RSpec/ExampleLength
@@ -182,7 +182,7 @@ RSpec.describe Spree::Gateway::EmerchantpayDirect, :vcr do
           originator: create(:refund, amount: emerchantpay_payment.amount, payment_id: emerchantpay_payment.id)
         }
 
-        expect(gateway.credit(amount_in_cents, transaction.transaction_id, refund).success?).to eq true
+        expect(gateway.credit(amount_in_cents, transaction.transaction_id, refund).success?).to be true
       end
     end
 

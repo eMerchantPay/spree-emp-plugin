@@ -13,18 +13,18 @@ RSpec.describe Spree::EmerchantpayCheckoutSource do
   it 'when can_capture' do
     payment.pend
 
-    expect(source.can_capture?(payment)).to eq true
+    expect(source.can_capture?(payment)).to be true
   end
 
   it 'when can_void' do
     payment.complete
 
-    expect(source.can_void?(payment)).to eq true
+    expect(source.can_void?(payment)).to be true
   end
 
   it 'when can_credit' do
     payment.complete
 
-    expect(source.can_credit?(payment)).to eq true
+    expect(source.can_credit?(payment)).to be true
   end
 end

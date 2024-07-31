@@ -9,11 +9,11 @@ group :development, :test do
   gem "rails-controller-testing"
   gem "redis", "~> 4.0"
   gem "spree_auth_devise"
-  gem "spree_frontend", "4.4.0"
+  gem "spree_frontend", "4.7.0"
   gem "sqlite3", "~> 1.7"
   gem "webmock", ">= 2.3.1"
-  gem "spree", "4.4.1"
-  gem "spree_backend", "4.4.1"
+  gem "spree", "4.7.3"
+  gem "spree_backend", "4.7.2"
   gem "rspec-rails"
 end
 

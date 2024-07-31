@@ -14,7 +14,7 @@ RUN apt-get update \
 
 # Create Rails skeleton
 WORKDIR /mnt
-RUN rails new spree \
+RUN rails new spree -j esbuild \
   --skip-bundle \
   --skip-git \
   --skip-keeps \
@@ -22,7 +22,6 @@ RUN rails new spree \
   --skip-spring \
   --skip-test \
   --skip-coffee \
-  --skip-javascript \
   --skip-bootsnap
 
 # Create plugin folder
@@ -32,10 +31,10 @@ RUN mkdir /mnt/spree-emerchantpay-plugin
 WORKDIR /mnt/spree
 
 RUN <<RUBY cat >> Gemfile
-gem 'spree', '4.7.3'
-gem 'spree_frontend', '4.7.0'
-gem 'spree_backend', '4.7.2'
-gem 'spree_sample', '4.7.3'
+gem 'spree', '4.8.3'
+gem 'spree_frontend', '4.8.0'
+gem 'spree_backend', '4.8.3'
+gem 'spree_sample', '4.8.3'
 gem 'spree_auth_devise', '4.6.3'
 gem 'pg'
 gem 'spree_emerchantpay_genesis', path: '/mnt/spree-emerchantpay-plugin'
@@ -78,7 +77,7 @@ FROM setup as development
 ENV RAILS_ENV $spree_env
 
 WORKDIR /mnt/spree
-RUN ls -alh
+
 # Add pry debug
 RUN echo "gem 'pry'" >> Gemfile
 

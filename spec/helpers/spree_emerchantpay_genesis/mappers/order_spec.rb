@@ -14,7 +14,7 @@ RSpec.describe SpreeEmerchantpayGenesis::Mappers::Order do
     let(:prepared_data) { described_class.prepare_data order, user, gateway_options }
 
     it 'with proper response' do
-      expect(prepared_data).to be_kind_of Hash
+      expect(prepared_data).to be_a Hash
     end
 
     it 'with order data' do
@@ -22,15 +22,15 @@ RSpec.describe SpreeEmerchantpayGenesis::Mappers::Order do
     end
 
     it 'with user data' do
-      expect(prepared_data[:user]).to be_kind_of Hash
+      expect(prepared_data[:user]).to be_a Hash
     end
 
     it 'with digital property' do
-      expect(prepared_data[:digital]).to eq false
+      expect(prepared_data[:digital]).to be false
     end
 
     it 'with line items' do
-      expect(prepared_data[:line_items]).to be_kind_of Array
+      expect(prepared_data[:line_items]).to be_a Array
     end
 
     it 'with fake line item' do
@@ -52,7 +52,7 @@ RSpec.describe SpreeEmerchantpayGenesis::Mappers::Order do
       let(:mapped_order) { described_class.for described_class.prepare_data(order, nil, {}) }
 
       it 'with proper response' do
-        expect(mapped_order).to be_kind_of Hash
+        expect(mapped_order).to be_a Hash
       end
 
       it 'with order data' do

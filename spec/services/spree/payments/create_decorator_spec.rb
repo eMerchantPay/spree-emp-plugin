@@ -39,12 +39,12 @@ RSpec.describe Spree::Payments::Create do
     end
 
     it 'with invalid source' do
-      expect(create_service.error).to be_kind_of Spree::ServiceModule::ResultError
+      expect(create_service.error).to be_a Spree::ServiceModule::ResultError
     end
   end
 
   it 'with source from database' do
-    expect(create_service).to be_kind_of Spree::ServiceModule::Result
+    expect(create_service).to be_a Spree::ServiceModule::Result
   end
 
   it 'with emerchantpay source' do

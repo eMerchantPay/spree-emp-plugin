@@ -1,3 +1,13 @@
+0.1.8
+-----
+**Features**:
+
+* Updated Genesis Ruby SDK to version 0.1.7
+* Updated Card JS to the latest
+* Updated transaction type list in the emerchantpay Checkout payment method
+* Removed GiroPay transaction type
+* Added Spree eCommerce version 4.8.x support
+
 0.1.7
 -----
 **Features**:

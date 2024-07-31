@@ -10,8 +10,15 @@ class AddCheckoutSource < ActiveRecord::Migration[6.1]
       t.datetime 'created_at', precision: 6, null: false
       t.datetime 'updated_at', precision: 6, null: false
       t.datetime 'deleted_at', precision: 6
-      t.jsonb 'public_metadata'
-      t.jsonb 'private_metadata'
+
+      if t.respond_to? :jsonb
+        t.jsonb 'public_metadata'
+        t.jsonb 'private_metadata'
+      else
+        t.json 'public_metadata'
+        t.json 'private_metadata'
+      end
+
     end
   end
 

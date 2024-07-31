@@ -94,7 +94,7 @@ RSpec.describe Spree::Api::V2::Storefront::EmerchantpayThreedsController, :vcr, 
       end
 
       it 'with callback_status update' do # rubocop:disable RSpec/MultipleExpectations
-        expect(emerchantpay_payment.reload.callback_status).to be nil
+        expect(emerchantpay_payment.reload.callback_status).to be_nil
 
         post :callback_handler, params: params
 

@@ -4,7 +4,7 @@ RSpec.describe SpreeEmerchantpayGenesis::Data::Provider do
   it 'when amount' do
     provider.total = nil
 
-    expect(provider.amount).to eq nil
+    expect(provider.amount).to be_nil
   end
 
   it 'when ip' do

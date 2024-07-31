@@ -24,7 +24,7 @@ RSpec.describe Spree::Gateway::EmerchantpayCheckout, :vcr do
     end
 
     it 'with provider' do
-      expect(gateway.provider).to be_kind_of SpreeEmerchantpayGenesis::GenesisProvider
+      expect(gateway.provider).to be_a SpreeEmerchantpayGenesis::GenesisProvider
     end
 
     it 'with proper source class' do
@@ -58,6 +58,12 @@ RSpec.describe Spree::Gateway::EmerchantpayCheckout, :vcr do
       expect(gate.preferred_transaction_types[:values])
         .to include('google_pay_sale', 'google_pay_authorize', 'apple_pay_sale', 'apple_pay_authorize', 'pay_pal_sale',
                     'pay_pal_authorize', 'pay_pal_express')
+    end
+
+    it 'without excluded transaction_type' do
+      gate = described_class.new
+
+      expect(gate.preferred_transaction_types[:values]).to_not include('google_pay', 'apple_pay', 'ppro', 'pay_pal')
     end
   end
 

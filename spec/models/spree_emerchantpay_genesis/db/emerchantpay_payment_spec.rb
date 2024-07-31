@@ -13,10 +13,10 @@ RSpec.describe SpreeEmerchantpayGenesis::Db::EmerchantpayPayment do
   end
 
   it 'when formatted created_at' do
-    expect(emerchantpay_payment.formatted_created_at).to be_kind_of String
+    expect(emerchantpay_payment.formatted_created_at).to be_a String
   end
 
   it 'when formatted updated_at' do
-    expect(emerchantpay_payment.formatted_updated_at).to be_kind_of String
+    expect(emerchantpay_payment.formatted_updated_at).to be_a String
   end
 end

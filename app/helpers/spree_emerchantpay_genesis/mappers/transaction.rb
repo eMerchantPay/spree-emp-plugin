@@ -22,6 +22,10 @@ module SpreeEmerchantpayGenesis
         GenesisRuby::Api::Constants::Transactions::PAY_PAL
       ].freeze
 
+      EXCLUDED_TYPES = [
+        GenesisRuby::Api::Constants::Transactions::PPRO
+      ].freeze
+
       MOBILE_PAYMENT_SUB_TYPE_AUTHORIZE = 'authorize'.freeze
       MOBILE_PAYMENT_SUB_TYPE_SALE      = 'sale'.freeze
       MOBILE_PAYMENT_SUB_TYPE_EXPRESS   = 'express'.freeze
@@ -52,8 +56,6 @@ module SpreeEmerchantpayGenesis
 
       # Map Web Payment Form Mobile transaction types
       def self.map_wpf_config_mobile_types(types)
-        MOBILE_TYPES.each { |type| types.delete type }
-
         types.push(*mobile_types_with_payment_sub_types)
       end
 
@@ -98,6 +100,13 @@ module SpreeEmerchantpayGenesis
         when pay_pal
           'payment_type'
         end
+      end
+
+      # Exclude specific transaction types that should not be available in the list
+      def self.exclude_wpf_types(types)
+        (EXCLUDED_TYPES + MOBILE_TYPES).each { |type| types.delete type }
+
+        types
       end
 
     end

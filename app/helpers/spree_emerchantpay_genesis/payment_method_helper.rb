@@ -37,7 +37,9 @@ module SpreeEmerchantpayGenesis
 
       # Provide a list of the available transaction types for the checkout payment method configuration
       def fetch_wpf_transaction_types
-        Mappers::Transaction.map_wpf_config_mobile_types GenesisRuby::Utils::Transactions::WpfTypes.all
+        types = Mappers::Transaction.exclude_wpf_types GenesisRuby::Utils::Transactions::WpfTypes.all
+
+        Mappers::Transaction.map_wpf_config_mobile_types types
       end
 
       # Extract Custom Attributes defined along with the transaction types

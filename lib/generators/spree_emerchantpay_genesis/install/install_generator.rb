@@ -1,3 +1,5 @@
+require 'rails/generators' # Fix Rails::Generators::Base missing class error in earlier Spree versions
+
 module SpreeEmerchantpayGenesis
   module Generators
     # Emerchantpay plugin install script

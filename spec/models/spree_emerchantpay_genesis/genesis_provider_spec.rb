@@ -21,7 +21,7 @@ RSpec.describe SpreeEmerchantpayGenesis::GenesisProvider, :vcr do
       end
 
       it 'with purchase' do
-        expect(genesis_provider.purchase).to be_kind_of GenesisRuby::Error
+        expect(genesis_provider.purchase).to be_a GenesisRuby::Error
       end
     end
 
@@ -31,7 +31,7 @@ RSpec.describe SpreeEmerchantpayGenesis::GenesisProvider, :vcr do
       end
 
       it 'with purchase' do
-        expect(genesis_provider.purchase).to be_kind_of GenesisRuby::Error
+        expect(genesis_provider.purchase).to be_a GenesisRuby::Error
       end
 
       it 'with reference' do # rubocop:disable RSpec/ExampleLength
@@ -46,7 +46,7 @@ RSpec.describe SpreeEmerchantpayGenesis::GenesisProvider, :vcr do
                              ),
                              currency:       spree_payment.order.currency
 
-        expect(genesis_provider.capture(1, transaction)).to be_kind_of ActiveMerchant::Billing::Response
+        expect(genesis_provider.capture(1, transaction)).to be_a ActiveMerchant::Billing::Response
       end
     end
   end
@@ -64,7 +64,7 @@ RSpec.describe SpreeEmerchantpayGenesis::GenesisProvider, :vcr do
         spree_payment.payment_method.preferences
       )
 
-      expect(genesis_provider.instance_variable_get(:@configuration)).to be_kind_of GenesisRuby::Configuration
+      expect(genesis_provider.instance_variable_get(:@configuration)).to be_a GenesisRuby::Configuration
     end
 
     it 'with checkout method type' do
@@ -150,7 +150,7 @@ RSpec.describe SpreeEmerchantpayGenesis::GenesisProvider, :vcr do
       it 'with proper success response type' do
         response = genesis_provider.purchase
 
-        expect(response).to be_kind_of GenesisRuby::Api::Response
+        expect(response).to be_a GenesisRuby::Api::Response
       end
 
       it 'with approved response state' do
@@ -169,13 +169,13 @@ RSpec.describe SpreeEmerchantpayGenesis::GenesisProvider, :vcr do
       end
 
       it 'with proper error response type' do
-        expect(genesis_provider.purchase).to be_kind_of GenesisRuby::Api::Response
+        expect(genesis_provider.purchase).to be_a GenesisRuby::Api::Response
       end
 
       it 'with error response state' do
         response = genesis_provider.purchase
 
-        expect(response.error?).to eq true
+        expect(response.error?).to be true
       end
     end
 
@@ -196,12 +196,12 @@ RSpec.describe SpreeEmerchantpayGenesis::GenesisProvider, :vcr do
       it 'with proper success response' do
         response = genesis_provider.capture transaction.major_amount, transaction
 
-        expect(response).to be_kind_of ActiveMerchant::Billing::Response
+        expect(response).to be_a ActiveMerchant::Billing::Response
       end
 
       it 'with proper error response' do
         expect(genesis_provider.capture(transaction.major_amount, transaction))
-          .to be_kind_of ActiveMerchant::Billing::Response
+          .to be_a ActiveMerchant::Billing::Response
       end
 
       it 'with stored reference payment' do
@@ -231,12 +231,12 @@ RSpec.describe SpreeEmerchantpayGenesis::GenesisProvider, :vcr do
       it 'with proper success response' do
         response = genesis_provider.refund transaction.major_amount, transaction
 
-        expect(response).to be_kind_of ActiveMerchant::Billing::Response
+        expect(response).to be_a ActiveMerchant::Billing::Response
       end
 
       it 'with proper error response' do
         expect(genesis_provider.refund(transaction.major_amount, transaction))
-          .to be_kind_of ActiveMerchant::Billing::Response
+          .to be_a ActiveMerchant::Billing::Response
       end
 
       it 'with stored reference payment' do
@@ -266,11 +266,11 @@ RSpec.describe SpreeEmerchantpayGenesis::GenesisProvider, :vcr do
       it 'with proper success response' do
         response = genesis_provider.void transaction
 
-        expect(response).to be_kind_of ActiveMerchant::Billing::Response
+        expect(response).to be_a ActiveMerchant::Billing::Response
       end
 
       it 'with proper error response' do
-        expect(genesis_provider.void(transaction)).to be_kind_of ActiveMerchant::Billing::Response
+        expect(genesis_provider.void(transaction)).to be_a ActiveMerchant::Billing::Response
       end
 
       it 'with stored reference payment' do
@@ -318,11 +318,11 @@ RSpec.describe SpreeEmerchantpayGenesis::GenesisProvider, :vcr do
       it 'with success 3dsv2 continue request' do
         response = genesis_provider.method_continue payment
 
-        expect(response).to be_kind_of GenesisRuby::Api::Response
+        expect(response).to be_a GenesisRuby::Api::Response
       end
 
       it 'with error 3dsv2 continue request' do
-        expect(genesis_provider.method_continue(payment)).to be_kind_of GenesisRuby::Api::Response
+        expect(genesis_provider.method_continue(payment)).to be_a GenesisRuby::Api::Response
       end
 
       it 'with redirect_url after 3dsv2 continue request' do
@@ -358,7 +358,7 @@ RSpec.describe SpreeEmerchantpayGenesis::GenesisProvider, :vcr do
           skip 'Skipped: Secrets file is used. Notification signature is generated with default password.'
         end
 
-        expect(genesis_provider.notification(transaction, params)).to be_kind_of GenesisRuby::Api::Notification
+        expect(genesis_provider.notification(transaction, params)).to be_a GenesisRuby::Api::Notification
       end
 
       it 'with reconcile response' do
@@ -417,7 +417,7 @@ RSpec.describe SpreeEmerchantpayGenesis::GenesisProvider, :vcr do
       it 'with proper success response type' do
         response = genesis_provider.purchase
 
-        expect(response).to be_kind_of GenesisRuby::Api::Response
+        expect(response).to be_a GenesisRuby::Api::Response
       end
 
       it 'with approved response state' do
@@ -436,13 +436,13 @@ RSpec.describe SpreeEmerchantpayGenesis::GenesisProvider, :vcr do
       end
 
       it 'with proper error response type' do
-        expect(genesis_provider.purchase).to be_kind_of GenesisRuby::Api::Response
+        expect(genesis_provider.purchase).to be_a GenesisRuby::Api::Response
       end
 
       it 'with error response state' do
         response = genesis_provider.purchase
 
-        expect(response.error?).to eq true
+        expect(response.error?).to be true
       end
     end
 
@@ -472,7 +472,7 @@ RSpec.describe SpreeEmerchantpayGenesis::GenesisProvider, :vcr do
           skip 'Skipped: Secrets file is used. Notification signature is generated with default password.'
         end
 
-        expect(genesis_provider.notification(transaction, params)).to be_kind_of GenesisRuby::Api::Notification
+        expect(genesis_provider.notification(transaction, params)).to be_a GenesisRuby::Api::Notification
       end
 
       it 'with reconcile response' do

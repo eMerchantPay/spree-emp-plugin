@@ -8,12 +8,12 @@ Overview
 This is a Payment Module for Spree eCommerce that gives you the ability to process payments through emerchantpay's Payment Gateway - Genesis.
 
 # Requirements
-* Spree Core 4.x (Tested up to 4.4.0)
-* Spree Backend 4.x (Tested up to 4.4.0)
-* Spree FrontEnd - Optional (Tested up to 4.4.0)
+* Spree Core 4.x (Tested up to 4.8.3)
+* Spree Backend 4.x (Tested up to 4.8.3)
+* Spree FrontEnd - Optional (Tested up to 4.8.0)
 * Ruby >= 2.7
 * Ruby on Rails >= 6.1.4
-* [GenesisRuby v0.1.6](https://github.com/GenesisGateway/genesis_ruby/releases/tag/0.1.6)
+* [GenesisRuby v0.1.7](https://github.com/GenesisGateway/genesis_ruby/releases/tag/0.1.7)
 * PCI-certified server in order to use emerchantpay Direct
 
 ## Installation
@@ -322,7 +322,6 @@ States:
   * __eps__
   * __eZeeWallet__
   * __Fashioncheque__
-  * __GiroPay__
   * __Google Pay__
   * __iDeal__
   * __iDebit__
@@ -346,7 +345,6 @@ States:
   * __Pix__
   * __POLi__
   * __Post Finance__
-  * __PPRO__
   * __PSE__
   * __RapiPago__
   * __Redpagos__

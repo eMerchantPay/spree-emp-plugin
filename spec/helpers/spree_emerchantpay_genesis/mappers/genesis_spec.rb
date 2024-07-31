@@ -49,7 +49,7 @@ RSpec.describe SpreeEmerchantpayGenesis::Mappers::Genesis do
     let(:config) { described_class.for_config(spree_payment.payment_method.preferences).context }
 
     it 'with proper type' do
-      expect(config).to be_kind_of GenesisRuby::Configuration
+      expect(config).to be_a GenesisRuby::Configuration
     end
 
     it 'with proper endpoint' do
@@ -75,7 +75,7 @@ RSpec.describe SpreeEmerchantpayGenesis::Mappers::Genesis do
 
   describe 'when payment without order' do
     it 'with proper response' do
-      expect(payment).to be_kind_of GenesisRuby::Api::Requests::Financial::Cards::Authorize3d
+      expect(payment).to be_a GenesisRuby::Api::Requests::Financial::Cards::Authorize3d
     end
 
     describe 'with missing data' do
@@ -97,11 +97,11 @@ RSpec.describe SpreeEmerchantpayGenesis::Mappers::Genesis do
       let(:payment) { described_class.for_payment(gate_request, mapped_order, emerchantpay_source, options).context }
 
       it 'without billing_address' do
-        expect(payment.billing_first_name).to eq nil
+        expect(payment.billing_first_name).to be_nil
       end
 
       it 'without shipping_address' do
-        expect(payment.shipping_first_name).to eq nil
+        expect(payment.shipping_first_name).to be_nil
       end
     end
 
@@ -217,7 +217,7 @@ RSpec.describe SpreeEmerchantpayGenesis::Mappers::Genesis do
       end
 
       it 'with threeds_v2_browser_java_enabled' do
-        expect(payment.threeds_v2_browser_java_enabled).to eq true
+        expect(payment.threeds_v2_browser_java_enabled).to be true
       end
 
       it 'with threeds_v2_browser_language' do
@@ -282,19 +282,19 @@ RSpec.describe SpreeEmerchantpayGenesis::Mappers::Genesis do
       end
 
       it 'with threeds_v2_card_holder_account_transactions_activity_previous_year' do
-        expect(payment.threeds_v2_card_holder_account_transactions_activity_previous_year).to eq nil
+        expect(payment.threeds_v2_card_holder_account_transactions_activity_previous_year).to be_nil
       end
 
       it 'with threeds_v2_card_holder_account_purchases_count_last6_months' do
-        expect(payment.threeds_v2_card_holder_account_purchases_count_last6_months).to eq nil
+        expect(payment.threeds_v2_card_holder_account_purchases_count_last6_months).to be_nil
       end
 
       it 'with threeds_v2_card_holder_account_registration_indicator' do
-        expect(payment.threeds_v2_card_holder_account_registration_indicator).to eq nil
+        expect(payment.threeds_v2_card_holder_account_registration_indicator).to be_nil
       end
 
       it 'with threeds_v2_card_holder_account_registration_date' do
-        expect(payment.threeds_v2_card_holder_account_registration_date).to eq nil
+        expect(payment.threeds_v2_card_holder_account_registration_date).to be_nil
       end
     end
 
@@ -457,7 +457,7 @@ RSpec.describe SpreeEmerchantpayGenesis::Mappers::Genesis do
     end
 
     it 'with proper response' do
-      expect(reference).to be_kind_of GenesisRuby::Api::Requests::Financial::Capture
+      expect(reference).to be_a GenesisRuby::Api::Requests::Financial::Capture
     end
 
     it 'with amount' do

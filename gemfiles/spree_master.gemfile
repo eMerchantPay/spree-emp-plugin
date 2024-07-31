@@ -3,14 +3,17 @@
 source "https://rubygems.org"
 
 group :development, :test do
+  gem "active_mailer", "~> 1.1.0"
   gem "pg"
+  gem "rails"
   gem "rails-controller-testing"
   gem "redis", "~> 4.0"
   gem "spree_auth_devise"
+  gem "spree_frontend"
+  gem "sqlite3", "~> 1.7"
   gem "webmock", ">= 2.3.1"
   gem "spree", branch: "main", git: "https://github.com/spree/spree.git"
   gem "spree_backend", branch: "main", git: "https://github.com/spree/spree_backend.git"
-  gem "rails"
   gem "rspec-rails"
 end
 
