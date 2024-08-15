@@ -56,6 +56,19 @@ module SpreeEmerchantpayGenesis
         attributes
       end
 
+      # Online Banking supported bank codes list
+      def online_banking_bank_codes
+        %w(CPI BCT BLK SE PF SN IT BR BB WP BN PS BO PID)
+      end
+
+      # Fetch selected bank codes and prepare the structure suitable for the Gateway SDK
+      def fetch_online_banking_bank_codes(options)
+        Hash[
+          GenesisRuby::Api::Constants::Transactions::ONLINE_BANKING_PAYIN,
+          { bank_codes: { bank_code: options[:bank_codes].reject { |code| code.to_s.empty? } } }
+        ]
+      end
+
     end
 
   end

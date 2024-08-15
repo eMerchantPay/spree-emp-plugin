@@ -64,9 +64,8 @@ RSpec.describe Spree::CheckoutController, :vcr, type: :controller do
 
       it 'with successful response' do
         post :update, params: params
-
-        expect(response).to redirect_to 'http://127.0.0.1:4000/emerchantpay_threeds/e6f86c7ca3b665e29f6d6c6eeb927788/' \
-                                         '4ac9f028afcd081bad7574daf12843fd'
+        expect(response).to redirect_to 'http://127.0.0.1:4000/emerchantpay_threeds/' \
+                                          'e6f86c7ca3b665e29f6d6c6eeb927788/4ac9f028afcd081bad7574daf12843fd'
       end
 
       it 'with unsuccessful response' do

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    spree_emerchantpay_genesis (0.1.8)
+    spree_emerchantpay_genesis (0.1.9)
       genesis_ruby (= 0.1.7)
       securerandom
       spree_backend (>= 4.4.0)

@@ -9,7 +9,7 @@ This is a Payment Module for Spree eCommerce that gives you the ability to proce
 
 # Requirements
 * Spree Core 4.x (Tested up to 4.8.3)
-* Spree Backend 4.x (Tested up to 4.8.3)
+* Spree Backend 4.x (Tested up to 4.8.4)
 * Spree FrontEnd - Optional (Tested up to 4.8.0)
 * Ruby >= 2.7
 * Ruby on Rails >= 6.1.4
@@ -336,6 +336,20 @@ States:
   * __Neosurf__
   * __Neteller__
   * __Online Banking__
+    * __Interac Combined Pay-in (CPI)__
+    * __Bancontact (BCT)__
+    * __BLIK (BLK)__
+    * __SPEI (SE)__
+    * __Post Finance (PF)__
+    * __Santander (SN)__
+    * __Itau (IT)__
+    * __Bradesco (BR)__
+    * __Banco do Brasil (BB)__
+    * __Webpay (WP)__
+    * __Bancomer (BN)__
+    * __PSE (PS)__
+    * __Banco de Occidente (BO)__
+    * __LatiPay (PID)__
   * __OXXO__
   * __P24__
   * __Pago Facil__

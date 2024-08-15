@@ -13,7 +13,9 @@ module Spree
       return unless new_record?
 
       if default_emerchantpay_checkout_source?
-        self.source_attributes = SpreeEmerchantpayGenesis::PaymentMethodHelper.default_checkout_source_attributes order
+        # Code format that suit plugin generation
+        self.source_attributes = SpreeEmerchantpayGenesis::
+            PaymentMethodHelper.default_checkout_source_attributes order
       end
 
       build_default_source if can_build_source?

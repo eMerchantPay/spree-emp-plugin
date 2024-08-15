@@ -613,7 +613,24 @@ RSpec.describe SpreeEmerchantpayGenesis::Mappers::Genesis do
         expect(gate_request.__send__(:transaction_types))
           .to include({ transaction_type: { '@attributes': { name: 'pay_pal' }, payment_type: 'express' } })
       end
+    end
 
+    describe 'when bank codes' do
+      let(:payment_method) do
+        payment_method = source.payment_method
+
+        payment_method.preferred_transaction_types.push 'online_banking'
+        payment_method.preferred_bank_codes = %w(CPI BCT BLK SE PF SN IT BR BB WP BN PS BO PID)
+
+        payment_method
+      end
+
+      it 'with bank codes' do
+        custom_attributes = { '@attributes': { name: 'online_banking' },
+                              bank_codes:    { bank_code: %w(CPI BCT BLK SE PF SN IT BR BB WP BN PS BO PID) } }
+
+        expect(gate_request.__send__(:transaction_types)).to include({ transaction_type: custom_attributes })
+      end
     end
 
   end

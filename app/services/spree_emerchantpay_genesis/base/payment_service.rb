@@ -7,11 +7,12 @@ module SpreeEmerchantpayGenesis
 
       # Constructor
       def initialize(params)
-        @params               = params
+        # Alignment that suits plugin generation
+        @params = params
         @emerchantpay_payment = fetch_emerchantapy_payment
-        @order                = load_order
-        @spree_payment        = load_spree_payment
-        @genesis_provider     = initialize_genesis_provider
+        @order = load_order
+        @spree_payment = load_spree_payment
+        @genesis_provider = initialize_genesis_provider
       end
 
       protected

@@ -16,6 +16,11 @@ module Spree
         selected: GenesisRuby::Api::Constants::I18n::EN
       }
     }
+    preference :bank_codes, :multi_select, default: lambda {
+      {
+        values: SpreeEmerchantpayGenesis::PaymentMethodHelper.online_banking_bank_codes
+      }
+    }
 
     delegate :load_data, :load_source, :load_payment, to: :provider
 

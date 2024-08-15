@@ -56,7 +56,12 @@ module SpreeEmerchantpayGenesis
 
       # Fetch 3DSv2 Card Holder Shipping Address first used
       def fetch_shipping_address_first_used(shipping_address)
-        return DateTime.now.strftime(SpreeEmerchantpayGenesis::ThreedsHelper::DATE_ISO_FORMAT) if shipping_address.nil?
+        # Code format that suit plugin generation
+        if shipping_address.nil?
+          return DateTime.now.strftime(
+            SpreeEmerchantpayGenesis::ThreedsHelper::DATE_ISO_FORMAT
+          )
+        end
 
         shipping_address.created_at.strftime(SpreeEmerchantpayGenesis::ThreedsHelper::DATE_ISO_FORMAT)
       end

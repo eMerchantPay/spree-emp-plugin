@@ -126,7 +126,10 @@ module SpreeEmerchantpayGenesis
       response_object = genesis_response.response_object
 
       if TransactionHelper.success_result? genesis_response
-        EmerchantpayPaymentsRepository.save_reference_from_transaction original_transaction, response_object[:unique_id]
+        # Code format that suit plugin generation
+        EmerchantpayPaymentsRepository.save_reference_from_transaction(
+          original_transaction, response_object[:unique_id]
+        )
       end
 
       handle_response genesis_request, genesis_response, is_payment: false

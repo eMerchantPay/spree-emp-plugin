@@ -1,3 +1,23 @@
+0.1.9
+-----
+**Features**:
+
+* Added the following Bank Codes support for Online Banking transaction type through the Checkout payment method:
+  * Interac Combined Pay-in (CPI)
+  * Bancontact (BCT)
+  * BLIK (BLK)
+  * SPEI (SE)
+  * Post Finance (PF)
+  * Santander (SN)
+  * Itau (IT)
+  * Bradesco (BR)
+  * Banco do Brasil (BB)
+  * Webpay (WP)
+  * Bancomer (BN)
+  * PSE (PS)
+  * Banco de Occidente (BO)
+  * LatiPay (PID)
+
 0.1.8
 -----
 **Features**:

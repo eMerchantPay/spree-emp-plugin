@@ -65,6 +65,13 @@ RSpec.describe Spree::Gateway::EmerchantpayCheckout, :vcr do
 
       expect(gate.preferred_transaction_types[:values]).to_not include('google_pay', 'apple_pay', 'ppro', 'pay_pal')
     end
+
+    it 'with bank_codes' do
+      gate = described_class.new
+
+      expect(gate.preferred_bank_codes[:values])
+        .to eq %w(CPI BCT BLK SE PF SN IT BR BB WP BN PS BO PID)
+    end
   end
 
   describe 'when authorize' do

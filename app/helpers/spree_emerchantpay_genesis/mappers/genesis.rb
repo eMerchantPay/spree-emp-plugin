@@ -214,7 +214,10 @@ module SpreeEmerchantpayGenesis
 
       # Map WPF Transaction Types
       def transaction_types_attributes(options, source)
-        transaction_types, custom_attributes = wpf_selected_transaction_types options, source
+        transaction_types, custom_attributes = wpf_selected_transaction_types options
+
+        # Make sure to merge to the public_metadata params. Those params can be send via create_payment API call.
+        custom_attributes = source.public_metadata.merge custom_attributes
 
         transaction_types.each do |type|
           next if type.empty?
@@ -248,16 +251,20 @@ module SpreeEmerchantpayGenesis
       end
 
       # Map WPF transaction types selected in the Payment Method Options
-      def wpf_selected_transaction_types(options, source)
+      def wpf_selected_transaction_types(options)
+        bank_codes        = {}
         transaction_types = PaymentMethodHelper.select_options_value options, :transaction_types
         mobile_types      = PaymentMethodHelper.fetch_wpf_mobile_types transaction_types
 
-        custom_attributes = source.public_metadata.merge mobile_types
+        if transaction_types.include? GenesisRuby::Api::Constants::Transactions::ONLINE_BANKING_PAYIN
+          bank_codes = PaymentMethodHelper.fetch_online_banking_bank_codes options
+        end
+
         transaction_types = (transaction_types - Mappers::Transaction.mobile_types_with_payment_sub_types).push(
           *mobile_types.keys
         )
 
-        [transaction_types, custom_attributes]
+        [transaction_types, {}.merge(mobile_types, bank_codes)]
       end
 
     end

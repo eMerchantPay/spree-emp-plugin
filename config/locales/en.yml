@@ -107,6 +107,20 @@ en:
       "no": Norwegian
       da: Danish
       sv: Swedish
+      CPI: Interac Combined Pay-in
+      BCT: Bancontact
+      BLK: BLIK
+      SE: SPEI
+      PF: Post Finance
+      SN: Santander
+      IT: Itau
+      BR: Bradesco
+      BB: Banco do Brasil
+      WP: Webpay
+      BN: Bancomer
+      PS: PSE
+      BO: Banco de Occidente
+      PID: LatiPay
     payment:
       usage: Electronic transaction via Spree eCommerce platform
       reference: Reference transaction via Spree eCommerce platform
@@ -143,3 +157,4 @@ en:
     threeds_allowed: Threeds V2 parameters handling
     enabled: Enabled
     disabled: Disabled
+    bank_codes: Bank Codes
