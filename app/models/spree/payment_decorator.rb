@@ -25,7 +25,8 @@ module Spree
 
     # Check if emerchantpay checkout source should be build with the default source_attributes
     def default_emerchantpay_checkout_source?
-      payment_method.is_a?(Spree::Gateway::EmerchantpayCheckout) && !source_attributes.present?
+      (payment_method&.type == 'Spree::Gateway::EmerchantpayCheckout' ||
+        payment_method&.type == 'Spree::Gateway::EcomprocessingCheckout') && !source_attributes.present?
     end
 
     # Check if can build source

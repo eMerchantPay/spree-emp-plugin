@@ -1,4 +1,4 @@
-class AddCheckoutSource < ActiveRecord::Migration[6.1]
+class AddEmerchantpayCheckoutSource < ActiveRecord::Migration[6.1]
 
   def up # rubocop:disable Metrics/MethodLength
     create_table 'emerchantpay_checkout_sources', if_not_exists: true do |t|

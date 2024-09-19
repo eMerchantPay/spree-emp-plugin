@@ -1,3 +1,11 @@
+0.1.10
+-----
+**Features**:
+
+* Improved plugin compatibility with the others
+* Updated project dependencies
+* Updated Threeds CSS used by the Spree Frontend
+
 0.1.9
 -----
 **Features**:

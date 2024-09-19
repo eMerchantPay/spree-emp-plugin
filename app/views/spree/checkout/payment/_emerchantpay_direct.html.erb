@@ -66,11 +66,11 @@
 
 <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", function(){
-        initBrowserParams()
-        initCreditCard()
+        empInitBrowserParams()
+        empInitCreditCard()
     });
 
-    function initCreditCard() {
+    function empInitCreditCard() {
         new Card({
             form: document.getElementById('checkout_form_payment'),
             container: '.emerchantpay-card-wrapper',
@@ -95,8 +95,8 @@
         });
     }
 
-    function initBrowserParams() {
-        document.getElementById('emp_cc_3dsv2_java_enabled').value         = fetchJavaEnabled()
+    function empInitBrowserParams() {
+        document.getElementById('emp_cc_3dsv2_java_enabled').value         = empFetchJavaEnabled()
         document.getElementById('emp_cc_3dsv2_color_depth').value          = screen.colorDepth.toString()
         document.getElementById('emp_cc_3dsv2_language').value             = navigator.language
         document.getElementById('emp_cc_3dsv2_screen_height').value        = screen.height.toString()
@@ -105,7 +105,7 @@
         document.getElementById('emp_cc_3dsv2_user_agent').value           = navigator.userAgent
     }
 
-    function fetchJavaEnabled() {
+    function empFetchJavaEnabled() {
         try {
             return navigator.javaEnabled();
         } catch (e) {
