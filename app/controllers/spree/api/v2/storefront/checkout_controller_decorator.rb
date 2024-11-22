@@ -64,7 +64,7 @@ module Spree
 
           # Check if the payment is made via emerchantpay checkout method
           def emerchantpay_checkout_method?
-            spree_current_order&.completed? && spree_current_order&.payments &&
+            spree_current_order&.completed? && spree_current_order.payments &&
               spree_current_order.payments.last.payment_method.type == Spree::Gateway::EmerchantpayCheckout.name
           end
 

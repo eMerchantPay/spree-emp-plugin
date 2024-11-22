@@ -31,6 +31,9 @@ if [ "${USERS_TABLE}" -eq 0 ]; then
 
   echo "Load Spree Commerce Simple Data"
   bundle exec rake spree_sample:load
+
+  echo "Update robots.txt"
+  printf "User-agent: *\nDisallow: /" > public/robots.txt
 fi
 
 CHECKOUT_METHOD=$(psql -U "${POSTGRES_USER}" -h "${PGHOST}" "${POSTGRES_DB}" -AXqtc "SELECT count(id) FROM spree_payment_methods where type='Spree::Gateway::EmerchantpayCheckout';")

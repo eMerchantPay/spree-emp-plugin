@@ -1,0 +1,116 @@
+---
+http_interactions:
+  - request:
+      method: post
+      uri: https://staging.gate.emerchantpay.net/reconcile/example_token/
+      body:
+        encoding: UTF-8
+        string: |
+          <?xml version="1.0" encoding="UTF-8"?>
+          <reconcile>
+            <unique_id>846b2298647e3b3f7b0067a818113eb1</unique_id>
+          </reconcile>
+      headers:
+        Content-Type:
+          - text/xml
+        Content-Length:
+          - '122'
+        Authorization:
+          - Basic example_credentials
+        User-Agent:
+          - 'Genesis Ruby Client 0.1.3. Network: GenesisRuby::Network::NetHttp'
+        Accept-Encoding:
+          - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+        Accept:
+          - "*/*"
+    response:
+      status:
+        code: 200
+        message: OK
+      headers:
+        Content-Type:
+          - application/xml; charset=utf-8
+        Transfer-Encoding:
+          - chunked
+        Connection:
+          - keep-alive
+        Date:
+          - Tue, 06 Feb 2024 17:37:57 GMT
+        Vary:
+          - Accept
+        Etag:
+          - W/"4084cc2d111873e5c95203f707342dc8"
+        Cache-Control:
+          - max-age=0, private, must-revalidate
+        X-Request-Id:
+          - c32a928f-a518-488b-a894-b423757ffa39
+        X-Runtime:
+          - '0.354095'
+        Strict-Transport-Security:
+          - max-age=631138519
+        X-Frame-Options:
+          - ALLOWALL
+        X-Content-Type-Options:
+          - nosniff
+        X-Xss-Protection:
+          - 1; mode=block
+        X-Download-Options:
+          - noopen
+        X-Permitted-Cross-Domain-Policies:
+          - none
+        Content-Security-Policy:
+          - 'default-src https: ''self''; font-src ''self'' data:; img-src https: ''self''
+        data:; script-src https: ''self'' ''unsafe-inline'' js-agent.newrelic.com
+        bam.nr-data.net; style-src https: ''self'' ''unsafe-inline''; report-uri https://emerchantpay.report-uri.io/r/default/csp/enforce'
+        X-Cache:
+          - Miss from cloudfront
+        Via:
+          - 1.1 1d01c9eafefacaa6322fccd6199f781c.cloudfront.net (CloudFront)
+        X-Amz-Cf-Pop:
+          - LHR3-C2
+        X-Amz-Cf-Id:
+          - myRI62kCu5yOdz-J7xsrA1c6dt3LpNdK_Kx2EsXWG17qKZEivaFGlw==
+      body:
+        encoding: UTF-8
+        string: |
+          <?xml version="1.0" encoding="UTF-8"?>
+          <payment_response>
+            <transaction_type>authorize3d</transaction_type>
+            <status>approved</status>
+            <cvv_result_code>M</cvv_result_code>
+            <authorization_code>386130</authorization_code>
+            <retrieval_reference_number>403710166294</retrieval_reference_number>
+            <scheme_response_code>00</scheme_response_code>
+            <unique_id>846b2298647e3b3f7b0067a818113eb1</unique_id>
+            <transaction_id>sp-9a508-4b64-4e4c-9636-7fd73889d</transaction_id>
+            <consumer_id>156765</consumer_id>
+            <response_code>00</response_code>
+            <technical_message>TESTMODE: No real money will be transferred!</technical_message>
+            <message>TESTMODE: No real money will be transferred!</message>
+            <mode>test</mode>
+            <timestamp>2024-02-06T10:34:01Z</timestamp>
+            <descriptor>test</descriptor>
+            <amount>11000</amount>
+            <currency>EUR</currency>
+            <threeds>
+              <eci>07</eci>
+              <protocol>
+                <target_version>2</target_version>
+              </protocol>
+            </threeds>
+            <captured>false</captured>
+            <capturable_amount>11000</capturable_amount>
+            <sent_to_acquirer>true</sent_to_acquirer>
+            <card_brand>visa</card_brand>
+            <card_number>411111...1111</card_number>
+            <card_type>DEBIT</card_type>
+            <card_subtype>CLASSIC</card_subtype>
+            <card_issuing_bank>CONOTOXIA SP. Z O.O</card_issuing_bank>
+            <card_issuing_country>poland</card_issuing_country>
+            <card_holder>Spree Commerce</card_holder>
+            <expiration_year>2025</expiration_year>
+            <expiration_month>12</expiration_month>
+            <scheme_transaction_identifier>234567891234560</scheme_transaction_identifier>
+          </payment_response>
+    recorded_at: Tue, 06 Feb 2024 17:37:57 GMT
+recorded_with: VCR 6.2.0

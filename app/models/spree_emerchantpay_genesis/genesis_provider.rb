@@ -93,6 +93,8 @@ module SpreeEmerchantpayGenesis
 
     # Handle notification
     def notification(emerchantpay_payment, params)
+      @configuration.token = params[:terminal_token] if @configuration.token.to_s.empty? && params.key?(:terminal_token)
+
       notification = TransactionHelper.init_notification @configuration, params
 
       notification.reconcile
@@ -192,7 +194,9 @@ module SpreeEmerchantpayGenesis
 
     # Configure Genesis provider with the token form the given transaction
     def configure_token(transaction)
-      @configuration.token = transaction.terminal_token if transaction.terminal_token
+      @configuration.token = transaction.terminal_token unless transaction.terminal_token.to_s.empty?
+
+      @configuration.force_smart_routing = true if @configuration.token.to_s.empty?
     end
 
     # Plugin options with dynamic parameters
@@ -216,6 +220,8 @@ module SpreeEmerchantpayGenesis
 
     # Init Processing API Request
     def init_processing_api
+      @configuration.force_smart_routing = true if @configuration.token.to_s.empty?
+
       genesis_request = TransactionHelper.init_genesis_req @configuration, @options[:transaction_types]
 
       GenesisRuby::Genesis.new(

@@ -34,7 +34,7 @@ module SpreeEmerchantpayGenesis
             accept_header:    params[:accept_header],
             java_enabled:     params[:java_enabled],
             language:         params[:language],
-            color_depth:      params[:color_depth],
+            color_depth:      params[:color_depth]&.to_i,
             screen_height:    params[:screen_height],
             screen_width:     params[:screen_width],
             time_zone_offset: params[:time_zone_offset],

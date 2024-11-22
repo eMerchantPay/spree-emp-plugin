@@ -1,7 +1,7 @@
 # rubocop:disable RSpec/MultipleMemoizedHelpers
 RSpec.describe Spree::Gateway::EmerchantpayDirect, :vcr do
   let(:gateway) { create :emerchantpay_direct_gateway }
-  let(:source) { create :credit_card_params }
+  let(:source) { create :emerchantpay_credit_card_source, payment_method: gateway, user: create(:user) }
   let(:payment) { create :spree_payment, payment_method: gateway, source: source }
   let(:order) { OrderWalkthrough.up_to(:payment) }
   let(:gateway_options) do
@@ -79,7 +79,6 @@ RSpec.describe Spree::Gateway::EmerchantpayDirect, :vcr do
       let(:gateway) { create :emerchantpay_direct_gateway, transaction_types: 'sale3d' }
 
       it 'with proper order state' do
-
         complete_order!
 
         expect(order.state).to eq 'complete'

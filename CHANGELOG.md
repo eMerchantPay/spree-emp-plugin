@@ -1,3 +1,11 @@
+0.1.11
+-----
+**Features**:
+
+* Added Smart Router support through the Direct payment method
+* Update Genesis Ruby to version 0.2.0
+* Tested up to Spree Core 4.10.1
+
 0.1.10
 -----
 **Features**:

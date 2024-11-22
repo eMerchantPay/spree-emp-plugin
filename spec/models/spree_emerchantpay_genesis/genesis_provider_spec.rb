@@ -510,5 +510,99 @@ RSpec.describe SpreeEmerchantpayGenesis::GenesisProvider, :vcr do
       end
     end
   end
+
+  describe 'when smart router' do
+    let(:options) do
+      preferences = spree_payment.payment_method.preferences
+      preferences[:token] = ''
+
+      preferences
+    end
+    let(:order_data) do
+      SpreeEmerchantpayGenesis::Mappers::Order.for(
+        SpreeEmerchantpayGenesis::Mappers::Order.prepare_data(
+          spree_payment.order,
+          spree_payment.order.user,
+          build(
+            :gateway_options_with_address,
+            email: spree_payment.order.email,
+            currency: spree_payment.order.currency,
+            order_number: spree_payment.order.number,
+            payment_number: spree_payment.number
+          )
+        )
+      )
+    end
+    let(:genesis_provider) do
+      provider = described_class.new SpreeEmerchantpayGenesis::PaymentMethodHelper::DIRECT_PAYMENT, options
+      provider.load_data order_data
+      provider.load_source(
+        build(
+          :emerchantpay_credit_card_source,
+          payment_method: spree_payment.payment_method,
+          user: spree_payment.order.user,
+          number: '4938730000000001'
+        )
+      )
+      provider.load_payment spree_payment
+
+      provider
+    end
+    let(:transaction) do
+      create :emerchantpay_payment,
+             transaction_id: 'sp-9a508-4b64-4e4c-9636-7fd73889d',
+             unique_id:      '846b2298647e3b3f7b0067a818113eb1',
+             payment_method: spree_payment.payment_method.name,
+             payment_id:     spree_payment.number,
+             order_id:       spree_payment.order.number,
+             amount:         GenesisRuby::Utils::MoneyFormat.amount_to_exponent(
+               spree_payment.amount.to_s, spree_payment.currency
+             ),
+             currency:       spree_payment.order.currency,
+             terminal_token: ''
+    end
+
+    it 'with init gateway req' do
+      genesis_provider.__send__ :init_gateway_req
+
+      expect(genesis_provider.instance_variable_get(:@configuration).force_smart_routing).to be_truthy
+    end
+
+    it 'with configure token' do
+      genesis_provider.__send__(:configure_token, transaction)
+
+      expect(genesis_provider.instance_variable_get(:@configuration).force_smart_routing).to be_truthy
+    end
+
+    describe 'when notification' do
+      let(:params) do
+        {
+          unique_id:      '846b2298647e3b3f7b0067a818113eb1',
+          signature:      '5f10e44d3789e6bf8e51f06d86a951db24c524cb',
+          terminal_token: '123456'
+        }
+      end
+
+      it 'without smart router' do
+        if Rails.application.credentials[:genesis]
+          skip 'Skipped: Secrets file is used. Notification signature is generated with default password.'
+        end
+
+        genesis_provider.notification(transaction, params)
+
+        expect(genesis_provider.instance_variable_get(:@configuration).force_smart_routing).to be_falsey
+      end
+
+      it 'with terminal token from ipn' do
+        if Rails.application.credentials[:genesis]
+          skip 'Skipped: Secrets file is used. Notification signature is generated with default password.'
+        end
+
+        genesis_provider.notification(transaction, params)
+
+        expect(genesis_provider.instance_variable_get(:@configuration).token).to eq '123456'
+      end
+    end
+  end
 end
 # rubocop:enable RSpec/MultipleMemoizedHelpers

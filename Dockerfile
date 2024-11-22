@@ -31,10 +31,10 @@ RUN mkdir /mnt/spree-emerchantpay-plugin
 WORKDIR /mnt/spree
 
 RUN <<RUBY cat >> Gemfile
-gem 'spree', '4.8.3'
+gem 'spree', '4.10.1'
 gem 'spree_frontend', '4.8.0'
 gem 'spree_backend', '4.8.4'
-gem 'spree_sample', '4.8.3'
+gem 'spree_sample', '4.10.1'
 gem 'spree_auth_devise', '4.6.3'
 gem 'pg'
 gem 'spree_emerchantpay_genesis', path: '/mnt/spree-emerchantpay-plugin'
