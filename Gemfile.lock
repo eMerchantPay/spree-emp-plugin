@@ -1,8 +1,8 @@
 PATH
   remote: .
   specs:
-    spree_emerchantpay_genesis (0.1.11)
-      genesis_ruby (= 0.2.0)
+    spree_emerchantpay_genesis (0.1.12)
+      genesis_ruby (= 0.2.2)
       securerandom (~> 0.3)
       spree_backend (~> 4.4, >= 4.4.0)
       spree_core (~> 4.4, >= 4.4.0)
@@ -178,6 +178,7 @@ GEM
       faraday (~> 2.0)
     ffaker (2.23.0)
     ffi (1.17.0-x86_64-darwin)
+    ffi (1.17.0-x86_64-linux-gnu)
     flag-icons-rails (3.4.6.1)
       sass-rails
     flatpickr (4.6.13.1)
@@ -186,7 +187,7 @@ GEM
     friendly_id-mobility (1.0.4)
       friendly_id (>= 5.0.0, < 5.5)
       mobility (>= 1.0.1, < 2.0)
-    genesis_ruby (0.2.0)
+    genesis_ruby (0.2.2)
       net-http (~> 0.3.2)
       nokogiri (~> 1.14)
     gitlab (4.20.1)
@@ -279,6 +280,8 @@ GEM
       net-protocol
     nio4r (2.7.4)
     nokogiri (1.16.7-x86_64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.16.7-x86_64-linux)
       racc (~> 1.4)
     octokit (7.2.0)
       faraday (>= 1, < 3)
@@ -533,6 +536,7 @@ GEM
       activesupport (>= 6.1)
       sprockets (>= 3.0.0)
     sqlite3 (1.7.3-x86_64-darwin)
+    sqlite3 (1.7.3-x86_64-linux)
     state_machines (0.6.0)
     state_machines-activemodel (0.9.0)
       activemodel (>= 6.0)
@@ -579,6 +583,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-22
+  x86_64-linux
 
 DEPENDENCIES
   active_mailer (~> 1.1.0)

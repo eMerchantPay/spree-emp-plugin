@@ -120,7 +120,7 @@ en:
       BN: Bancomer
       PS: PSE
       BO: Banco de Occidente
-      PID: LatiPay
+      PID: PayID
     payment:
       usage: Electronic transaction via Spree eCommerce platform
       reference: Reference transaction via Spree eCommerce platform

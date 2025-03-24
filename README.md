@@ -13,7 +13,7 @@ This is a Payment Module for Spree eCommerce that gives you the ability to proce
 * Spree FrontEnd - Optional (Tested up to 4.8.0)
 * Ruby >= 2.7
 * Ruby on Rails >= 6.1.4
-* [GenesisRuby v0.2.0](https://github.com/GenesisGateway/genesis_ruby/releases/tag/0.2.0)
+* [GenesisRuby v0.2.2](https://github.com/GenesisGateway/genesis_ruby/releases/tag/0.2.2)
 * PCI-certified server in order to use emerchantpay Direct
 
 ## Installation
@@ -349,7 +349,7 @@ States:
     * __Bancomer (BN)__
     * __PSE (PS)__
     * __Banco de Occidente (BO)__
-    * __LatiPay (PID)__
+    * __PayID (PID)__
   * __OXXO__
   * __P24__
   * __Pago Facil__

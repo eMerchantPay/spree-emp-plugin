@@ -27,7 +27,7 @@ Gem::Specification.new do |spec|
 
   spec.files = Dir['{app,config,db,lib}/**/*', 'LICENSE', 'Rakefile', 'README.md', 'CHANGELOG.md']
 
-  spec.add_dependency 'genesis_ruby', '0.2.0'
+  spec.add_dependency 'genesis_ruby', '0.2.2'
   spec.add_dependency 'securerandom', '~> 0.3'
   spec.add_dependency 'spree_backend', '~> 4.4', '>= 4.4.0'
   spec.add_dependency 'spree_core', '~> 4.4', '>= 4.4.0'

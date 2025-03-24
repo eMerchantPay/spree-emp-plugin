@@ -1,3 +1,10 @@
+0.1.12
+-----
+**Features**:
+
+* Updated Genesis Ruby to version 0.2.2
+* Renamed Latipay bank code to PayID
+
 0.1.11
 -----
 **Features**:
