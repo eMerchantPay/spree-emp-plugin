@@ -1,3 +1,17 @@
+0.2.0
+-----
+**Features**:
+
+* Updated Genesis Ruby SDK to version 0.3.1
+* Removed the following transaction types support via Web Payment Form:
+  * Banco do Brasil
+  * Bradesco
+  * Itau
+  * PSE
+  * Redpagos
+  * Santander
+  * Webpay
+
 0.1.12
 -----
 **Features**:

@@ -13,7 +13,7 @@ This is a Payment Module for Spree eCommerce that gives you the ability to proce
 * Spree FrontEnd - Optional (Tested up to 4.8.0)
 * Ruby >= 2.7
 * Ruby on Rails >= 6.1.4
-* [GenesisRuby v0.2.2](https://github.com/GenesisGateway/genesis_ruby/releases/tag/0.2.2)
+* [GenesisRuby v0.3.1](https://github.com/GenesisGateway/genesis_ruby/releases/tag/0.3.1)
 * PCI-certified server in order to use emerchantpay Direct
 
 ## Installation
@@ -309,10 +309,8 @@ States:
   * __Bancomer__
   * __Bancontact__
   * __Banco de Occidente__
-  * __Banco do Brasil__
   * __BitPay__
   * __Boleto__
-  * __Bradesco__
   * __Cabal__
   * __CashU__
   * __Cencosud__
@@ -327,7 +325,6 @@ States:
   * __iDebit__
   * __InstaDebit__
   * __Intersolve__
-  * __Itau__
   * __Klarna__
   * __Multibanco__
   * __MyBank__
@@ -359,13 +356,10 @@ States:
   * __Pix__
   * __POLi__
   * __Post Finance__
-  * __PSE__
   * __RapiPago__
-  * __Redpagos__
   * __SafetyPay__
   * __Sale__
   * __Sale (3D-Secure)__
-  * __Santander__
   * __Sepa Direct Debit__
   * __SOFORT__
   * __Tarjeta Shopping__
@@ -374,7 +368,6 @@ States:
   * __TrustPay__
   * __UPI__
   * __WebMoney__
-  * __WebPay__
   * __WeChat__
 
 _Note_: If you have trouble with your credentials or terminal configuration, get in touch with our [support] team
